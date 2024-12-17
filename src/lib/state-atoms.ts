@@ -4,6 +4,16 @@ import { atom } from "jotai";
 export const dynamicSizeAtom = atom<string>("size-[350px]");
 
 export const searchTermAtom = atom<string>(new URLSearchParams(window.location.search).get("search") || "");
+export const writeSearchTermAtom = atom(null, (_get, set, searchTerm: string) => {
+    const url = new URL(window.location.href);
+    if (searchTerm) {
+        url.searchParams.set("search", searchTerm);
+    } else {
+        url.searchParams.delete("search");
+    }
+    window.history.replaceState({}, "", url.toString());
+    set(searchTermAtom, searchTerm);
+});
 
 export const selectionsAtom = atom<Selections>(defaultSelections);
 
