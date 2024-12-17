@@ -1,0 +1,1190 @@
+{
+    "medievaloak": {
+        "displayName": "Medieval Oak",
+        "authors": ["Carlansor"],
+        "buildingData": {
+            "blueprints": {},
+            "categories": {
+                "agriculture": {
+                    "blueprints": {},
+                    "categories": {
+                        "horticulture": {
+                            "blueprints": {
+                                "altfarmer": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutfarmer"],
+                                    "back": true
+                                },
+                                "composter": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutcomposter"],
+                                    "back": true
+                                },
+                                "farmer": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutfarmer"],
+                                    "back": true
+                                },
+                                "florist": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutflorist"],
+                                    "back": true
+                                },
+                                "plantation": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutplantation"],
+                                    "back": true
+                                }
+                            },
+                            "categories": {}
+                        },
+                        "husbandry": {
+                            "blueprints": {
+                                "altchickenherder": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutchickenherder"],
+                                    "back": true
+                                },
+                                "altcowboy": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutcowboy"],
+                                    "back": true
+                                },
+                                "altfisherman": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutfisherman"],
+                                    "back": true
+                                },
+                                "altswineherder": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutswineherder"],
+                                    "back": true
+                                },
+                                "beekeeper": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutbeekeeper"],
+                                    "back": true
+                                },
+                                "chickenherder": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutchickenherder"],
+                                    "back": true
+                                },
+                                "cowboy": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutcowboy"],
+                                    "back": true
+                                },
+                                "fisherman": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutfisherman"],
+                                    "back": true
+                                },
+                                "rabbithutch": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutrabbithutch"],
+                                    "back": true
+                                },
+                                "shepherd": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutshepherd"],
+                                    "back": true
+                                },
+                                "swineherder": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutswineherder"],
+                                    "back": true
+                                }
+                            },
+                            "categories": {}
+                        }
+                    }
+                },
+                "craftsmanship": {
+                    "blueprints": {},
+                    "categories": {
+                        "carpentry": {
+                            "blueprints": {
+                                "altsawmill": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutsawmill"],
+                                    "back": true
+                                },
+                                "fletcher": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutfletcher"],
+                                    "back": true
+                                },
+                                "sawmill": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutsawmill"],
+                                    "back": true
+                                }
+                            },
+                            "categories": {}
+                        },
+                        "luxury": {
+                            "blueprints": {
+                                "altbaker": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutbaker"],
+                                    "back": true
+                                },
+                                "baker": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutbaker"],
+                                    "back": true
+                                },
+                                "concretemixer": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutconcretemixer"],
+                                    "back": true
+                                },
+                                "cookery": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutkitchen"],
+                                    "back": true
+                                },
+                                "dyer": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutdyer"],
+                                    "back": true
+                                },
+                                "glassblower": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutglassblower"],
+                                    "back": true
+                                }
+                            },
+                            "categories": {}
+                        },
+                        "masonry": {
+                            "blueprints": {
+                                "crusher": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutcrusher"],
+                                    "back": true
+                                },
+                                "sifter": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutsifter"],
+                                    "back": true
+                                },
+                                "stonemason": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutstonemason"],
+                                    "back": true
+                                },
+                                "stonesmeltery": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutstonesmeltery"],
+                                    "back": true
+                                }
+                            },
+                            "categories": {}
+                        },
+                        "metallurgy": {
+                            "blueprints": {
+                                "altblacksmith": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutblacksmith"],
+                                    "back": true
+                                },
+                                "blacksmith": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutblacksmith"],
+                                    "back": true
+                                },
+                                "mechanic": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutmechanic"],
+                                    "back": true
+                                },
+                                "smeltery": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutsmeltery"],
+                                    "back": true
+                                }
+                            },
+                            "categories": {}
+                        },
+                        "storage": {
+                            "blueprints": {
+                                "altdeliveryman": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutdeliveryman"],
+                                    "back": true
+                                },
+                                "altwarehouse": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutwarehouse"],
+                                    "back": true
+                                },
+                                "deliveryman": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutdeliveryman"],
+                                    "back": true
+                                },
+                                "warehouse": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutwarehouse"],
+                                    "back": true
+                                }
+                            },
+                            "categories": {}
+                        }
+                    }
+                },
+                "decorations": {
+                    "blueprints": {},
+                    "categories": {
+                        "misc": {
+                            "blueprints": {
+                                "bigwell": {
+                                    "levels": 3
+                                },
+                                "big_log_cart": {
+                                    "levels": false
+                                },
+                                "citysquare": {
+                                    "levels": false,
+                                    "back": true
+                                },
+                                "gallows": {
+                                    "levels": false,
+                                    "back": true
+                                },
+                                "headsman_post": {
+                                    "levels": false,
+                                    "back": true
+                                },
+                                "hot_cage": {
+                                    "levels": false
+                                },
+                                "noble_guard_post": {
+                                    "levels": false,
+                                    "back": true
+                                },
+                                "pillory": {
+                                    "levels": false
+                                },
+                                "poor_guard_post": {
+                                    "levels": false,
+                                    "back": true
+                                },
+                                "roofed_carriage": {
+                                    "levels": false,
+                                    "back": true
+                                },
+                                "smallwell": {
+                                    "levels": 3
+                                },
+                                "small_log_cart": {
+                                    "levels": false,
+                                    "back": true
+                                },
+                                "small_stable": {
+                                    "levels": false,
+                                    "back": true
+                                },
+                                "small_well": {
+                                    "levels": false
+                                },
+                                "small_wheat_cart": {
+                                    "levels": false
+                                },
+                                "towncenter": {
+                                    "levels": false,
+                                    "back": true
+                                },
+                                "war_encampment": {
+                                    "levels": false,
+                                    "back": true
+                                },
+                                "wooden_cage": {
+                                    "levels": false
+                                }
+                            },
+                            "categories": {}
+                        },
+                        "supplies": {
+                            "blueprints": {
+                                "camp": {
+                                    "levels": false,
+                                    "back": true
+                                },
+                                "ship": {
+                                    "levels": false,
+                                    "back": true
+                                },
+                                "supplycamp": {
+                                    "levels": false,
+                                    "back": true
+                                },
+                                "supplyship": {
+                                    "levels": false,
+                                    "back": true
+                                }
+                            },
+                            "categories": {}
+                        }
+                    }
+                },
+                "education": {
+                    "blueprints": {
+                        "altlibrary": {
+                            "levels": 5,
+                            "hutBlocks": ["blockhutlibrary"],
+                            "back": true
+                        },
+                        "archery": {
+                            "levels": 5,
+                            "hutBlocks": ["blockhutarchery"],
+                            "back": true
+                        },
+                        "library": {
+                            "levels": 5,
+                            "hutBlocks": ["blockhutlibrary"],
+                            "back": true
+                        },
+                        "school": {
+                            "levels": 5,
+                            "hutBlocks": ["blockhutschool"],
+                            "back": true
+                        },
+                        "university": {
+                            "levels": 5,
+                            "hutBlocks": ["blockhutuniversity"],
+                            "back": true
+                        },
+                        "universitylibrary": {
+                            "levels": false,
+                            "hutBlocks": ["blockhutlibrary", "blockhutuniversity"]
+                        }
+                    },
+                    "categories": {}
+                },
+                "fundamentals": {
+                    "blueprints": {
+                        "altbuilder": {
+                            "levels": 5,
+                            "hutBlocks": ["blockhutbuilder"],
+                            "back": true
+                        },
+                        "altcook": {
+                            "levels": 5,
+                            "hutBlocks": ["blockhutcook"],
+                            "back": true
+                        },
+                        "altlumberjack": {
+                            "levels": 5,
+                            "hutBlocks": ["blockhutlumberjack"],
+                            "back": true
+                        },
+                        "altminer": {
+                            "levels": 5,
+                            "hutBlocks": ["blockhutminer"],
+                            "back": true
+                        },
+                        "altresidence": {
+                            "levels": 5,
+                            "hutBlocks": ["blockhutcitizen"],
+                            "back": true
+                        },
+                        "alttownhall": {
+                            "levels": 5,
+                            "hutBlocks": ["blockhuttownhall"],
+                            "back": true
+                        },
+                        "builder": {
+                            "levels": 5,
+                            "hutBlocks": ["blockhutbuilder"],
+                            "back": true
+                        },
+                        "cook": {
+                            "levels": 5,
+                            "hutBlocks": ["blockhutcook"],
+                            "back": true
+                        },
+                        "grachtenpand": {
+                            "levels": 5,
+                            "hutBlocks": ["blockhutcitizen"],
+                            "back": true
+                        },
+                        "hospital": {
+                            "levels": 5,
+                            "hutBlocks": ["blockhuthospital"],
+                            "back": true
+                        },
+                        "lumberjack": {
+                            "levels": 5,
+                            "hutBlocks": ["blockhutlumberjack"],
+                            "back": true
+                        },
+                        "miner": {
+                            "levels": 5,
+                            "hutBlocks": ["blockhutminer"],
+                            "back": true
+                        },
+                        "residence": {
+                            "levels": 5,
+                            "hutBlocks": ["blockhutcitizen"],
+                            "back": true
+                        },
+                        "tavern": {
+                            "levels": 3,
+                            "hutBlocks": ["blockhuttavern"],
+                            "back": true
+                        },
+                        "townhall": {
+                            "levels": 5,
+                            "hutBlocks": ["blockhuttownhall"],
+                            "back": true
+                        }
+                    },
+                    "categories": {}
+                },
+                "infrastructure": {
+                    "blueprints": {},
+                    "categories": {
+                        "canal": {
+                            "blueprints": {
+                                "canal_bridge": {
+                                    "levels": false
+                                },
+                                "canal_corner": {
+                                    "levels": false
+                                },
+                                "canal_innercorner": {
+                                    "levels": false
+                                },
+                                "canal_straight": {
+                                    "levels": false
+                                }
+                            },
+                            "categories": {}
+                        },
+                        "crossroads": {
+                            "blueprints": {
+                                "small_crossroads": {
+                                    "levels": 5
+                                }
+                            },
+                            "categories": {}
+                        }
+                    }
+                },
+                "military": {
+                    "blueprints": {
+                        "altarchery": {
+                            "levels": 5,
+                            "hutBlocks": ["blockhutarchery"],
+                            "back": true
+                        },
+                        "altbarracks": {
+                            "levels": 5,
+                            "hutBlocks": ["blockhutbarracks", "blockhutbarrackstower"],
+                            "back": true
+                        },
+                        "altbarrackstower": {
+                            "levels": 5,
+                            "hutBlocks": ["blockhutbarrackstower"]
+                        },
+                        "altcombatacademy": {
+                            "levels": 5,
+                            "hutBlocks": ["blockhutcombatacademy"],
+                            "back": true
+                        },
+                        "altguardtower": {
+                            "levels": 5,
+                            "hutBlocks": ["blockhutguardtower"],
+                            "back": true
+                        },
+                        "archery": {
+                            "levels": 5,
+                            "hutBlocks": ["blockhutarchery"],
+                            "back": true
+                        },
+                        "barracks": {
+                            "levels": 5,
+                            "hutBlocks": ["blockhutbarrackstower", "blockhutbarracks"],
+                            "back": true
+                        },
+                        "barrackstower": {
+                            "levels": 5,
+                            "hutBlocks": ["blockhutbarrackstower"],
+                            "back": true
+                        },
+                        "combatacademy": {
+                            "levels": 5,
+                            "hutBlocks": ["blockhutcombatacademy"],
+                            "back": true
+                        },
+                        "guardtower": {
+                            "levels": 5,
+                            "hutBlocks": ["blockhutguardtower"],
+                            "back": true
+                        },
+                        "guard_post": {
+                            "levels": 5,
+                            "hutBlocks": ["blockhutguardtower"]
+                        }
+                    },
+                    "categories": {}
+                },
+                "mystic": {
+                    "blueprints": {
+                        "enchanter": {
+                            "levels": 5,
+                            "hutBlocks": ["blockhutenchanter"],
+                            "back": true
+                        },
+                        "graveyard": {
+                            "levels": 5,
+                            "hutBlocks": ["blockhutgraveyard"],
+                            "back": true
+                        },
+                        "mysticalsite": {
+                            "levels": 5,
+                            "hutBlocks": ["blockhutmysticalsite"]
+                        }
+                    },
+                    "categories": {}
+                },
+                "walls": {
+                    "blueprints": {},
+                    "categories": {
+                        "corner": {
+                            "blueprints": {
+                                "corner": {
+                                    "levels": 5,
+                                    "back": true
+                                },
+                                "innercorner": {
+                                    "levels": 5,
+                                    "back": true
+                                },
+                                "tcorner": {
+                                    "levels": 5,
+                                    "back": true
+                                }
+                            },
+                            "categories": {}
+                        },
+                        "gate": {
+                            "blueprints": {
+                                "gate": {
+                                    "levels": 5,
+                                    "back": true
+                                }
+                            },
+                            "categories": {}
+                        },
+                        "segment": {
+                            "blueprints": {
+                                "segment": {
+                                    "levels": 5,
+                                    "back": true
+                                }
+                            },
+                            "categories": {}
+                        },
+                        "tower": {
+                            "blueprints": {
+                                "tower": {
+                                    "levels": 5
+                                }
+                            },
+                            "categories": {}
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "caledonia": {
+        "displayName": "Caledonia",
+        "authors": ["Thaylar"],
+        "buildingData": {
+            "blueprints": {},
+            "categories": {
+                "agriculture": {
+                    "blueprints": {},
+                    "categories": {
+                        "horticulture": {
+                            "blueprints": {
+                                "alfarmer": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutfield", "blockhutfarmer"],
+                                    "back": true
+                                },
+                                "composter": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutcomposter"],
+                                    "back": true
+                                },
+                                "farmer": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutfarmer"],
+                                    "back": true
+                                },
+                                "florist": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutflorist"],
+                                    "back": true
+                                },
+                                "plantation": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutplantation"],
+                                    "back": true
+                                }
+                            },
+                            "categories": {}
+                        },
+                        "husbandry": {
+                            "blueprints": {
+                                "beekeeper": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutbeekeeper"],
+                                    "back": true
+                                },
+                                "chickenherder": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutchickenherder"],
+                                    "back": true
+                                },
+                                "cowboy": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutcowboy"],
+                                    "back": true
+                                },
+                                "fisherman": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutfisherman"],
+                                    "back": true
+                                },
+                                "rabbithutch": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutrabbithutch"],
+                                    "back": true
+                                },
+                                "shepherd": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutshepherd"],
+                                    "back": true
+                                },
+                                "swineherder": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutswineherder"],
+                                    "back": true
+                                }
+                            },
+                            "categories": {}
+                        }
+                    }
+                },
+                "craftsmanship": {
+                    "blueprints": {},
+                    "categories": {
+                        "carpentry": {
+                            "blueprints": {
+                                "fletcher": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutfletcher"],
+                                    "back": true
+                                },
+                                "sawmill": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutsawmill"],
+                                    "back": true
+                                }
+                            },
+                            "categories": {}
+                        },
+                        "luxury": {
+                            "blueprints": {
+                                "alchemist": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutalchemist"],
+                                    "back": true
+                                },
+                                "baker": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutbaker"],
+                                    "back": true
+                                },
+                                "concretemixer": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutconcretemixer"],
+                                    "back": true
+                                },
+                                "dyer": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutdyer"],
+                                    "back": true
+                                },
+                                "glassblower": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutglassblower"],
+                                    "back": true
+                                },
+                                "kitchen": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutkitchen"],
+                                    "back": true
+                                }
+                            },
+                            "categories": {}
+                        },
+                        "masonry": {
+                            "blueprints": {
+                                "crusher": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutcrusher"],
+                                    "back": true
+                                },
+                                "sifter": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutsifter"],
+                                    "back": true
+                                },
+                                "stonemason": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutstonemason"],
+                                    "back": true
+                                },
+                                "stonesmeltery": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutstonesmeltery"],
+                                    "back": true
+                                }
+                            },
+                            "categories": {}
+                        },
+                        "metallurgy": {
+                            "blueprints": {
+                                "blacksmith": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutblacksmith"],
+                                    "back": true
+                                },
+                                "mechanic": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutmechanic"],
+                                    "back": true
+                                },
+                                "smeltery": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutsmeltery"],
+                                    "back": true
+                                }
+                            },
+                            "categories": {}
+                        },
+                        "storage": {
+                            "blueprints": {
+                                "deliveryman": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutdeliveryman"],
+                                    "back": true
+                                },
+                                "warehouse": {
+                                    "levels": 5,
+                                    "hutBlocks": ["blockhutwarehouse"],
+                                    "back": true
+                                }
+                            },
+                            "categories": {}
+                        }
+                    }
+                },
+                "decorations": {
+                    "blueprints": {},
+                    "categories": {
+                        "arches": {
+                            "blueprints": {
+                                "double": {
+                                    "levels": false
+                                },
+                                "single": {
+                                    "levels": false
+                                }
+                            },
+                            "categories": {}
+                        },
+                        "decorative": {
+                            "blueprints": {
+                                "windmill": {
+                                    "levels": 2
+                                }
+                            },
+                            "categories": {}
+                        },
+                        "plaza": {
+                            "blueprints": {
+                                "diorite_lrg": {
+                                    "levels": false
+                                },
+                                "diorite_med": {
+                                    "levels": false
+                                },
+                                "diorite_sml": {
+                                    "levels": false
+                                },
+                                "garden_tower": {
+                                    "levels": false
+                                },
+                                "lamp_plaza": {
+                                    "levels": false
+                                },
+                                "market_plaza": {
+                                    "levels": false
+                                },
+                                "sitting_plaza": {
+                                    "levels": false
+                                },
+                                "waystone": {
+                                    "levels": 2
+                                }
+                            },
+                            "categories": {}
+                        },
+                        "supplies": {
+                            "blueprints": {
+                                "camp": {
+                                    "levels": false
+                                },
+                                "ship": {
+                                    "levels": false
+                                },
+                                "supplycamp": {
+                                    "levels": false
+                                },
+                                "supplyship": {
+                                    "levels": false
+                                }
+                            },
+                            "categories": {}
+                        },
+                        "utility": {
+                            "blueprints": {
+                                "auto_smelter": {
+                                    "levels": 3
+                                },
+                                "concrete_machine": {
+                                    "levels": 3
+                                },
+                                "greenhouse_a": {
+                                    "levels": 3,
+                                    "back": true
+                                },
+                                "greenhouse_b": {
+                                    "levels": 3,
+                                    "back": true
+                                },
+                                "meat_grinder": {
+                                    "levels": 3,
+                                    "back": true
+                                }
+                            },
+                            "categories": {}
+                        }
+                    }
+                },
+                "education": {
+                    "blueprints": {
+                        "library": {
+                            "levels": 5,
+                            "hutBlocks": ["blockhutlibrary"],
+                            "back": true
+                        },
+                        "school": {
+                            "levels": 5,
+                            "hutBlocks": ["blockhutschool"],
+                            "back": true
+                        },
+                        "university": {
+                            "levels": 5,
+                            "hutBlocks": ["blockhutuniversity"],
+                            "back": true
+                        }
+                    },
+                    "categories": {}
+                },
+                "fundamentals": {
+                    "blueprints": {
+                        "builder": {
+                            "levels": 5,
+                            "hutBlocks": ["blockhutbuilder"],
+                            "back": true
+                        },
+                        "cook": {
+                            "levels": 5,
+                            "hutBlocks": ["blockhutcook"],
+                            "back": true
+                        },
+                        "hospital": {
+                            "levels": 5,
+                            "hutBlocks": ["blockhuthospital"],
+                            "back": true
+                        },
+                        "lumberjack": {
+                            "levels": 5,
+                            "hutBlocks": ["blockhutlumberjack"],
+                            "back": true
+                        },
+                        "miner": {
+                            "levels": 5,
+                            "hutBlocks": ["blockhutminer"],
+                            "back": true
+                        },
+                        "residence": {
+                            "levels": 5,
+                            "hutBlocks": ["blockhutcitizen"],
+                            "back": true
+                        },
+                        "tavern": {
+                            "levels": 3,
+                            "hutBlocks": ["blockhuttavern"],
+                            "back": true
+                        },
+                        "townhall": {
+                            "levels": 5,
+                            "hutBlocks": ["blockhuttownhall"],
+                            "back": true
+                        }
+                    },
+                    "categories": {}
+                },
+                "infrastructure": {
+                    "blueprints": {},
+                    "categories": {
+                        "birail": {
+                            "blueprints": {
+                                "cross": {
+                                    "levels": false
+                                },
+                                "down_a": {
+                                    "levels": false
+                                },
+                                "down_b": {
+                                    "levels": false
+                                },
+                                "long": {
+                                    "levels": false
+                                },
+                                "plub_b": {
+                                    "levels": false
+                                },
+                                "plug_a": {
+                                    "levels": false
+                                },
+                                "plug_c": {
+                                    "levels": false
+                                },
+                                "short": {
+                                    "levels": false
+                                },
+                                "station": {
+                                    "levels": false
+                                },
+                                "tee": {
+                                    "levels": false
+                                },
+                                "turn": {
+                                    "levels": false
+                                }
+                            },
+                            "categories": {}
+                        },
+                        "monorail": {
+                            "blueprints": {
+                                "cross": {
+                                    "levels": false
+                                },
+                                "down_a": {
+                                    "levels": false
+                                },
+                                "down_b": {
+                                    "levels": false
+                                },
+                                "long": {
+                                    "levels": false
+                                },
+                                "plub_b": {
+                                    "levels": false
+                                },
+                                "plug_a": {
+                                    "levels": false
+                                },
+                                "plug_c": {
+                                    "levels": false
+                                },
+                                "short": {
+                                    "levels": false
+                                },
+                                "station": {
+                                    "levels": false
+                                },
+                                "tee": {
+                                    "levels": false
+                                },
+                                "turn": {
+                                    "levels": false
+                                }
+                            },
+                            "categories": {}
+                        }
+                    }
+                },
+                "military": {
+                    "blueprints": {
+                        "altguardtower": {
+                            "levels": 5,
+                            "hutBlocks": ["blockhutguardtower"],
+                            "back": true
+                        },
+                        "archery": {
+                            "levels": 5,
+                            "hutBlocks": ["blockhutarchery"],
+                            "back": true
+                        },
+                        "barracks": {
+                            "levels": 5,
+                            "hutBlocks": ["blockhutbarrackstower", "blockhutbarracks"],
+                            "back": true
+                        },
+                        "combatacademy": {
+                            "levels": 5,
+                            "hutBlocks": ["blockhutcombatacademy"],
+                            "back": true
+                        },
+                        "guardtower": {
+                            "levels": 5,
+                            "hutBlocks": ["blockhutguardtower"],
+                            "back": true
+                        }
+                    },
+                    "categories": {}
+                },
+                "mystic": {
+                    "blueprints": {
+                        "enchanter": {
+                            "levels": 5,
+                            "hutBlocks": ["blockhutenchanter"],
+                            "back": true
+                        },
+                        "graveyard": {
+                            "levels": 5,
+                            "hutBlocks": ["blockhutgraveyard"],
+                            "back": true
+                        },
+                        "mysticalsite": {
+                            "levels": 5,
+                            "hutBlocks": ["blockhutmysticalsite"]
+                        },
+                        "netherworker": {
+                            "levels": 5,
+                            "hutBlocks": ["blockhutnetherworker"],
+                            "back": true
+                        }
+                    },
+                    "categories": {}
+                },
+                "walls": {
+                    "blueprints": {},
+                    "categories": {
+                        "corners": {
+                            "blueprints": {
+                                "corner_a": {
+                                    "levels": false
+                                },
+                                "corner_b": {
+                                    "levels": false
+                                },
+                                "tower": {
+                                    "levels": false
+                                }
+                            },
+                            "categories": {}
+                        },
+                        "gates": {
+                            "blueprints": {
+                                "double": {
+                                    "levels": 2
+                                },
+                                "double_house": {
+                                    "levels": 2
+                                },
+                                "single": {
+                                    "levels": 2
+                                },
+                                "single_house": {
+                                    "levels": 2
+                                }
+                            },
+                            "categories": {}
+                        },
+                        "misc": {
+                            "blueprints": {
+                                "cross": {
+                                    "levels": false
+                                },
+                                "diagonal": {
+                                    "levels": false
+                                },
+                                "end_tower": {
+                                    "levels": false
+                                }
+                            },
+                            "categories": {}
+                        },
+                        "stairs": {
+                            "blueprints": {
+                                "end": {
+                                    "levels": false
+                                },
+                                "side": {
+                                    "levels": false
+                                }
+                            },
+                            "categories": {}
+                        },
+                        "walls": {
+                            "blueprints": {
+                                "down_a": {
+                                    "levels": false
+                                },
+                                "down_b": {
+                                    "levels": false
+                                },
+                                "end": {
+                                    "levels": false
+                                },
+                                "long": {
+                                    "levels": false
+                                },
+                                "medium": {
+                                    "levels": false
+                                },
+                                "plug_a": {
+                                    "levels": false
+                                },
+                                "plug_b": {
+                                    "levels": false
+                                },
+                                "short": {
+                                    "levels": false
+                                },
+                                "tee": {
+                                    "levels": false
+                                }
+                            },
+                            "categories": {}
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+
+# .png files in the ./public/minecolonies subdirectories
+/public/minecolonies/**/*.png
