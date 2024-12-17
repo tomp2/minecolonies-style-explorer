@@ -15,7 +15,7 @@ from tqdm import tqdm
 MAX_SIZE = 700
 
 OTHER_SRC_SETS = [
-    350
+    # 350
 ]
 
 images_dir = Path(__file__).parent.parent.joinpath("public", "minecolonies")
