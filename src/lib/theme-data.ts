@@ -5,6 +5,7 @@ type BuildingDataJson = {
     levels: number | false;
     hutBlocks?: string[];
     back?: true;
+    blur: [string, string?];
 };
 
 export type CategoryJson = {
@@ -111,7 +112,7 @@ function getThemes(themesJson: Record<string, ThemeJson>): Map<string, Theme> {
     return result;
 }
 
-export const themes = getThemes(_themes as Record<string, ThemeJson>);
+export const themes = getThemes(_themes as unknown as Record<string, ThemeJson>);
 
 export const defaultSelections: Selections = Object.fromEntries(
     [...themes.keys()].map(themeName => [

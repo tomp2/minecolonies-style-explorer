@@ -1,5 +1,5 @@
 import { pageContentAtom, searchTermAtom, selectedThemesAtom } from "@/lib/state-atoms.ts";
-import { BuildingData, themes } from "@/lib/theme-data.ts";
+import { BuildingData } from "@/lib/theme-data.ts";
 import { BuildingCard } from "@/ui/building-card.tsx";
 import { useAtomValue } from "jotai";
 
@@ -23,11 +23,7 @@ function BuildingSection({ title, buildings }: { title: string; buildings: Build
             <h2 className="text-2xl font-extrabold mb-4 capitalize">{title}</h2>
             <div className="flex gap-4 flex-wrap">
                 {buildings.sort(sortBuildings).map(building => (
-                    <BuildingCard
-                        key={building.path.join() + building.name}
-                        building={building}
-                        theme={themes.get(building.path[0])!}
-                    />
+                    <BuildingCard key={building.path.join() + building.name} building={building} />
                 ))}
             </div>
         </div>
