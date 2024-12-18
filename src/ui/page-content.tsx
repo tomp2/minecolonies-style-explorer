@@ -47,9 +47,13 @@ export function PageContent() {
                         Welcome to the MineColonies Building Explorer!
                     </h1>
                     <p className="mt-4">
-                        This is an <em>unofficial</em> site where you can find screenshots of some of the
-                        buildings from the MineColonies mod themes. I created this site to make it easy to
-                        visually browse the buildings from different themes and categories at the same time.
+                        This is an <em>unofficial</em> site for browsing screenshots of the{" "}
+                        <a className="text-blue-500" href="https://minecolonies.com/">
+                            MineColonies
+                        </a>{" "}
+                        mod theme buildings. <b>Credits</b> for the buildings go to the theme authors listed
+                        in the sidebar next to the theme name. I created this site to make it easy to visually
+                        browse the buildings from different themes and categories at the same time.
                     </p>
                     <p className="mt-4">
                         To get started, select one or more themes/categories from the sidebar and start
@@ -58,20 +62,22 @@ export function PageContent() {
                         back of most buildings by clicking on the image.
                     </p>
                     <p className="mt-4 mb-0">
-                        Some of the themes, categories, or buildings <strong>may be missing</strong> for
-                        reasons like:
+                        Some of the themes, categories, or buildings <strong>are missing or excluded</strong>{" "}
+                        for reasons like:
                     </p>
                     <ul className="mt-0">
-                        <li>
-                            I haven't used the theme in my own worlds yet. I'll add themes here if people
-                            request them and I have time :)
-                        </li>
+                        <li>I haven&#39;t used the theme in my own worlds yet.</li>
                         <li>The builds have been updated and I have not taken new screenshots.</li>
                         <li>
                             Some themes have a lot off little pieces that I decided not to include for now to
-                            save space and time (mostly roads and some infrastructure).
+                            save space and time (mostly roads, mineshafts and some infrastructure).
                         </li>
+                        <li>New buildings have been added, or I have forgotten some.</li>
                     </ul>
+                    <p>
+                        Send me some feedback if you notice changed or missing buildings! I&#39;ll add themes
+                        here if people request them and I have time :)
+                    </p>
                     <p>
                         Viewing buildings at different levels is not supported yet, but I might add it in the
                         future.
