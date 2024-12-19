@@ -56,18 +56,10 @@ def main():
         if not match:
             continue
 
-        # remove image if the \d is < 3
-        if int(match.group(1)) < 3:
-            image_path.unlink()
-            continue
-
-        # new_name = f"{match.group(2)}{match.group(1)}.jpg"
-        # image_path.rename(image_path.with_name(new_name))
-
         with Image.open(image_path) as im:
             width, height = im.size  # Get dimensions
 
-            if width < MAX_SIZE and height < MAX_SIZE:
+            if width <= MAX_SIZE and height <= MAX_SIZE:
                 continue
 
             new_im = resize(im, MAX_SIZE)

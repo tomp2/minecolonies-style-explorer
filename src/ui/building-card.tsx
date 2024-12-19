@@ -97,7 +97,7 @@ function ImageButton({ building, view, enableImg, className, ...props }: ImageBu
                     <img
                         src={imgSrc}
                         alt={`${buildingName} (${view})`}
-                        className="object-cover rounded-sm"
+                        className="object-cover size-full rounded-sm"
                         onError={() => setError(true)}
                         onLoad={() => {
                             setLoading(false);
@@ -122,7 +122,10 @@ function BuildingImage({ building }: { building: BuildingData }) {
                 aria-label={`${view} view of ${buildingName}`}
                 type="button"
                 className="size-[var(--imgsize)] focus-visible:ring-1 focus-visible:ring-ring rounded-sm relative"
-                onClick={() => building.json.back && setView(view === "front" ? "back" : "front")}
+                onClick={() => {
+                    if (building.json.back) setView(view === "front" ? "back" : "front");
+                    if (!mountBack) setMountBack(true);
+                }}
             >
                 <ImageButton
                     className="absolute"
@@ -147,15 +150,15 @@ export function BuildingCard({ building }: { building: BuildingData }) {
     return (
         <div className="w-[calc(var(--imgsize)+18px)] rounded-lg border bg-card text-card-foreground shadow p-2">
             <BuildingImage building={building} />
-            <div className="p-4 border-t">
+            <div className="p-1.5">
                 <h2 className="font-semibold">
                     {buildingName}
                     {buildingName !== building.name && ` (${building.name})`}
                 </h2>
                 <p className="text-sm text-muted-foreground capitalize">{building.path.join(" > ")}</p>
-                {building.json.levels !== false && (
-                    <p className="text-sm text-muted-foreground">Levels: {building.json.levels}</p>
-                )}
+                {/*{building.json.levels !== false && (*/}
+                {/*    <p className="text-sm text-muted-foreground">Levels: {building.json.levels}</p>*/}
+                {/*)}*/}
             </div>
         </div>
     );

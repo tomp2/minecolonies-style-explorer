@@ -63,9 +63,9 @@ export function PageContent() {
     const { totalBuildingsFound } = useAtomValue(pageContentAtom);
 
     return (
-        <>
+        <div className="p-2 flex flex-col">
             {selectedThemes.size === 0 && (
-                <article className="prose mx-auto prose-xl mt-5 ">
+                <article className="prose mx-auto prose-xl mt-5 pb-14">
                     <h1 className="text-4xl font-extrabold">
                         Welcome to the <em>unofficial</em> MineColonies Building Explorer!
                     </h1>
@@ -103,7 +103,7 @@ export function PageContent() {
                     </p>
                     <p>
                         Viewing buildings at different levels is not supported yet, but I might add it in the
-                        future.
+                        future. Currently the screenshots are of the maximum level of the building.
                     </p>
                 </article>
             )}
@@ -120,6 +120,6 @@ export function PageContent() {
             )}
 
             <BuildingsContainer />
-        </>
+        </div>
     );
 }
