@@ -69,7 +69,7 @@ function App() {
                 <SidebarInset className="w-full flex flex-col">
                     <PageHeader />
 
-                    <div className="bg-gray-100 grow">
+                    <div className="bg-gray-100 grow p-2">
                         <PageContent />
                     </div>
                     <div className="border-t bg-card/50 h-10 shrink-0 grow-0 flex px-4 justify-end gap-5">

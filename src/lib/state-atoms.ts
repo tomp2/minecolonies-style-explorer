@@ -1,8 +1,9 @@
 import { BuildingData, Category, Selections, themes } from "@/lib/theme-data.ts";
 import { buildingMatchesSearchTerm } from "@/lib/utils.ts";
 import { atom } from "jotai";
+import { atomWithStorage } from "jotai/utils";
 
-export const dynamicSizeAtom = atom<string>("size-[350px]");
+export const dynamicSizeAtom = atomWithStorage<number>("imgsize", 300);
 
 export const searchTermAtom = atom<string>(new URLSearchParams(window.location.search).get("search") || "");
 export const writeSearchTermAtom = atom(null, (_get, set, searchTerm: string) => {

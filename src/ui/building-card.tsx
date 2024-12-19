@@ -1,8 +1,6 @@
-import { dynamicSizeAtom } from "@/lib/state-atoms.ts";
 import { BuildingData } from "@/lib/theme-data.ts";
 import { cn } from "@/lib/utils.ts";
 import { decode } from "blurhash";
-import { useAtomValue } from "jotai";
 import * as React from "react";
 import { useEffect, useRef, useState } from "react";
 
@@ -26,34 +24,28 @@ function BlurhashCanvas({ hash, height, width, className, ...props }: BlurhashCa
 
     return (
         <canvas
-            {...props}
-            className={cn("w-full h-full", className)}
+            ref={canvasRef}
+            className={cn("size-full", className)}
             height={height}
             width={width}
-            ref={canvasRef}
+            {...props}
         />
     );
 }
 
-function ImageCountIndicator({
-    view,
-    setView,
-}: {
-    view: "front" | "back";
-    setView: (view: "front" | "back") => void;
-}) {
+function ImageCountIndicator({ setView }: { setView: (view: "front" | "back") => void }) {
     return (
-        <div className="absolute bottom-0 opacity-70 flex gap-1 items-center justify-center w-fit mx-auto mb-1.5">
+        <div className="absolute bottom-0 opacity-70 space-x-1 mb-1.5">
             <button
                 type="button"
                 aria-label="View front of building"
-                className={cn("size-2.5 rounded-full", view === "front" ? "bg-gray-100" : "bg-gray-400")}
+                className="size-2.5 rounded-full bg-gray-100 group-data-[view='back']:bg-gray-400"
                 onClick={setView.bind(null, "front")}
             ></button>
             <button
                 type="button"
                 aria-label="View back of building"
-                className={cn("size-2.5 rounded-full", view === "front" ? "bg-gray-400" : "bg-gray-100")}
+                className="size-2.5 rounded-full bg-gray-400 group-data-[view='back']:bg-gray-100"
                 onClick={setView.bind(null, "back")}
             ></button>
         </div>
@@ -70,10 +62,10 @@ export interface ImageButtonProps extends React.ComponentPropsWithoutRef<"div"> 
  * @param building
  * @param view
  * @param enableImg can prevent the image from loading before it is needed.
+ * @param className
  * @param props
  */
-function ImageButton({ building, view, enableImg, ...props }: ImageButtonProps) {
-    const dynamicSize = useAtomValue(dynamicSizeAtom);
+function ImageButton({ building, view, enableImg, className, ...props }: ImageButtonProps) {
     const [error, setError] = useState(false);
     const [loading, setLoading] = useState(true);
     const [showBlurhash, setShowBlurhash] = useState(true);
@@ -84,13 +76,12 @@ function ImageButton({ building, view, enableImg, ...props }: ImageButtonProps) 
     const imgSrc = ["minecolonies", ...building.path, building.name, `${level}${view}.jpg`].join("/");
 
     return (
-        <div className={cn("absolute", props.className)} {...props}>
-            {showBlurhash && blurhash && (
+        <div className={cn("w-full h-full inset-0", className)} {...props}>
+            {blurhash && (showBlurhash || error) && (
                 <BlurhashCanvas
                     className={cn(
-                        "absolute opacity-0 transition-opacity duration-100",
-                        loading && "opacity-100",
-                        error && "opacity-0",
+                        "absolute opacity-0 transition-opacity duration-100 rounded-sm",
+                        (loading || error) && "opacity-100",
                     )}
                     hash={blurhash}
                     width={25}
@@ -98,7 +89,7 @@ function ImageButton({ building, view, enableImg, ...props }: ImageButtonProps) 
                 />
             )}
             {error ? (
-                <div className="absolute inset-0 flex items-center justify-center text-muted-foreground">
+                <div className="absolute w-full h-full flex items-center justify-center text-secondary">
                     Error loading {view} image
                 </div>
             ) : (
@@ -106,7 +97,7 @@ function ImageButton({ building, view, enableImg, ...props }: ImageButtonProps) 
                     <img
                         src={imgSrc}
                         alt={`${buildingName} (${view})`}
-                        className={cn("object-cover rounded-sm", dynamicSize)}
+                        className="object-cover rounded-sm"
                         onError={() => setError(true)}
                         onLoad={() => {
                             setLoading(false);
@@ -120,62 +111,41 @@ function ImageButton({ building, view, enableImg, ...props }: ImageButtonProps) 
 }
 
 function BuildingImage({ building }: { building: BuildingData }) {
-    const backPreloadStatus = useRef<boolean>(false);
-    const dynamicSize = useAtomValue(dynamicSizeAtom);
     const [view, setView] = useState<"front" | "back">("front");
     const [mountBack, setMountBack] = useState(false);
-
-    function preloadBack() {
-        if (!backPreloadStatus.current && building.json.back) {
-            setMountBack(true);
-            const img = new Image();
-            const level = building.json.levels || "";
-            img.src = ["minecolonies", ...building.path, building.name, `${level}back.jpg`].join("/");
-            backPreloadStatus.current = true;
-        }
-    }
 
     const buildingName = building.displayName || building.name;
 
     return (
-        <button
-            aria-label={`${view} view of ${buildingName}`}
-            type="button"
-            className={cn(
-                "focus-visible:ring-1 focus-visible:ring-ring rounded-sm group aspect-square relative flex items-center justify-center",
-                dynamicSize,
-            )}
-            data-view={view}
-            onClick={() => {
-                if (!building.json.back) return;
-                if (!mountBack) setMountBack(true);
-                setView(view === "front" ? "back" : "front");
-            }}
-        >
-            <ImageButton
-                className="group-data-[view='back']:hidden absolute"
-                building={building}
-                view="front"
-                onMouseEnter={preloadBack}
-                onClick={() => building.json.back && setView("back") && setMountBack(true)}
-            />
-            <ImageButton
-                className="group-data-[view='front']:hidden absolute"
-                building={building}
-                view="back"
-                enableImg={mountBack}
-                onClick={() => setView("front")}
-            />
-            {building.json.back && <ImageCountIndicator view={view} setView={setView} />}
-        </button>
+        <div className="relative flex justify-center group" data-view={view}>
+            <button
+                aria-label={`${view} view of ${buildingName}`}
+                type="button"
+                className="size-[var(--imgsize)] focus-visible:ring-1 focus-visible:ring-ring rounded-sm relative"
+                onClick={() => building.json.back && setView(view === "front" ? "back" : "front")}
+            >
+                <ImageButton
+                    className="absolute"
+                    building={building}
+                    view="front"
+                    onMouseEnter={() => !mountBack && setMountBack(true)}
+                />
+                <ImageButton
+                    className="group-data-[view='front']:hidden absolute"
+                    building={building}
+                    view="back"
+                    enableImg={mountBack}
+                />
+            </button>
+            {building.json.back && <ImageCountIndicator setView={setView} />}
+        </div>
     );
 }
 
 export function BuildingCard({ building }: { building: BuildingData }) {
     const buildingName = building.displayName || building.name;
-
     return (
-        <div className="overflow-hidden rounded-lg border bg-card text-card-foreground shadow p-2">
+        <div className="w-[calc(var(--imgsize)+18px)] rounded-lg border bg-card text-card-foreground shadow p-2">
             <BuildingImage building={building} />
             <div className="p-4 border-t">
                 <h2 className="font-semibold">

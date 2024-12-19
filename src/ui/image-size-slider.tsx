@@ -9,28 +9,19 @@ export function ImageSizeSlider() {
     const [dynamicSize, setDynamicSize] = useAtom(dynamicSizeAtom);
     const sendEventTimeoutId = useRef<NodeJS.Timeout | null>(null);
 
-    const sliderValues = [
-        "size-[300px]",
-        "size-[350px]",
-        "size-[400px]",
-        "size-[450px]",
-        "size-[500px]",
-        "size-[600px]",
-        "size-[700px]",
-        "size-[800px]",
-    ];
     return (
         <Slider
-            defaultValue={[sliderValues.indexOf(dynamicSize)]}
+            defaultValue={[dynamicSize]}
+            value={[dynamicSize]}
             aria-label="Image size"
-            min={0}
-            max={sliderValues.length - 1}
-            step={1}
+            min={200}
+            max={800}
+            step={50}
             onValueChange={([value]) => {
-                setDynamicSize(sliderValues[value]);
+                setDynamicSize(value);
                 if (sendEventTimeoutId.current) clearTimeout(sendEventTimeoutId.current);
                 sendEventTimeoutId.current = setTimeout(() => {
-                    posthog.capture("image_size_changed", { size: parseInt(dynamicSize.slice(6, -3)) });
+                    posthog.capture("image_size_changed", { size: value });
                 }, 10000);
             }}
         />

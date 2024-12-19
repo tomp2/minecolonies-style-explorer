@@ -86,6 +86,10 @@ function recurseCategories(
     return parent;
 }
 
+/**
+ * Convert the JSON data into a more usable format.
+ * The JSON doesn't have display names or paths for the buildings, so we add those.
+ */
 function getThemes(themesJson: Record<string, ThemeJson>): Map<string, Theme> {
     const result = new Map<string, Theme>();
     for (const themeName of Object.keys(themesJson)) {

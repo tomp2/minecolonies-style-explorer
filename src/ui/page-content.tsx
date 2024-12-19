@@ -1,7 +1,8 @@
-import { pageContentAtom, searchTermAtom, selectedThemesAtom } from "@/lib/state-atoms.ts";
-import { BuildingData } from "@/lib/theme-data.ts";
+import { dynamicSizeAtom, pageContentAtom, searchTermAtom, selectedThemesAtom } from "@/lib/state-atoms.ts";
+import { type BuildingData } from "@/lib/theme-data.ts";
 import { BuildingCard } from "@/ui/building-card.tsx";
 import { useAtomValue } from "jotai";
+import { type CSSProperties } from "react";
 
 function sortBuildings(a: BuildingData, b: BuildingData) {
     for (let i = 1; i < Math.min(a.path.length - 1, b.path.length - 1); i++) {
@@ -30,10 +31,36 @@ function BuildingSection({ title, buildings }: { title: string; buildings: Build
     );
 }
 
+function BuildingsContainer() {
+    const imageSize = useAtomValue(dynamicSizeAtom);
+    const { categories, rootBuildings } = useAtomValue(pageContentAtom);
+
+    return (
+        <div style={{ "--imgsize": `${imageSize}px` } as CSSProperties}>
+            {/*Root buildings from all selected themes*/}
+            <BuildingSection title="Top-level Buildings" buildings={rootBuildings} />
+
+            {/*Categories and their buildings*/}
+            {[...categories.entries()].map(([categoryName, section]) => (
+                <div key={categoryName} className="mb-8">
+                    <BuildingSection title={categoryName} buildings={section.blueprints} />
+                    {[...section.categories.entries()].map(([subcategoryName, subcategory]) => (
+                        <BuildingSection
+                            key={subcategoryName}
+                            title={subcategoryName}
+                            buildings={subcategory}
+                        />
+                    ))}
+                </div>
+            ))}
+        </div>
+    );
+}
+
 export function PageContent() {
     const selectedThemes = useAtomValue(selectedThemesAtom);
-    const { categories, rootBuildings, totalBuildingsFound } = useAtomValue(pageContentAtom);
     const searchTerm = useAtomValue(searchTermAtom);
+    const { totalBuildingsFound } = useAtomValue(pageContentAtom);
 
     return (
         <>
@@ -92,22 +119,7 @@ export function PageContent() {
                 </article>
             )}
 
-            {/*Root buildings from all selected themes*/}
-            <BuildingSection title="Top-level Buildings" buildings={rootBuildings} />
-
-            {/*Categories and their buildings*/}
-            {[...categories.entries()].map(([categoryName, section]) => (
-                <div key={categoryName} className="mb-8">
-                    <BuildingSection title={categoryName} buildings={section.blueprints} />
-                    {[...section.categories.entries()].map(([subcategoryName, subcategory]) => (
-                        <BuildingSection
-                            key={subcategoryName}
-                            title={subcategoryName}
-                            buildings={subcategory}
-                        />
-                    ))}
-                </div>
-            ))}
+            <BuildingsContainer />
         </>
     );
 }
