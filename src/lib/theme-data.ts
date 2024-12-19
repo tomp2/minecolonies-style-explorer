@@ -16,7 +16,8 @@ export type CategoryJson = {
 export type ThemeJson = {
     displayName: string;
     authors: string[];
-    buildingData: CategoryJson;
+    blueprints: { [key: string]: BuildingDataJson };
+    categories: { [key: string]: CategoryJson };
 };
 
 export type BuildingData = {
@@ -28,7 +29,6 @@ export type BuildingData = {
 
 export type Category = {
     name: string;
-    path: string[];
     blueprints: Map<string, BuildingData>;
     categories: Map<string, Category>;
 };
@@ -61,7 +61,6 @@ function recurseCategories(
     for (const [categoryName, categoryDataJson] of Object.entries(categories)) {
         const categoryObject: Category = {
             name: categoryName,
-            path: [],
             blueprints: new Map<string, BuildingData>(),
             categories: new Map<string, Category>(),
         };
@@ -98,7 +97,7 @@ function getThemes(themesJson: Record<string, ThemeJson>): Map<string, Theme> {
             blueprints: new Map<string, BuildingData>(),
             categories: new Map<string, Category>(),
         };
-        for (const [name, data] of Object.entries(theme.buildingData.blueprints)) {
+        for (const [name, data] of Object.entries(theme.blueprints)) {
             themeObject.blueprints.set(name, {
                 name,
                 path: [themeName],
@@ -106,7 +105,7 @@ function getThemes(themesJson: Record<string, ThemeJson>): Map<string, Theme> {
                 json: data,
             });
         }
-        recurseCategories([themeName], theme.buildingData.categories, themeObject.categories, 5);
+        recurseCategories([themeName], theme.categories, themeObject.categories, 5);
         result.set(themeName, themeObject);
     }
     return result;
