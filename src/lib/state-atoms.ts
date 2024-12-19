@@ -1,4 +1,5 @@
-import { BuildingData, Category, defaultSelections, Selections, themes } from "@/lib/theme-data.ts";
+import { BuildingData, Category, Selections, themes } from "@/lib/theme-data.ts";
+import { buildingMatchesSearchTerm } from "@/lib/utils.ts";
 import { atom } from "jotai";
 
 export const dynamicSizeAtom = atom<string>("size-[350px]");
@@ -15,12 +16,78 @@ export const writeSearchTermAtom = atom(null, (_get, set, searchTerm: string) =>
     set(searchTermAtom, searchTerm);
 });
 
-export const selectionsAtom = atom<Selections>(defaultSelections);
+function parseSelectionsFromUrl() {
+    const url = new URL(window.location.href);
+    const selections: Selections = {};
 
-export const selectedThemesAtom = atom<string[]>(get => {
+    for (const [theme, categories] of themes.entries()) {
+        if (!url.searchParams.has(theme)) {
+            selections[theme] = Object.fromEntries(
+                [...categories.categories.keys()].map(categoryName => [categoryName, false]),
+            );
+            continue;
+        }
+
+        const rawParamValue = url.searchParams.get(theme)!;
+        selections[theme] = {};
+        if (rawParamValue === "all") {
+            for (const category of categories.categories.keys()) {
+                selections[theme][category] = true;
+            }
+        } else {
+            const inverted = rawParamValue.startsWith("-");
+            const categories = new Set(rawParamValue.slice(inverted ? 1 : 0).split("|"));
+            for (const category of themes.get(theme)!.categories.keys()) {
+                const inList = categories.has(category.slice(0, 4));
+                selections[theme][category] = inverted ? !inList : inList;
+            }
+        }
+    }
+    return selections;
+}
+
+function encodeSelectionsToUrl(selections: Selections) {
+    const url = new URL(window.location.href);
+
+    // Store the selections in the URL.
+    // Store the category name itself as a parameter, so that the URL is human-readable.
+    // If all subcategories are selected, store "caledonia=all" instead of
+    // "caledonia=agri|craf|deco|mili" (4 first letters of each subcategory).
+    for (const [theme, themeSelections] of Object.entries(selections)) {
+        if (!Object.values(themeSelections).some(selected => selected)) {
+            url.searchParams.delete(theme);
+            continue;
+        }
+        if (Object.values(themeSelections).every(selected => selected)) {
+            url.searchParams.set(theme, "all");
+        } else {
+            const selectedCategories = [];
+            const nonSelectedCategories = [];
+            for (const [category, selected] of Object.entries(themeSelections)) {
+                if (selected) {
+                    selectedCategories.push(category.slice(0, 4));
+                } else {
+                    nonSelectedCategories.push(category.slice(0, 4));
+                }
+            }
+            // If there are more non-selected categories than selected ones, store them instead
+            // by prefixing them with a minus sign.
+            if (selectedCategories.length > nonSelectedCategories.length) {
+                url.searchParams.set(theme, "-" + nonSelectedCategories.join("|"));
+            } else {
+                url.searchParams.set(theme, selectedCategories.join("|"));
+            }
+        }
+    }
+    return url.toString();
+}
+
+export const selectionsAtom = atom<Selections>(parseSelectionsFromUrl());
+
+export const selectedThemesAtom = atom<Set<string>>(get => {
     const selections = get(selectionsAtom);
-    return Object.keys(selections).filter(theme =>
-        Object.values(selections[theme]).some(selected => selected),
+    return new Set(
+        Object.keys(selections).filter(theme => Object.values(selections[theme]).some(selected => selected)),
     );
 });
 
@@ -29,31 +96,16 @@ export const pageContentAtom = atom(get => {
     const selectedThemes = get(selectedThemesAtom);
     const searchTerm = get(searchTermAtom);
 
+    window.history.replaceState({}, "", encodeSelectionsToUrl(selections));
+
     let totalBuildingsFound = 0;
-
-    function matchesSearchTerm(building: BuildingData) {
-        if (searchTerm === "") {
-            return true;
-        }
-        const searchTermLower = searchTerm.toLowerCase();
-
-        return (
-            (building.displayName && building.displayName.toLowerCase().includes(searchTermLower)) ||
-            building.name.toLowerCase().includes(searchTermLower) ||
-            (building.json.hutBlocks &&
-                building.json.hutBlocks.some(block =>
-                    block.toLowerCase().replace("blockhut", "").includes(searchTermLower),
-                )) ||
-            building.path.join("/").toLowerCase().includes(searchTermLower)
-        );
-    }
 
     // Root buildings of all themes come first:
     const rootBuildings: BuildingData[] = [];
 
     for (const themeName of selectedThemes) {
         for (const building of themes.get(themeName)!.blueprints.values()) {
-            if (!matchesSearchTerm(building)) continue;
+            if (!buildingMatchesSearchTerm(searchTerm, building)) continue;
             rootBuildings.push(building);
             totalBuildingsFound++;
         }
@@ -61,7 +113,7 @@ export const pageContentAtom = atom(get => {
 
     function recursivelyGatherAllBuildings(category: Category, results: BuildingData[]) {
         for (const building of category.blueprints.values()) {
-            if (!matchesSearchTerm(building)) continue;
+            if (!buildingMatchesSearchTerm(searchTerm, building)) continue;
             results.push(building);
             totalBuildingsFound++;
         }
@@ -86,7 +138,7 @@ export const pageContentAtom = atom(get => {
             const section = categories.get(categoryName)!;
 
             for (const building of categoryData.blueprints.values()) {
-                if (!matchesSearchTerm(building)) continue;
+                if (!buildingMatchesSearchTerm(searchTerm, building)) continue;
                 section.blueprints.push(building);
                 totalBuildingsFound++;
             }

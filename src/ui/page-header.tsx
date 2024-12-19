@@ -12,10 +12,10 @@ export function PageHeader() {
             <SidebarTrigger />
             <div className="ml-4 flex items-center space-x-4">
                 <h1 className="text-lg font-semibold">
-                    {selectedThemes.length === 0 && "Select a theme"}
-                    {selectedThemes.length > 0 &&
-                        `${selectedThemes.map(theme => themes.get(theme)!.displayName).join(", ")}`}
-                    {selectedThemes.length > 0 && (
+                    {selectedThemes.size === 0 && "Select a theme"}
+                    {selectedThemes.size > 0 &&
+                        `${[...selectedThemes].map(theme => themes.get(theme)!.displayName).join(", ")}`}
+                    {selectedThemes.size > 0 && (
                         <span className="text-muted-foreground"> ({totalBuildingsFound} buildings)</span>
                     )}
                 </h1>

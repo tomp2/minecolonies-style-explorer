@@ -37,7 +37,7 @@ export function PageContent() {
 
     return (
         <>
-            {selectedThemes.length === 0 && (
+            {selectedThemes.size === 0 && (
                 <article className="prose mx-auto prose-xl mt-5 ">
                     <h1 className="text-4xl font-extrabold">
                         Welcome to the <em>unofficial</em> MineColonies Building Explorer!
@@ -81,7 +81,7 @@ export function PageContent() {
                 </article>
             )}
 
-            {selectedThemes.length > 0 && totalBuildingsFound === 0 && (
+            {selectedThemes.size > 0 && totalBuildingsFound === 0 && (
                 <article className="prose mx-auto prose-xl mt-5 text-center">
                     <h3>No buildings found</h3>
                     {searchTerm === "" ? (
