@@ -40,7 +40,7 @@ export function PageContent() {
             {selectedThemes.length === 0 && (
                 <article className="prose w-fit mx-auto prose-xl">
                     <h1 className="text-4xl font-extrabold">
-                        Welcome to the MineColonies Building Explorer!
+                        Welcome to the <em>unofficial</em> MineColonies Building Explorer!
                     </h1>
                     <p className="mt-4">
                         This is an <em>unofficial</em> site for browsing screenshots of the{" "}
