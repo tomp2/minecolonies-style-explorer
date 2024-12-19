@@ -2,24 +2,10 @@ import { Input } from "@/components/ui/input.tsx";
 import { searchTermAtom, writeSearchTermAtom } from "@/lib/state-atoms.ts";
 import { useAtomValue, useSetAtom } from "jotai";
 import { Search, X } from "lucide-react";
-import { usePostHog } from "posthog-js/react";
-import { useEffect, useRef } from "react";
 
 export function SearchBar() {
-    const posthog = usePostHog();
     const searchTerm = useAtomValue(searchTermAtom);
     const writeSearchTerm = useSetAtom(writeSearchTermAtom);
-
-    const sendEventTimeoutId = useRef<NodeJS.Timeout | null>(null);
-
-    // Send an event when the search is used to determine need for more categories and filters.
-    useEffect(() => {
-        if (sendEventTimeoutId.current) clearTimeout(sendEventTimeoutId.current);
-        if (searchTerm.length < 2) return;
-        sendEventTimeoutId.current = setTimeout(() => {
-            posthog.capture("search_term_changed", { term: searchTerm });
-        }, 5000);
-    }, [searchTerm]);
 
     return (
         <div className="relative">
@@ -34,7 +20,7 @@ export function SearchBar() {
                 aria-label="Search buildings"
                 className="pl-8"
                 value={searchTerm}
-                onChange={e => writeSearchTerm(e.target.value)}
+                onChange={e => writeSearchTerm(e.target.value.slice(0, 30))}
             />
         </div>
     );

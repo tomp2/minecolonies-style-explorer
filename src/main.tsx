@@ -23,8 +23,6 @@ const options: Partial<PostHogConfig> = {
     api_host: import.meta.env.VITE_REACT_APP_PUBLIC_POSTHOG_HOST,
     persistence: "memory",
     disable_persistence: true,
-    person_profiles: "never",
-    rageclick: false,
     autocapture: false,
     capture_dead_clicks: false,
     sanitize_properties: function (properties, event) {
