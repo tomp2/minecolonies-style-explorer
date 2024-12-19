@@ -1,9 +1,21 @@
 import { Slider } from "@/components/ui/slider.tsx";
 import { dynamicSizeAtom } from "@/lib/state-atoms.ts";
 import { useAtom } from "jotai/index";
+import { usePostHog } from "posthog-js/react";
+import { useEffect, useRef } from "react";
 
 export function ImageSizeSlider() {
+    const posthog = usePostHog();
     const [dynamicSize, setDynamicSize] = useAtom(dynamicSizeAtom);
+    const sendEventTimeoutId = useRef<NodeJS.Timeout | null>(null);
+
+    // Send an event when the slider is used to measure if the default image size is appropriate.
+    useEffect(() => {
+        if (sendEventTimeoutId.current) clearTimeout(sendEventTimeoutId.current);
+        sendEventTimeoutId.current = setTimeout(() => {
+            posthog.capture("image_size_changed", { size: parseInt(dynamicSize.slice(6, -3)) });
+        }, 10000);
+    }, [dynamicSize]);
 
     const sliderValues = [
         "size-[300px]",

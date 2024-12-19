@@ -3,6 +3,7 @@ import { BuildingData } from "@/lib/theme-data.ts";
 import { cn } from "@/lib/utils.ts";
 import { decode } from "blurhash";
 import { useAtomValue } from "jotai";
+import { usePostHog } from "posthog-js/react";
 import * as React from "react";
 import { useEffect, useRef, useState } from "react";
 
@@ -120,10 +121,12 @@ function ImageButton({ building, view, enableImg, ...props }: ImageButtonProps) 
 }
 
 function BuildingImage({ building }: { building: BuildingData }) {
+    const clicked = useRef(false);
     const backPreloadStatus = useRef<boolean>(false);
     const dynamicSize = useAtomValue(dynamicSizeAtom);
     const [view, setView] = useState<"front" | "back">("front");
     const [mountBack, setMountBack] = useState(false);
+    const posthog = usePostHog();
 
     function preloadBack() {
         if (!backPreloadStatus.current && building.json.back) {
@@ -150,6 +153,13 @@ function BuildingImage({ building }: { building: BuildingData }) {
                 if (!building.json.back) return;
                 if (!mountBack) setMountBack(true);
                 setView(view === "front" ? "back" : "front");
+                if (!clicked.current) {
+                    clicked.current = true;
+                    posthog.capture("building_view_back", {
+                        theme: building.path[0],
+                        name: building.name,
+                    });
+                }
             }}
         >
             <ImageButton
