@@ -16,7 +16,7 @@ This is a small and unofficial web app to view organized screenshots of the buil
 - [shadcn/ui](https://ui.shadcn.com/)
 - [Jotai](https://jotai.org/)
 - [PostGog](https://posthog.com/)
-- [Blushash](https://blurha.sh/)
+- [Blurhash](https://blurha.sh/)
 - [prismarine-nbt](https://github.com/PrismarineJS/prismarine-nbt)
   
 ## Getting Started
