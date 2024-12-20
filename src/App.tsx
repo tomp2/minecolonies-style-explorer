@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/sidebar.tsx";
 import { Footer } from "@/Footer.tsx";
 import { themes } from "@/lib/theme-data.ts";
+import { HiddenDialog, useInitialPersistentIdentity } from "@/ui/hidden-dialog.tsx";
 import { ImageSizeSlider } from "@/ui/image-size-slider.tsx";
 import { PageContent } from "@/ui/page-content.tsx";
 import { PageHeader } from "@/ui/page-header.tsx";
@@ -21,51 +22,55 @@ import { ThemeSelector } from "@/ui/theme-selector.tsx";
 import { House } from "lucide-react";
 
 function App() {
+    useInitialPersistentIdentity();
     return (
-        <SidebarProvider>
-            <div className="flex h-screen w-full">
-                <Sidebar>
-                    <SidebarHeader>
-                        <SidebarMenu>
-                            <SidebarMenuItem>
-                                <SidebarMenuButton asChild>
-                                    <Button
-                                        variant="ghost"
-                                        className="w-full justify-start text-md [&_svg]:size-5"
-                                    >
-                                        <House className="mt-1" />
-                                        Minecolonies Styles
-                                    </Button>
-                                </SidebarMenuButton>
-                            </SidebarMenuItem>
-                        </SidebarMenu>
-                        <SearchBar />
-                    </SidebarHeader>
-                    <SidebarContent>
-                        <SidebarGroup>
-                            <SidebarGroupLabel>Image Size</SidebarGroupLabel>
-                            <ImageSizeSlider />
-                        </SidebarGroup>
-                        <SidebarGroup>
-                            <SidebarGroupLabel>Building Selections</SidebarGroupLabel>
+        <>
+            <HiddenDialog />
+            <SidebarProvider>
+                <div className="flex h-screen w-full">
+                    <Sidebar>
+                        <SidebarHeader>
                             <SidebarMenu>
-                                {[...themes.values()].map(theme => (
-                                    <ThemeSelector key={theme.name} theme={theme} />
-                                ))}
+                                <SidebarMenuItem>
+                                    <SidebarMenuButton asChild>
+                                        <Button
+                                            variant="ghost"
+                                            className="w-full justify-start text-md [&_svg]:size-5"
+                                        >
+                                            <House className="mt-1" />
+                                            Minecolonies Styles
+                                        </Button>
+                                    </SidebarMenuButton>
+                                </SidebarMenuItem>
                             </SidebarMenu>
-                        </SidebarGroup>
-                    </SidebarContent>
-                </Sidebar>
-                <SidebarInset className="w-full flex flex-col min-h-screen">
-                    <PageHeader />
-                    <div className="bg-gray-100 flex flex-col grow overflow-x-auto">
-                        <PageContent />
-                        <div className="grow" />
-                        <Footer />
-                    </div>
-                </SidebarInset>
-            </div>
-        </SidebarProvider>
+                            <SearchBar />
+                        </SidebarHeader>
+                        <SidebarContent>
+                            <SidebarGroup>
+                                <SidebarGroupLabel>Image Size</SidebarGroupLabel>
+                                <ImageSizeSlider />
+                            </SidebarGroup>
+                            <SidebarGroup>
+                                <SidebarGroupLabel>Building Selections</SidebarGroupLabel>
+                                <SidebarMenu>
+                                    {[...themes.values()].map(theme => (
+                                        <ThemeSelector key={theme.name} theme={theme} />
+                                    ))}
+                                </SidebarMenu>
+                            </SidebarGroup>
+                        </SidebarContent>
+                    </Sidebar>
+                    <SidebarInset className="w-full flex flex-col min-h-screen">
+                        <PageHeader />
+                        <div className="bg-gray-100 flex flex-col grow overflow-x-auto">
+                            <PageContent />
+                            <div className="grow" />
+                            <Footer />
+                        </div>
+                    </SidebarInset>
+                </div>
+            </SidebarProvider>
+        </>
     );
 }
 
