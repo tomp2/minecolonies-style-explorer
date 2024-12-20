@@ -35,7 +35,7 @@ function App() {
                                         className="w-full justify-start text-md [&_svg]:size-5"
                                     >
                                         <House className="mt-1" />
-                                        Minecolonies Themes
+                                        Minecolonies Styles
                                     </Button>
                                 </SidebarMenuButton>
                             </SidebarMenuItem>

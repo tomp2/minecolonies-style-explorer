@@ -67,38 +67,38 @@ export function PageContent() {
             {selectedThemes.size === 0 && (
                 <article className="prose mx-auto prose-xl mt-5 pb-14">
                     <h1 className="text-4xl font-extrabold">
-                        Welcome to the <em>unofficial</em> MineColonies Building Explorer!
+                        Welcome to the <em>unofficial</em> MineColonies Style Explorer!
                     </h1>
                     <p className="mt-4">
                         This is an <em>unofficial</em> site for browsing screenshots of the{" "}
                         <a className="text-blue-500" href="https://minecolonies.com/">
                             MineColonies
                         </a>{" "}
-                        mod theme buildings. <b>Credits</b> for the buildings go to the theme authors listed
-                        in the sidebar next to the theme name. I created this site to make it easy to visually
-                        browse the buildings from different themes and categories at the same time.
+                        mod theme/style buildings. <b>Credits</b> for the buildings go to the style authors
+                        listed in the sidebar next to the style name. I created this site to make it easy to
+                        visually browse the buildings from different styles and categories at the same time.
                     </p>
                     <p className="mt-4">
-                        To get started, select one or more themes/categories from the sidebar and start
+                        To get started, select one or more styles/categories from the sidebar and start
                         exploring the buildings! You can also search for a building name, hut block, or
-                        category—just select all the themes you want to search from first. You can see the
+                        category—just select all the styles you want to search from first. You can see the
                         back of most buildings by clicking on the image.
                     </p>
                     <p className="mt-4 mb-0">
-                        Some of the themes, categories, or buildings <strong>are missing or excluded</strong>{" "}
+                        Some of the styles, categories, or buildings <strong>are missing or excluded</strong>{" "}
                         for reasons like:
                     </p>
                     <ul className="mt-0">
-                        <li>I haven&#39;t used the theme in my own worlds yet.</li>
+                        <li>I haven&#39;t used the style in my own worlds yet.</li>
                         <li>The builds have been updated and I have not taken new screenshots.</li>
                         <li>
-                            Some themes have a lot off little pieces that I decided not to include for now to
+                            Some styles have a lot off little pieces that I decided not to include for now to
                             save space and time (mostly roads, mineshafts and some infrastructure).
                         </li>
                         <li>New buildings have been added, or I have forgotten some.</li>
                     </ul>
                     <p>
-                        Send me some feedback if you notice changed or missing buildings! I&#39;ll add themes
+                        Send me some feedback if you notice changed or missing buildings! I&#39;ll add styles
                         here if people request them and I have time :)
                     </p>
                     <p>
@@ -112,7 +112,7 @@ export function PageContent() {
                 <article className="prose mx-auto prose-xl mt-5 text-center">
                     <h3>No buildings found</h3>
                     {searchTerm === "" ? (
-                        <p>Try selecting more themes or categories</p>
+                        <p>Try selecting more styles or categories</p>
                     ) : (
                         <p>Try a different search term</p>
                     )}

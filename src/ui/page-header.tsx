@@ -12,7 +12,7 @@ export function PageHeader() {
             <SidebarTrigger />
             <div className="ml-4 flex items-center gap-x-4 min-h-12 flex-wrap">
                 <h1 className="text-lg font-semibold">
-                    {selectedThemes.size === 0 && "Select a theme"}
+                    {selectedThemes.size === 0 && "Select a style"}
                     {selectedThemes.size > 0 &&
                         `${[...selectedThemes].map(theme => themes.get(theme)!.displayName).join(", ")}`}
                 </h1>

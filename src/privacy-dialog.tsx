@@ -57,8 +57,8 @@ export function PrivacyDialog() {
                                 </TableCell>
                             </TableRow>
                             <TableRow>
-                                <TableCell>Theme selections</TableCell>
-                                <TableCell>Which themes are priority to keep updated</TableCell>
+                                <TableCell>Style selections</TableCell>
+                                <TableCell>Which styles are priority to keep updated</TableCell>
                             </TableRow>
                             <TableRow>
                                 <TableCell>Used image size</TableCell>

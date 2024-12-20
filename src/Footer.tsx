@@ -4,7 +4,7 @@ export function Footer() {
     return (
         <div className="border-t bg-card/50 h-10 shrink-0 grow-0 flex px-4 justify-end gap-5">
             <a
-                href="https://github.com/tomp2/minecolonies-building-explorer"
+                href="https://github.com/tomp2/minecolonies-style-explorer"
                 target="_blank"
                 className="inline-flex items-center font-semibold gap-1"
                 rel="noreferrer"

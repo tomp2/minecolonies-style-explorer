@@ -4,7 +4,7 @@ import { defineConfig } from "vite";
 
 export default defineConfig({
     plugins: [react()],
-    base: process.env.NODE_ENV === "production" ? "/minecolonies-building-explorer/" : "/",
+    base: process.env.NODE_ENV === "production" ? "/minecolonies-style-explorer/" : "/",
     resolve: {
         alias: {
             "@": path.resolve(__dirname, "./src"),
