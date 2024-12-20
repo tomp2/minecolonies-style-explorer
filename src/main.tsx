@@ -19,10 +19,11 @@ const customPropertyHandlers: Record<
     $initial_browser_version: null,
 };
 
+const customIdentity = localStorage.getItem("persistent-identity");
+
 const options: Partial<PostHogConfig> = {
     api_host: import.meta.env.VITE_REACT_APP_PUBLIC_POSTHOG_HOST,
-    persistence: "memory",
-    disable_persistence: true,
+    persistence: customIdentity ? "localStorage" : "memory",
     autocapture: false,
     capture_dead_clicks: false,
     sanitize_properties: function (properties, event) {
