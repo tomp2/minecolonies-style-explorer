@@ -1,6 +1,7 @@
 import { SidebarTrigger } from "@/components/ui/sidebar.tsx";
 import { pageContentAtom, selectedThemesAtom } from "@/lib/state-atoms.ts";
 import { themes } from "@/lib/theme-data.ts";
+import { FeedbackDialog } from "@/ui/feedback-dialog.tsx";
 import { useAtomValue } from "jotai";
 
 export function PageHeader() {
@@ -23,6 +24,7 @@ export function PageHeader() {
                     </h1>
                 )}
             </div>
+            <FeedbackDialog />
         </header>
     );
 }

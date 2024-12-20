@@ -1,4 +1,4 @@
-import { PrivacyDialog } from "@/privacy-dialog.tsx";
+import { PrivacyDialog } from "@/ui/privacy-dialog.tsx";
 
 export function Footer() {
     return (
