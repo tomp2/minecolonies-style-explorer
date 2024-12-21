@@ -1,0 +1,20 @@
+[
+  {
+    "name": "barracksfull",
+    "displayName": "[Combined] Barracks + Barrack Towers",
+    "path": "nordic/military",
+    "blueprints": [
+      "barracks5.blueprint",
+      "barrackstower5.blueprint"
+    ]
+  },
+  {
+    "name": "universityfull",
+    "displayName": "[Combined] University + Library",
+    "path": "medievaloak/education",
+    "blueprints": [
+      "university5.blueprint",
+      "library5.blueprint"
+    ]
+  }
+]

@@ -1,7 +1,7 @@
 import json
 import re
 from pathlib import Path
-from typing import Dict, Optional, Any, Set, TypedDict
+from typing import Dict, Optional, Any, Set, TypedDict, Literal
 
 from PIL import Image
 from blurhash import encode
@@ -18,6 +18,7 @@ THEME_DIRS = [
 
 # --- Constants ---
 REPO_DIR = Path(__file__).parent.parent
+COMBINED_BUILDINGS_JSON = REPO_DIR / "src/assets/combined_buildings.json"
 IMAGES_DIR = REPO_DIR / "public/minecolonies"
 OUTPUT_JSON = REPO_DIR / "src/assets/themes.json"
 BUILDING_IGNORE_FILE = Path(__file__).parent / "buildings.ignore"
@@ -34,7 +35,8 @@ ignored_pattern = re.compile(
     "|".join([line.strip() for line in BUILDING_IGNORE_FILE.read_text().splitlines() if line.strip()]))
 
 
-def parse_building_filename(file_name: str) -> Dict[str, Any]:
+def parse_building_filename(file_name: str) -> TypedDict("BuildingName",
+                                                         {"buildingName": str, "buildingLevel": int | Literal[False]}):
     match = re.match(r"^(.+?)(\d?)\.blueprint$", file_name)
     if not match:
         raise ValueError(f"File name doesn't match the pattern: {file_name}")
@@ -189,6 +191,7 @@ def process_theme(theme_path: Path):
     for item in theme_path.iterdir():
         if item.name in ["pack.json", f"{theme_path.name}.png"]:
             continue
+        print(f"    Processing: {item.relative_to(theme_path)}")
 
         if item.is_file():
             handle_file(item, theme_blueprints, theme_images_dir, theme_path)
@@ -203,6 +206,93 @@ def process_theme(theme_path: Path):
     }
 
 
+def add_combined_buildings(themes: Dict[str, Any]):
+    """
+    Reads the combined buildings which look like this:
+    [
+      {
+        "name": "barracksfull",
+        "displayName": "Barracks + Towers",
+        "path": "nordic/military",
+        "blueprints": [
+          "barracks5.blueprint",
+          "barrackstower5.blueprint"
+        ]
+      }
+    ]
+    These entries must be added to the themes.json file.
+    The "path" must be used to find the actual blueprint files +
+    add the new building object to the correct category in the resulting JSON.
+    """
+    combined_buildings = json.loads(COMBINED_BUILDINGS_JSON.read_text())
+    for combined_building in combined_buildings:
+        path = combined_building["path"].split("/")
+        name = combined_building["name"]
+
+        print(f"Processing combined building: {name} ({'/'.join(path)})")
+
+        (theme_name, *category_path) = path
+        if theme_name not in themes:
+            print(f"[WARN] Theme not found: {theme_name}")
+            continue
+
+        theme_source_dir: Path | None = None
+        for theme_dir in THEME_DIRS:
+            if theme_dir.name == theme_name:
+                theme_source_dir = theme_dir
+                break
+
+        if theme_source_dir is None:
+            print(f"[WARN] Theme directory not found: {theme_name}")
+            continue
+
+        combined_hut_blocks = set()
+        combined_level = False
+        for blueprint in combined_building["blueprints"]:
+            blueprint_path = theme_source_dir.joinpath(*category_path).joinpath(blueprint)
+            nbt_data = read_blueprint_nbt(blueprint_path)
+            combined_hut_blocks |= get_building_hut_blocks(nbt_data)
+            building_level = parse_building_filename(blueprint)["buildingLevel"]
+            if not combined_level:
+                combined_level = building_level
+            elif building_level:
+                combined_level = max(combined_level, building_level)
+
+        building_object = {
+            "levels": combined_level,
+            "displayName": combined_building["displayName"]
+        }
+
+        if combined_hut_blocks:
+            building_object["hutBlocks"] = list(combined_hut_blocks)
+
+        combined_images_dir = IMAGES_DIR / theme_name / "/".join(category_path) / name
+        front = combined_images_dir / (f"{combined_level}front.jpg" if combined_level else "front.jpg")
+        back = combined_images_dir / (f"{combined_level}back.jpg" if combined_level else "back.jpg")
+
+        frontExists = front.exists()
+        backExists = back.exists()
+
+        if not frontExists:
+            print(f"[WARN] Required front image not found: {front.relative_to(IMAGES_DIR)}")
+            continue
+
+        blur_hashes = [encode_image_to_blurhash(front)]
+
+        if backExists:
+            building_object["back"] = True
+            blur_hashes.append(encode_image_to_blurhash(back))
+
+        building_object["blur"] = blur_hashes
+
+        # Drill down in the themes object to find the correct category for adding the new building
+        current_category = themes[theme_name]
+        for category in category_path:
+            current_category = current_category["categories"][category]
+
+        current_category["blueprints"][name] = building_object
+
+
 def main():
     themes = {}
 
@@ -210,7 +300,10 @@ def main():
         themes = json.loads(OUTPUT_JSON.read_text())
 
     for theme_dir in THEME_DIRS:
+        print(f"Processing theme: {theme_dir.name}")
         themes[theme_dir.name] = process_theme(theme_dir)
+
+    add_combined_buildings(themes)
 
     OUTPUT_JSON.write_text(json.dumps(themes))
     print("Done!")

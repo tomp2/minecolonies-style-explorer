@@ -180,14 +180,14 @@ function FavoriteButton({ building, className }: { building: BuildingData; class
 }
 
 export function BuildingCard({ building }: { building: BuildingData }) {
-    const buildingName = building.displayName || building.name;
+    const buildingName = building.json.displayName || building.displayName || building.name;
     return (
         <div className="w-[calc(var(--imgsize)+18px)] rounded-lg border bg-card p-2 text-card-foreground shadow">
             <BuildingImage building={building} />
             <div className="p-1.5">
                 <h2 className="font-semibold">
                     {buildingName}
-                    {buildingName !== building.name && ` (${building.name})`}
+                    {!building.json.displayName && buildingName !== building.name && ` (${building.name})`}
                 </h2>
                 <p className="text-sm capitalize text-muted-foreground">{building.path.join(" > ")}</p>
                 {/*{building.json.levels !== false && (*/}

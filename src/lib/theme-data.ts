@@ -6,6 +6,7 @@ type BuildingDataJson = {
     hutBlocks?: string[];
     back?: true;
     blur: [string, string?];
+    displayName?: string;
 };
 
 export type CategoryJson = {
