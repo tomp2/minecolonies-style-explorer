@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://tomp2.github.io/minecolonies-style-explorer/sitemap.xml
