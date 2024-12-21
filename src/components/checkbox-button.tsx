@@ -17,7 +17,7 @@ export const CheckboxButton = React.forwardRef<
         {...props}
         ref={ref}
     >
-        <div className="size-4 rounded-sm border border-primary shadow text-primary-foreground group-data-[state=on]:bg-primary">
+        <div className="size-4 rounded-sm border border-primary text-primary-foreground shadow group-data-[state=on]:bg-primary">
             <div className="flex items-center justify-center text-current group-data-[state=off]:invisible">
                 <Check className="size-4" />
             </div>

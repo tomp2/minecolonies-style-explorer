@@ -14,7 +14,7 @@ import { MessageCircle } from "lucide-react";
 export function FeedbackDialog() {
     return (
         <Dialog>
-            <DialogTrigger className="ml-auto text-lg font-semibold flex items-center">
+            <DialogTrigger className="ml-auto flex items-center text-lg font-semibold">
                 <MessageCircle className="size-5" />
                 Feedback
             </DialogTrigger>
@@ -38,11 +38,11 @@ export function FeedbackDialog() {
                 </DialogHeader>
                 <iframe
                     src="https://docs.google.com/forms/d/e/1FAIpQLSdCtm4Ne3MkI2bHWxMsHAZwFxT5-IfcY2P2HNehZfsepEtncQ/viewform?embedded=true"
-                    className="overflow-y-auto w-full sm:h-[calc(min(510px,_70vh))] h-[calc(min(570px,_70vh))]"
+                    className="h-[calc(min(570px,_70vh))] w-full overflow-y-auto sm:h-[calc(min(510px,_70vh))]"
                 >
                     Loading...
                 </iframe>
-                <DialogFooter className="sm:justify-start p-6">
+                <DialogFooter className="p-6 sm:justify-start">
                     <DialogClose asChild>
                         <Button type="button" variant="secondary">
                             Close

@@ -30,7 +30,7 @@ function ShowFavorites() {
             onPressedChange={toggleShowFavorites}
         >
             <p className="mb-0.5">Show Favorites</p>
-            <p className="text-sm text-gray-500 ml-auto">{favoriteCount}</p>
+            <p className="ml-auto text-sm text-gray-500">{favoriteCount}</p>
         </CheckboxButton>
     );
 }
@@ -42,7 +42,7 @@ export function FullSidebar() {
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton asChild>
-                            <Button variant="ghost" className="w-full justify-start text-md [&_svg]:size-5">
+                            <Button variant="ghost" className="text-md w-full justify-start [&_svg]:size-5">
                                 <House className="mt-1" />
                                 Minecolonies Styles
                             </Button>

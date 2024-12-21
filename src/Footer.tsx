@@ -2,11 +2,11 @@ import { PrivacyDialog } from "@/ui/privacy-dialog.tsx";
 
 export function Footer() {
     return (
-        <div className="border-t bg-card/50 h-10 shrink-0 grow-0 flex px-4 justify-end gap-5">
+        <div className="flex h-10 shrink-0 grow-0 justify-end gap-5 border-t bg-card/50 px-4">
             <a
                 href="https://github.com/tomp2/minecolonies-style-explorer"
                 target="_blank"
-                className="inline-flex items-center font-semibold gap-1"
+                className="inline-flex items-center gap-1 font-semibold"
                 rel="noreferrer"
                 aria-label="View source on GitHub"
             >

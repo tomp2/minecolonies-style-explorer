@@ -11,7 +11,7 @@ export function PageHeader() {
     return (
         <header className="flex items-center border-b px-4">
             <SidebarTrigger />
-            <div className="ml-4 flex items-center gap-x-4 min-h-12 flex-wrap">
+            <div className="ml-4 flex min-h-12 flex-wrap items-center gap-x-4">
                 <h1 className="text-lg font-semibold">
                     {selectedThemes.size === 0 && "Select a style"}
                     {selectedThemes.size > 0 &&

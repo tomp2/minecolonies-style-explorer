@@ -28,8 +28,8 @@ function BuildingSection({ title, buildings }: { title: string; buildings: Build
     }
     return (
         <div className="mb-8">
-            <h2 className="ml-2 text-2xl font-extrabold mb-4 capitalize">{title}</h2>
-            <div className="flex gap-4 flex-wrap">
+            <h2 className="mb-4 ml-2 text-2xl font-extrabold capitalize">{title}</h2>
+            <div className="flex flex-wrap gap-4">
                 {buildings.sort(sortBuildings).map(building => (
                     <BuildingCard key={building.path.join() + building.name} building={building} />
                 ))}
@@ -77,9 +77,9 @@ export function PageContent() {
     const { totalBuildingsFound } = useAtomValue(pageContentAtom);
 
     return (
-        <div className="p-2 flex flex-col">
+        <div className="flex flex-col p-2">
             {selectedThemes.size === 0 && !showFavorites && (
-                <article className="prose mx-auto prose-xl mt-5 pb-14">
+                <article className="prose prose-xl mx-auto mt-5 pb-14">
                     <h1 className="text-4xl font-extrabold">
                         Welcome to the <em>unofficial</em> MineColonies Style Explorer!
                     </h1>
@@ -98,7 +98,7 @@ export function PageContent() {
                         category—just select all the styles you want to search from first. You can see the
                         back of most buildings by clicking on the image.
                     </p>
-                    <p className="mt-4 mb-0">
+                    <p className="mb-0 mt-4">
                         Some of the styles, categories, or buildings <strong>are missing or excluded</strong>{" "}
                         for reasons like:
                     </p>
@@ -123,7 +123,7 @@ export function PageContent() {
             )}
 
             {selectedThemes.size > 0 && totalBuildingsFound === 0 && (
-                <article className="prose mx-auto prose-xl mt-5 text-center">
+                <article className="prose prose-xl mx-auto mt-5 text-center">
                     <h3>No buildings found</h3>
                     {searchTerm === "" ? (
                         <p>Try selecting more styles or categories</p>

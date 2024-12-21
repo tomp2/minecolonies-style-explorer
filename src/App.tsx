@@ -13,9 +13,9 @@ function App() {
             <SidebarProvider>
                 <div className="flex h-screen w-full">
                     <FullSidebar />
-                    <SidebarInset className="w-full flex flex-col min-h-screen">
+                    <SidebarInset className="flex min-h-screen w-full flex-col">
                         <PageHeader />
-                        <div className="bg-gray-100 flex flex-col grow overflow-x-auto">
+                        <div className="flex grow flex-col overflow-x-auto bg-gray-100">
                             <PageContent />
                             <div className="grow" />
                             <Footer />

@@ -14,7 +14,7 @@ import { ScrollText } from "lucide-react";
 export function PrivacyDialog() {
     return (
         <Dialog>
-            <DialogTrigger className="inline-flex items-center font-semibold gap-1">
+            <DialogTrigger className="inline-flex items-center gap-1 font-semibold">
                 <ScrollText className="size-5" />
                 Privacy
             </DialogTrigger>
@@ -29,7 +29,7 @@ export function PrivacyDialog() {
                             href="https://posthog.com/"
                             target="_blank"
                             rel="noreferrer"
-                            className="underline text-blue-500"
+                            className="text-blue-500 underline"
                         >
                             PostHog
                         </a>{" "}
