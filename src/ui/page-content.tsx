@@ -1,6 +1,7 @@
 import {
     dynamicSizeAtom,
     favoriteBuildingsAtom,
+    favoritePaths,
     pageContentAtom,
     searchTermAtom,
     selectedThemesAtom,
@@ -74,11 +75,12 @@ export function PageContent() {
     const selectedThemes = useAtomValue(selectedThemesAtom);
     const searchTerm = useAtomValue(searchTermAtom);
     const showFavorites = useAtomValue(showFavoritesAtom);
+    const favoriteCount = useAtomValue(favoritePaths).length;
     const { totalBuildingsFound } = useAtomValue(pageContentAtom);
 
     return (
         <div className="flex flex-col p-2">
-            {selectedThemes.size === 0 && !showFavorites && (
+            {selectedThemes.size === 0 && (!showFavorites || favoriteCount === 0) && (
                 <article className="prose prose-xl mx-auto mt-5 pb-14">
                     <h1 className="text-4xl font-extrabold">
                         Welcome to the <em>unofficial</em> MineColonies Style Explorer!
