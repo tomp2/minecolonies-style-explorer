@@ -1,4 +1,11 @@
-import { dynamicSizeAtom, pageContentAtom, searchTermAtom, selectedThemesAtom } from "@/lib/state-atoms.ts";
+import {
+    dynamicSizeAtom,
+    favoriteBuildingsAtom,
+    pageContentAtom,
+    searchTermAtom,
+    selectedThemesAtom,
+    showFavoritesAtom,
+} from "@/lib/state-atoms.ts";
 import { type BuildingData } from "@/lib/theme-data.ts";
 import { BuildingCard } from "@/ui/building-card.tsx";
 import { useAtomValue } from "jotai";
@@ -21,7 +28,7 @@ function BuildingSection({ title, buildings }: { title: string; buildings: Build
     }
     return (
         <div className="mb-8">
-            <h2 className="text-2xl font-extrabold mb-4 capitalize">{title}</h2>
+            <h2 className="ml-2 text-2xl font-extrabold mb-4 capitalize">{title}</h2>
             <div className="flex gap-4 flex-wrap">
                 {buildings.sort(sortBuildings).map(building => (
                     <BuildingCard key={building.path.join() + building.name} building={building} />
@@ -33,10 +40,16 @@ function BuildingSection({ title, buildings }: { title: string; buildings: Build
 
 function BuildingsContainer() {
     const imageSize = useAtomValue(dynamicSizeAtom);
+    const showFavorites = useAtomValue(showFavoritesAtom);
+    const favoriteBuildings = useAtomValue(favoriteBuildingsAtom);
     const { categories, rootBuildings } = useAtomValue(pageContentAtom);
 
     return (
         <div style={{ "--imgsize": `${imageSize}px` } as CSSProperties}>
+            {showFavorites && favoriteBuildings.length > 0 && (
+                <BuildingSection title="Favorites" buildings={favoriteBuildings.sort(sortBuildings)} />
+            )}
+
             {/*Root buildings from all selected themes*/}
             <BuildingSection title="Top-level Buildings" buildings={rootBuildings} />
 
@@ -60,11 +73,12 @@ function BuildingsContainer() {
 export function PageContent() {
     const selectedThemes = useAtomValue(selectedThemesAtom);
     const searchTerm = useAtomValue(searchTermAtom);
+    const showFavorites = useAtomValue(showFavoritesAtom);
     const { totalBuildingsFound } = useAtomValue(pageContentAtom);
 
     return (
         <div className="p-2 flex flex-col">
-            {selectedThemes.size === 0 && (
+            {selectedThemes.size === 0 && !showFavorites && (
                 <article className="prose mx-auto prose-xl mt-5 pb-14">
                     <h1 className="text-4xl font-extrabold">
                         Welcome to the <em>unofficial</em> MineColonies Style Explorer!

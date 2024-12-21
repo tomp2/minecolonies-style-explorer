@@ -104,7 +104,7 @@ function ThemeButton({ theme }: { theme: Theme }) {
                 pressed={isSelected}
                 onPressedChange={() => toggleTheme(theme)}
             >
-                <div className="flex flex-wrap leading-none gap-x-1.5">
+                <div className="mb-0.5 flex flex-wrap gap-x-1.5 leading-none">
                     <p>{theme.displayName}</p>
                     <p className="text-muted-foreground">({theme.authors.join(", ")})</p>
                 </div>
@@ -123,7 +123,7 @@ export function ThemeSelector({ theme }: { theme: Theme }) {
                     <SidebarGroupLabel asChild>
                         <ThemeButton theme={theme} />
                     </SidebarGroupLabel>
-                    <CollapsibleTrigger className="ml-auto size-8 shrink-0 flex items-center justify-center">
+                    <CollapsibleTrigger className="ml-auto flex size-8 shrink-0 items-center justify-center">
                         <ChevronDown className="transition-transform group-data-[state=open]/collapsible:rotate-180" />
                     </CollapsibleTrigger>
                 </div>

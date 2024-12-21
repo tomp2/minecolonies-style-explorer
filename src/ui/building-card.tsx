@@ -1,6 +1,10 @@
+import { Button } from "@/components/ui/button.tsx";
+import { favoritesPathsWriteAtom } from "@/lib/state-atoms.ts";
 import { BuildingData } from "@/lib/theme-data.ts";
 import { cn } from "@/lib/utils.ts";
 import { decode } from "blurhash";
+import { useAtom } from "jotai";
+import { Heart } from "lucide-react";
 import * as React from "react";
 import { useEffect, useRef, useState } from "react";
 
@@ -35,17 +39,17 @@ function BlurhashCanvas({ hash, height, width, className, ...props }: BlurhashCa
 
 function ImageCountIndicator({ setView }: { setView: (view: "front" | "back") => void }) {
     return (
-        <div className="absolute bottom-0 opacity-70 space-x-1 mb-1.5">
+        <div className="absolute bottom-0 mb-1.5 space-x-1 opacity-70">
             <button
                 type="button"
                 aria-label="View front of building"
-                className="size-2.5 rounded-full bg-gray-100 group-data-[view='back']:bg-gray-400"
+                className="size-2.5 rounded-full bg-gray-100 group-data-[view='back']/card:bg-gray-400"
                 onClick={setView.bind(null, "front")}
             ></button>
             <button
                 type="button"
                 aria-label="View back of building"
-                className="size-2.5 rounded-full bg-gray-400 group-data-[view='back']:bg-gray-100"
+                className="size-2.5 rounded-full bg-gray-400 group-data-[view='back']/card:bg-gray-100"
                 onClick={setView.bind(null, "back")}
             ></button>
         </div>
@@ -76,11 +80,11 @@ function ImageButton({ building, view, enableImg, className, ...props }: ImageBu
     const imgSrc = ["minecolonies", ...building.path, building.name, `${level}${view}.jpg`].join("/");
 
     return (
-        <div className={cn("w-full h-full inset-0", className)} {...props}>
+        <div className={cn("inset-0 h-full w-full", className)} {...props}>
             {blurhash && (showBlurhash || error) && (
                 <BlurhashCanvas
                     className={cn(
-                        "absolute opacity-0 transition-opacity duration-100 rounded-sm",
+                        "absolute rounded-sm opacity-0 transition-opacity duration-100",
                         (loading || error) && "opacity-100",
                     )}
                     hash={blurhash}
@@ -89,7 +93,7 @@ function ImageButton({ building, view, enableImg, className, ...props }: ImageBu
                 />
             )}
             {error ? (
-                <div className="absolute w-full h-full flex items-center justify-center text-secondary">
+                <div className="absolute flex h-full w-full items-center justify-center text-secondary">
                     Error loading {view} image
                 </div>
             ) : (
@@ -98,7 +102,7 @@ function ImageButton({ building, view, enableImg, className, ...props }: ImageBu
                         loading="lazy"
                         src={imgSrc}
                         alt={`${buildingName} (${view})`}
-                        className="object-cover size-full rounded-sm"
+                        className="size-full rounded-sm object-cover"
                         onError={() => setError(true)}
                         onLoad={() => {
                             setLoading(false);
@@ -118,11 +122,11 @@ function BuildingImage({ building }: { building: BuildingData }) {
     const buildingName = building.displayName || building.name;
 
     return (
-        <div className="relative flex justify-center group" data-view={view}>
+        <div className="group/card relative flex justify-center" data-view={view}>
             <button
                 aria-label={`${view} view of ${buildingName}`}
                 type="button"
-                className="size-[var(--imgsize)] focus-visible:ring-1 focus-visible:ring-ring rounded-sm relative"
+                className="relative size-[var(--imgsize)] rounded-sm focus-visible:ring-1 focus-visible:ring-ring"
                 onClick={() => {
                     if (building.json.back) {
                         setView(view === "front" ? "back" : "front");
@@ -137,28 +141,55 @@ function BuildingImage({ building }: { building: BuildingData }) {
                     onMouseEnter={() => !mountBack && building.json.back && setMountBack(true)}
                 />
                 <ImageButton
-                    className="group-data-[view='front']:hidden absolute"
+                    className="absolute group-data-[view='front']/card:hidden"
                     building={building}
                     view="back"
                     enableImg={mountBack}
                 />
             </button>
             {building.json.back && <ImageCountIndicator setView={setView} />}
+            <FavoriteButton className="absolute right-2 top-2" building={building} />
         </div>
+    );
+}
+
+function FavoriteButton({ building, className }: { building: BuildingData; className?: string }) {
+    const [favorites, setFavorites] = useAtom(favoritesPathsWriteAtom);
+
+    const path = building.path.join(">") + ">" + building.name;
+    const isFavorite = favorites.has(path);
+    return (
+        <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            data-favorite={isFavorite}
+            aria-label={`Toggle ${building.displayName || building.name} as a favorite`}
+            className={cn(
+                "group hover:scale-105 hover:bg-transparent active:scale-95 [&_svg]:size-6",
+                className,
+            )}
+            onClick={() => setFavorites(path)}
+        >
+            <Heart
+                size={16}
+                className="fill-stone-400 text-secondary drop-shadow-sm group-data-[favorite=true]:fill-rose-500"
+            />
+        </Button>
     );
 }
 
 export function BuildingCard({ building }: { building: BuildingData }) {
     const buildingName = building.displayName || building.name;
     return (
-        <div className="w-[calc(var(--imgsize)+18px)] rounded-lg border bg-card text-card-foreground shadow p-2">
+        <div className="w-[calc(var(--imgsize)+18px)] rounded-lg border bg-card p-2 text-card-foreground shadow">
             <BuildingImage building={building} />
             <div className="p-1.5">
                 <h2 className="font-semibold">
                     {buildingName}
                     {buildingName !== building.name && ` (${building.name})`}
                 </h2>
-                <p className="text-sm text-muted-foreground capitalize">{building.path.join(" > ")}</p>
+                <p className="text-sm capitalize text-muted-foreground">{building.path.join(" > ")}</p>
                 {/*{building.json.levels !== false && (*/}
                 {/*    <p className="text-sm text-muted-foreground">Levels: {building.json.levels}</p>*/}
                 {/*)}*/}

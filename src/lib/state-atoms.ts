@@ -3,7 +3,7 @@ import { buildingMatchesSearchTerm } from "@/lib/utils.ts";
 import { atom } from "jotai";
 import { atomWithStorage } from "jotai/utils";
 
-export const dynamicSizeAtom = atomWithStorage<number>("imgsize", 300);
+export const dynamicSizeAtom = atomWithStorage<number>("imgsize", 300, undefined, { getOnInit: true });
 
 export const searchTermAtom = atom<string>(new URLSearchParams(window.location.search).get("search") || "");
 export const writeSearchTermAtom = atom(null, (_get, set, searchTerm: string) => {
@@ -15,6 +15,41 @@ export const writeSearchTermAtom = atom(null, (_get, set, searchTerm: string) =>
     }
     window.history.replaceState({}, "", url.toString());
     set(searchTermAtom, searchTerm);
+});
+
+export const showFavoritesAtom = atomWithStorage<boolean>("showFavorites", true, undefined, {
+    getOnInit: true,
+});
+export const favoritePaths = atomWithStorage<string[]>("favorites", [], undefined, { getOnInit: true });
+export const favoritesPathsWriteAtom = atom(
+    get => new Set(get(favoritePaths)),
+    (get, set, path: string) => {
+        const favorites = get(favoritePaths);
+        if (favorites.includes(path)) {
+            set(
+                favoritePaths,
+                favorites.filter(favorite => favorite !== path),
+            );
+        } else {
+            set(favoritePaths, [...favorites, path]);
+        }
+    },
+);
+export const favoriteBuildingsAtom = atom(get => {
+    const paths = get(favoritePaths);
+    return paths.map(path => {
+        const pathParts = path.split(">");
+
+        const categories = pathParts.slice(1, -1);
+        const theme = pathParts[0];
+        const name = pathParts[pathParts.length - 1];
+
+        let categoryLevel: Category = themes.get(theme)!;
+        for (const category of categories) {
+            categoryLevel = categoryLevel.categories.get(category)!;
+        }
+        return categoryLevel.blueprints.get(name)!;
+    });
 });
 
 function parseSelectionsFromUrl() {
