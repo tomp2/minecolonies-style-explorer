@@ -95,6 +95,7 @@ function ImageButton({ building, view, enableImg, className, ...props }: ImageBu
             ) : (
                 (enableImg === undefined || enableImg) && (
                     <img
+                        loading="lazy"
                         src={imgSrc}
                         alt={`${buildingName} (${view})`}
                         className="object-cover size-full rounded-sm"
@@ -123,15 +124,17 @@ function BuildingImage({ building }: { building: BuildingData }) {
                 type="button"
                 className="size-[var(--imgsize)] focus-visible:ring-1 focus-visible:ring-ring rounded-sm relative"
                 onClick={() => {
-                    if (building.json.back) setView(view === "front" ? "back" : "front");
-                    if (!mountBack) setMountBack(true);
+                    if (building.json.back) {
+                        setView(view === "front" ? "back" : "front");
+                        if (!mountBack) setMountBack(true);
+                    }
                 }}
             >
                 <ImageButton
                     className="absolute"
                     building={building}
                     view="front"
-                    onMouseEnter={() => !mountBack && setMountBack(true)}
+                    onMouseEnter={() => !mountBack && building.json.back && setMountBack(true)}
                 />
                 <ImageButton
                     className="group-data-[view='front']:hidden absolute"
