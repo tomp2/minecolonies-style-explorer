@@ -83,7 +83,7 @@ export function PageContent() {
                     <h1 className="text-4xl font-extrabold">
                         Welcome to the <em>unofficial</em> MineColonies Style Explorer!
                     </h1>
-                    <p className="mt-4">
+                    <p>
                         This is an <em>unofficial</em> site for browsing screenshots of the{" "}
                         <a className="text-blue-500" href="https://minecolonies.com/">
                             MineColonies
@@ -92,15 +92,24 @@ export function PageContent() {
                         listed in the sidebar next to the style name. I created this site to make it easy to
                         visually browse the buildings from different styles and categories at the same time.
                     </p>
-                    <p className="mt-4">
+                    <p>
                         To get started, select one or more styles/categories from the sidebar and start
                         exploring the buildings! You can also search for a building name, hut block, or
                         category—just select all the styles you want to search from first. You can see the
                         back of most buildings by clicking on the image.
                     </p>
-                    <p className="mb-0 mt-4">
-                        Some of the styles, categories, or buildings <strong>are missing or excluded</strong>{" "}
-                        for reasons like:
+                    <p>
+                        Note: This page only shows simple pics of the buildings. Minecolonies has a Patreon
+                        where you can support them and get access to their official <b>schematics server</b>{" "}
+                        if you want to browse and inspect the buildings more closely in-game. Read more about
+                        it on their{" "}
+                        <a className="text-blue-500" href="https://www.patreon.com/minecolonies">
+                            Patreon page
+                        </a>
+                    </p>
+                    <p className="mb-0">
+                        Some of the styles, categories, or buildings may be
+                        <strong> missing or excluded</strong> for reasons like:
                     </p>
                     <ul className="mt-0">
                         <li>I haven&#39;t used the style in my own worlds yet.</li>
@@ -112,8 +121,8 @@ export function PageContent() {
                         <li>New buildings have been added, or I have forgotten some.</li>
                     </ul>
                     <p>
-                        Send me some feedback if you notice changed or missing buildings! I&#39;ll add styles
-                        here if people request them and I have time :)
+                        Send me some feedback (button on top right) if you notice changed or missing
+                        buildings! I&#39;ll add styles here if people request them and I have time :)
                     </p>
                     <p>
                         Viewing buildings at different levels is not supported yet, but I might add it in the
