@@ -1,4 +1,5 @@
 import { CheckboxButton } from "@/components/checkbox-button.tsx";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import {
     SidebarGroupLabel,
     SidebarMenuButton,
@@ -6,9 +7,11 @@ import {
     SidebarMenuSub,
     SidebarMenuSubItem,
 } from "@/components/ui/sidebar.tsx";
-import { selectionsAtom } from "@/lib/state-atoms.ts";
+import { selectedThemesAtom, selectionsAtom } from "@/lib/state-atoms.ts";
 import { Theme } from "@/lib/theme-data.ts";
+import { useAtomValue } from "jotai";
 import { useAtom } from "jotai/index";
+import { ChevronDown } from "lucide-react";
 import { usePostHog } from "posthog-js/react";
 import { useRef } from "react";
 
@@ -101,26 +104,42 @@ function ThemeButton({ theme }: { theme: Theme }) {
                 pressed={isSelected}
                 onPressedChange={() => toggleTheme(theme)}
             >
-                {theme.displayName}
-                <span className="text-muted-foreground text-sm">({theme.authors.join(", ")})</span>
+                <div className="flex flex-wrap leading-none gap-x-1.5">
+                    <p>{theme.displayName}</p>
+                    <p className="text-muted-foreground">({theme.authors.join(", ")})</p>
+                </div>
             </CheckboxButton>
         </SidebarMenuButton>
     );
 }
 
 export function ThemeSelector({ theme }: { theme: Theme }) {
+    const selectedThemes = useAtomValue(selectedThemesAtom);
+    const isSelected = selectedThemes.has(theme.name);
     return (
-        <SidebarMenuItem className="p-0">
-            <SidebarGroupLabel asChild>
-                <ThemeButton theme={theme} />
-            </SidebarGroupLabel>
-            <SidebarMenuSub>
-                {[...theme.categories.values()].map(category => (
-                    <SidebarMenuSubItem key={category.name}>
-                        <ThemSubCategoryButton key={category.name} path={[theme.name, category.name]} />
-                    </SidebarMenuSubItem>
-                ))}
-            </SidebarMenuSub>
-        </SidebarMenuItem>
+        <Collapsible defaultOpen={isSelected} className="group/collapsible">
+            <SidebarMenuItem className="p-0">
+                <div className="flex items-center">
+                    <SidebarGroupLabel asChild>
+                        <ThemeButton theme={theme} />
+                    </SidebarGroupLabel>
+                    <CollapsibleTrigger className="ml-auto size-8 shrink-0 flex items-center justify-center">
+                        <ChevronDown className="transition-transform group-data-[state=open]/collapsible:rotate-180" />
+                    </CollapsibleTrigger>
+                </div>
+                <CollapsibleContent>
+                    <SidebarMenuSub>
+                        {[...theme.categories.values()].map(category => (
+                            <SidebarMenuSubItem key={category.name}>
+                                <ThemSubCategoryButton
+                                    key={category.name}
+                                    path={[theme.name, category.name]}
+                                />
+                            </SidebarMenuSubItem>
+                        ))}
+                    </SidebarMenuSub>
+                </CollapsibleContent>
+            </SidebarMenuItem>
+        </Collapsible>
     );
 }

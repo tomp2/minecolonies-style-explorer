@@ -8,10 +8,45 @@ The user may have different process so this script must be modified to fit their
 """
 
 import os
+import re
 from datetime import datetime
 from pathlib import Path
+from typing import Any
 
-images_path = Path(__file__).parent.parent.joinpath("public", "minecolonies", "shire")
+images_path = Path(__file__).parent.parent.joinpath("public", "minecolonies", "nordic")
+blueprints_path = Path(r"C:\Users\user\Desktop\minecolonies").joinpath(images_path.name)
+
+
+def parse_building_filename(file_name: str) -> dict[str, Any]:
+    match = re.match(r"^(.+?)(\d?)\.blueprint$", file_name)
+    if not match:
+        raise ValueError(f"File name doesn't match the pattern: {file_name}")
+    return {"buildingName": match[1], "buildingLevel": int(match[2]) if match[2] else False}
+
+
+def get_building_max_level(building_screenshot_path: Path) -> int | None:
+    # The images_path directory and blueprint_path directory have the same structure, so the
+    # blueprints for a building screenshot can be found by replacing the images_path with the
+    # blueprints_path. However, in the blueprints directory each building doesn't have their
+    # own directory but are files instead, e.g. "building1.blueprint", "building2.blueprint", etc.
+    # If the building name doesn't end with an integer, then the building doesn't have levels.
+    partial_building_path = building_screenshot_path.relative_to(images_path).parent
+    building_name = partial_building_path.name
+
+    blueprint_directory = blueprints_path.joinpath(partial_building_path.parent)
+
+    if (blueprint_directory / f"{partial_building_path.name}.blueprint").exists():
+        return None
+
+    # Find by glob
+    matching_files = list(blueprint_directory.glob(f"{building_name}*.blueprint"))
+    matching_files.sort(reverse=True)
+
+    if not matching_files:
+        return None
+
+    return int(matching_files[0].stem[-1])
+
 
 # Recursively iterate over directories here until a directory with .png files is found
 for dirpath, dirnames, filenames in os.walk(images_path):
@@ -39,8 +74,11 @@ for dirpath, dirnames, filenames in os.walk(images_path):
 
         frontPath = Path(dirpath).joinpath(front)
         backPath = Path(dirpath).joinpath(back)
-        frontPath.rename(frontPath.with_name("front.png"))
-        backPath.rename(backPath.with_name("back.png"))
+
+        max_level = get_building_max_level(frontPath)
+
+        frontPath.rename(frontPath.with_name(f"{max_level or ''}front.png"))
+        backPath.rename(backPath.with_name(f"{max_level or ''}back.png"))
         continue
 
     # Sort all .png files by their name which is a date like 2024-11-30_03.22.30.png

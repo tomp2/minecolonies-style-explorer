@@ -12,6 +12,7 @@ ONE_LEVEL_ONLY = True
 THEME_DIRS = [
     Path(r"C:\Users\user\Desktop\minecolonies\medievaloak"),
     Path(r"C:\Users\user\Desktop\minecolonies\caledonia"),
+    Path(r"C:\Users\user\Desktop\minecolonies\nordic"),
 ]
 
 # --- Constants ---
@@ -108,7 +109,7 @@ def process_building(
     building_images = find_building_image(file_path, building_name, building_level, theme_images_dir, theme_path)
 
     if not building_images["frontExists"]:
-        print(f"[WARN] Required front image not found: {file_path}")
+        print(f"[WARN] Required front image not found: {building_images['front'].relative_to(theme_images_dir.parent)}")
         return
 
     building_obj = parent_category_object.setdefault(
