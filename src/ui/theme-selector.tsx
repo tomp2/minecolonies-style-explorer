@@ -7,18 +7,16 @@ import {
     SidebarMenuSub,
     SidebarMenuSubItem,
 } from "@/components/ui/sidebar.tsx";
+import { useDelayedCaptureEvent } from "@/hooks/delayed-capture-event.ts";
 import { selectedThemesAtom, selectionsAtom } from "@/lib/state-atoms.ts";
 import { Theme } from "@/lib/theme-data.ts";
 import { useAtomValue } from "jotai";
 import { useAtom } from "jotai/index";
 import { ChevronDown } from "lucide-react";
-import { usePostHog } from "posthog-js/react";
-import { useRef } from "react";
 
 function ThemSubCategoryButton({ path }: { path: [string, string] }) {
-    const posthog = usePostHog();
+    const delayedCapture = useDelayedCaptureEvent();
     const [selections, setSelections] = useAtom(selectionsAtom);
-    const sendEventTimeoutId = useRef<NodeJS.Timeout | null>(null);
 
     const [theme, category] = path;
     const isSelected = selections[theme]![category]!;
@@ -29,20 +27,15 @@ function ThemSubCategoryButton({ path }: { path: [string, string] }) {
             const newSelections = { ...prev };
             newSelections[theme][category] = !isSelected;
 
-            if (sendEventTimeoutId.current) {
-                clearTimeout(sendEventTimeoutId.current);
-            }
-            sendEventTimeoutId.current = setTimeout(() => {
-                const selectedThemesWithCategories = Object.entries(newSelections)
-                    .filter(([, categories]) => Object.values(categories).some(value => value))
-                    .map(([theme, categories]) => ({
-                        theme,
-                        categories: Object.entries(categories)
-                            .filter(([, selected]) => selected)
-                            .map(([category]) => category),
-                    }));
-                posthog.capture("select_categories", { categories: selectedThemesWithCategories });
-            }, 10000);
+            const selectedThemesWithCategories = Object.entries(newSelections)
+                .filter(([, categories]) => Object.values(categories).some(value => value))
+                .map(([theme, categories]) => ({
+                    theme,
+                    categories: Object.entries(categories)
+                        .filter(([, selected]) => selected)
+                        .map(([category]) => category),
+                }));
+            delayedCapture(10_000, "select_categories", { categories: selectedThemesWithCategories });
 
             return newSelections;
         });
@@ -63,10 +56,9 @@ function ThemSubCategoryButton({ path }: { path: [string, string] }) {
 }
 
 function ThemeButton({ theme }: { theme: Theme }) {
-    const posthog = usePostHog();
+    const delayedCapture = useDelayedCaptureEvent();
     const [selections, setSelections] = useAtom(selectionsAtom);
     const isSelected = Object.values(selections[theme.name]).some(value => value);
-    const sendEventTimeoutId = useRef<NodeJS.Timeout | null>(null);
 
     // Send an event when the theme is selected to determine which themes/categories are most popular.
     function toggleTheme(theme: Theme) {
@@ -85,13 +77,10 @@ function ThemeButton({ theme }: { theme: Theme }) {
                 newSelections[theme.name][category] = true;
             }
 
-            if (sendEventTimeoutId.current) clearTimeout(sendEventTimeoutId.current);
-            sendEventTimeoutId.current = setTimeout(() => {
-                const selectedThemes = Object.entries(newSelections)
-                    .filter(([, categories]) => Object.values(categories).some(value => value))
-                    .map(([theme]) => theme);
-                posthog.capture("select_themes", { themes: selectedThemes });
-            }, 10000);
+            const selectedThemes = Object.entries(newSelections)
+                .filter(([, categories]) => Object.values(categories).some(value => value))
+                .map(([theme]) => theme);
+            delayedCapture(10_000, "select_themes", { themes: selectedThemes });
 
             return newSelections;
         });

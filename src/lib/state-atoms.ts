@@ -30,8 +30,10 @@ export const favoritesPathsWriteAtom = atom(
                 favoritePaths,
                 favorites.filter(favorite => favorite !== path),
             );
+            return false;
         } else {
             set(favoritePaths, [...favorites, path]);
+            return true;
         }
     },
 );

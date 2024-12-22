@@ -1,4 +1,6 @@
 import { Button } from "@/components/ui/button.tsx";
+import { useDelayedCaptureEvent } from "@/hooks/delayed-capture-event.ts";
+import { useCaptureEventOnce } from "@/hooks/use-capture-event-once.ts";
 import { favoritesPathsWriteAtom } from "@/lib/state-atoms.ts";
 import { BuildingData } from "@/lib/theme-data.ts";
 import { cn } from "@/lib/utils.ts";
@@ -116,6 +118,7 @@ function ImageButton({ building, view, enableImg, className, ...props }: ImageBu
 }
 
 function BuildingImage({ building }: { building: BuildingData }) {
+    const [captureOnce] = useCaptureEventOnce();
     const [view, setView] = useState<"front" | "back">("front");
     const [mountBack, setMountBack] = useState(false);
 
@@ -131,6 +134,7 @@ function BuildingImage({ building }: { building: BuildingData }) {
                     if (building.json.back) {
                         setView(view === "front" ? "back" : "front");
                         if (!mountBack) setMountBack(true);
+                        captureOnce("toggle_building_view", { building: buildingName, view: view });
                     }
                 }}
             >
@@ -154,6 +158,7 @@ function BuildingImage({ building }: { building: BuildingData }) {
 }
 
 function FavoriteButton({ building, className }: { building: BuildingData; className?: string }) {
+    const delayedCapture = useDelayedCaptureEvent();
     const [favorites, setFavorites] = useAtom(favoritesPathsWriteAtom);
 
     const path = building.path.join(">") + ">" + building.name;
@@ -169,7 +174,10 @@ function FavoriteButton({ building, className }: { building: BuildingData; class
                 "group hover:scale-105 hover:bg-transparent active:scale-95 [&_svg]:size-6",
                 className,
             )}
-            onClick={() => setFavorites(path)}
+            onClick={() => {
+                const isFavorite = setFavorites(path);
+                delayedCapture(10_000, "toggle_favorite", { building: path, isFavorite });
+            }}
         >
             <Heart
                 size={16}

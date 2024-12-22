@@ -1,13 +1,11 @@
 import { Slider } from "@/components/ui/slider.tsx";
+import { useDelayedCaptureEvent } from "@/hooks/delayed-capture-event.ts";
 import { dynamicSizeAtom } from "@/lib/state-atoms.ts";
 import { useAtom } from "jotai/index";
-import { usePostHog } from "posthog-js/react";
-import { useRef } from "react";
 
 export function ImageSizeSlider() {
-    const posthog = usePostHog();
+    const delayedCapture = useDelayedCaptureEvent();
     const [dynamicSize, setDynamicSize] = useAtom(dynamicSizeAtom);
-    const sendEventTimeoutId = useRef<NodeJS.Timeout | null>(null);
 
     return (
         <Slider
@@ -19,10 +17,7 @@ export function ImageSizeSlider() {
             step={50}
             onValueChange={([value]) => {
                 setDynamicSize(value);
-                if (sendEventTimeoutId.current) clearTimeout(sendEventTimeoutId.current);
-                sendEventTimeoutId.current = setTimeout(() => {
-                    posthog.capture("image_size_changed", { size: value });
-                }, 10000);
+                delayedCapture(10_000, "image_size_changed", { size: value });
             }}
         />
     );
