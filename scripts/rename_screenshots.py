@@ -13,7 +13,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
-images_path = Path(__file__).parent.parent.joinpath("public", "minecolonies", "nordic")
+images_path = Path(__file__).parent.parent.joinpath("public", "minecolonies", "medievalspruce")
 blueprints_path = Path(r"C:\Users\user\Desktop\minecolonies").joinpath(images_path.name)
 
 
@@ -39,7 +39,7 @@ def get_building_max_level(building_screenshot_path: Path) -> int | None:
         return None
 
     # Find by glob
-    matching_files = list(blueprint_directory.glob(f"{building_name}*.blueprint"))
+    matching_files = list(blueprint_directory.glob(f"{building_name}?.blueprint"))
     matching_files.sort(reverse=True)
 
     if not matching_files:
