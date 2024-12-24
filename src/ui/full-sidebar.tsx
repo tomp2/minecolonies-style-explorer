@@ -9,6 +9,7 @@ import {
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
+    SidebarTrigger,
 } from "@/components/ui/sidebar.tsx";
 import { favoritePaths, showFavoritesAtom } from "@/lib/state-atoms.ts";
 import { themes } from "@/lib/theme-data.ts";
@@ -40,13 +41,14 @@ export function FullSidebar() {
         <Sidebar>
             <SidebarHeader>
                 <SidebarMenu>
-                    <SidebarMenuItem>
+                    <SidebarMenuItem className="flex items-center">
                         <SidebarMenuButton asChild>
                             <Button variant="ghost" className="text-md w-full justify-start [&_svg]:size-5">
                                 <House className="mt-1" />
                                 Minecolonies Styles
                             </Button>
                         </SidebarMenuButton>
+                        <SidebarTrigger />
                     </SidebarMenuItem>
                 </SidebarMenu>
             </SidebarHeader>
