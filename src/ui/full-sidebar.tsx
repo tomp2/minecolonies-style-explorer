@@ -49,11 +49,14 @@ export function FullSidebar() {
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 </SidebarMenu>
-                <SearchBar />
             </SidebarHeader>
             <SidebarContent>
                 <SidebarGroup>
-                    <SidebarGroupLabel>Image Size</SidebarGroupLabel>
+                    <SidebarGroupLabel>Search</SidebarGroupLabel>
+                    <SearchBar />
+                </SidebarGroup>
+                <SidebarGroup>
+                    <SidebarGroupLabel>Image columns</SidebarGroupLabel>
                     <ImageSizeSlider />
                 </SidebarGroup>
                 <SidebarGroup>

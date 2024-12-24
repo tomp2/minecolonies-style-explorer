@@ -125,11 +125,11 @@ function BuildingImage({ building }: { building: BuildingData }) {
     const buildingName = building.displayName || building.name;
 
     return (
-        <div className="group/card relative flex justify-center" data-view={view}>
+        <div className="group/card relative flex aspect-square justify-center" data-view={view}>
             <button
                 aria-label={`${view} view of ${buildingName}`}
                 type="button"
-                className="relative size-[var(--imgsize)] rounded-sm focus-visible:ring-1 focus-visible:ring-ring"
+                className="relative size-full rounded-sm focus-visible:ring-1 focus-visible:ring-ring"
                 onClick={() => {
                     if (building.json.back) {
                         setView(view === "front" ? "back" : "front");
@@ -190,7 +190,7 @@ function FavoriteButton({ building, className }: { building: BuildingData; class
 export function BuildingCard({ building }: { building: BuildingData }) {
     const buildingName = building.json.displayName || building.displayName || building.name;
     return (
-        <div className="w-[calc(var(--imgsize)+18px)] rounded-lg border bg-card p-2 text-card-foreground shadow">
+        <div className="w-full rounded-lg border bg-card p-2 text-card-foreground shadow">
             <BuildingImage building={building} />
             <div className="p-1.5">
                 <h2 className="font-semibold">

@@ -3,8 +3,9 @@ import { buildingMatchesSearchTerm } from "@/lib/utils.ts";
 import { atom } from "jotai";
 import { atomWithStorage } from "jotai/utils";
 
-export const dynamicSizeAtom = atomWithStorage<number>("imgsize", 300, undefined, { getOnInit: true });
-
+export const searchEverywhereAtom = atomWithStorage<boolean>("searchEverywhere", false, undefined, {
+    getOnInit: true,
+});
 export const searchTermAtom = atom<string>(new URLSearchParams(window.location.search).get("search") || "");
 export const writeSearchTermAtom = atom(null, (_get, set, searchTerm: string) => {
     const url = new URL(window.location.href);
@@ -133,21 +134,11 @@ export const pageContentAtom = atom(get => {
     const selections = get(selectionsAtom);
     const selectedThemes = get(selectedThemesAtom);
     const searchTerm = get(searchTermAtom);
+    const searchEverywhere = get(searchEverywhereAtom);
 
     window.history.replaceState({}, "", encodeSelectionsToUrl(selections));
 
     let totalBuildingsFound = 0;
-
-    // Root buildings of all themes come first:
-    const rootBuildings: BuildingData[] = [];
-
-    for (const themeName of selectedThemes) {
-        for (const building of themes.get(themeName)!.blueprints.values()) {
-            if (!buildingMatchesSearchTerm(searchTerm, building)) continue;
-            rootBuildings.push(building);
-            totalBuildingsFound++;
-        }
-    }
 
     function recursivelyGatherAllBuildings(category: Category, results: BuildingData[]) {
         for (const building of category.blueprints.values()) {
@@ -162,12 +153,36 @@ export const pageContentAtom = atom(get => {
 
     type PageBuildingsSection = { blueprints: BuildingData[]; categories: Map<string, BuildingData[]> };
 
-    const categories: Map<string, PageBuildingsSection> = new Map();
-    for (const [themeName, themeCategorySelections] of Object.entries(selections)) {
-        const theme = themes.get(themeName)!;
-        for (const [categoryName, categoryData] of theme.categories.entries()) {
-            if (!themeCategorySelections[categoryName]) {
+    // Root buildings of all themes come first:
+    const rootBuildings: BuildingData[] = [];
+    const categories = new Map<string, PageBuildingsSection>();
+    for (const themeName of themes.keys()) {
+        if (searchTerm) {
+            if (!searchEverywhere && !selectedThemes.has(themeName)) {
                 continue;
+            }
+        } else {
+            if (!selectedThemes.has(themeName)) {
+                continue;
+            }
+        }
+        const theme = themes.get(themeName)!;
+        for (const building of theme.blueprints.values()) {
+            if (!buildingMatchesSearchTerm(searchTerm, building)) continue;
+            rootBuildings.push(building);
+            totalBuildingsFound++;
+        }
+
+        const themeCategorySelections = selections[themeName]!;
+        for (const [categoryName, categoryData] of theme.categories.entries()) {
+            if (searchTerm) {
+                if (!searchEverywhere && !themeCategorySelections[categoryName]) {
+                    continue;
+                }
+            } else {
+                if (!themeCategorySelections[categoryName]) {
+                    continue;
+                }
             }
 
             if (!categories.has(categoryName)) {

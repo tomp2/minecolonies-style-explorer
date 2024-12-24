@@ -10,15 +10,5 @@ export function buildingMatchesSearchTerm(searchTerm: string, building: Building
     if (searchTerm === "") {
         return true;
     }
-    const searchTermLower = searchTerm.toLowerCase();
-
-    return (
-        (building.displayName && building.displayName.toLowerCase().includes(searchTermLower)) ||
-        building.name.toLowerCase().includes(searchTermLower) ||
-        (building.json.hutBlocks &&
-            building.json.hutBlocks.some(block =>
-                block.toLowerCase().replace("blockhut", "").includes(searchTermLower),
-            )) ||
-        building.path.join("/").toLowerCase().includes(searchTermLower)
-    );
+    return building.searchString.includes(searchTerm.toLowerCase());
 }

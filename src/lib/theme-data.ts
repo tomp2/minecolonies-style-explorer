@@ -26,6 +26,7 @@ export type BuildingData = {
     path: string[];
     displayName?: string;
     json: BuildingDataJson;
+    searchString: string;
 };
 
 export type Category = {
@@ -53,6 +54,14 @@ function getBuildingDisplayName(hutBlocks: string[]): string | undefined {
     return undefined;
 }
 
+function createBuildingObject(name: string, data: BuildingDataJson, path: string[]): BuildingData {
+    const displayName = data.hutBlocks && getBuildingDisplayName(data.hutBlocks);
+    const searchString = [name, displayName, data.displayName, data.hutBlocks?.join(" "), path.join(" ")]
+        .join(" ")
+        .toLowerCase();
+    return { name, path, displayName, searchString, json: data };
+}
+
 function recurseCategories(
     path: string[],
     categories: { [key: string]: CategoryJson },
@@ -65,18 +74,15 @@ function recurseCategories(
             blueprints: new Map<string, BuildingData>(),
             categories: new Map<string, Category>(),
         };
+        const categoryPath = [...path, categoryName];
         for (const [name, data] of Object.entries(categoryDataJson.blueprints)) {
-            categoryObject.blueprints.set(name, {
-                name,
-                path: [...path, categoryName],
-                displayName: data.hutBlocks && getBuildingDisplayName(data.hutBlocks),
-                json: data,
-            });
+            const building = createBuildingObject(name, data, categoryPath);
+            categoryObject.blueprints.set(name, building);
         }
         parent.set(categoryName, categoryObject);
         if (limit > 0) {
             recurseCategories(
-                [...path, categoryName],
+                categoryPath,
                 categoryDataJson.categories,
                 categoryObject.categories,
                 limit - 1,
@@ -91,8 +97,9 @@ function recurseCategories(
  * Convert the JSON data into a more usable format.
  * The JSON doesn't have display names or paths for the buildings, so we add those.
  */
-function getThemes(themesJson: Record<string, ThemeJson>): Map<string, Theme> {
-    const result = new Map<string, Theme>();
+function restructureThemesJson(themesJson: Record<string, ThemeJson>): Map<string, Theme> {
+    const themes = new Map<string, Theme>();
+
     for (const themeName of Object.keys(themesJson)) {
         const theme = themesJson[themeName];
         const themeObject: Theme = {
@@ -103,26 +110,13 @@ function getThemes(themesJson: Record<string, ThemeJson>): Map<string, Theme> {
             categories: new Map<string, Category>(),
         };
         for (const [name, data] of Object.entries(theme.blueprints)) {
-            themeObject.blueprints.set(name, {
-                name,
-                path: [themeName],
-                displayName: data.hutBlocks && getBuildingDisplayName(data.hutBlocks),
-                json: data,
-            });
+            const building = createBuildingObject(name, data, [themeName]);
+            themeObject.blueprints.set(name, building);
         }
         recurseCategories([themeName], theme.categories, themeObject.categories, 5);
-        result.set(themeName, themeObject);
+        themes.set(themeName, themeObject);
     }
-    return result;
+    return themes;
 }
 
-export const themes = getThemes(_themes as unknown as Record<string, ThemeJson>);
-
-export const defaultSelections: Selections = Object.fromEntries(
-    [...themes.keys()].map(themeName => [
-        themeName,
-        Object.fromEntries(
-            [...themes.get(themeName)!.categories.keys()].map(categoryName => [categoryName, false]),
-        ),
-    ]),
-);
+export const themes = restructureThemesJson(_themes as unknown as Record<string, ThemeJson>);
