@@ -12,12 +12,21 @@ export function PageHeader() {
         <header className="flex items-center border-b px-4">
             <SidebarTrigger />
             <div className="ml-4 flex min-h-12 flex-wrap items-center gap-x-4">
-                <h1 className="text-lg font-semibold">
-                    {selectedThemes.size === 0 && "Select a style"}
-                    {selectedThemes.size > 0 &&
-                        `${[...selectedThemes].map(theme => themes.get(theme)!.displayName).join(", ")}`}
-                </h1>
-
+                {selectedThemes.size === 0 ? (
+                    <h1 className="text-lg font-semibold">Select a style</h1>
+                ) : (
+                    <>
+                        <h1 className="hidden text-lg font-semibold md:block">
+                            {[...selectedThemes].map(theme => themes.get(theme)!.displayName).join(", ")}
+                        </h1>
+                        <h1 className="text-lg font-semibold md:hidden">
+                            {selectedThemes.size}
+                            {selectedThemes.size === 1 ? " style" : " styles"}
+                            {"  "}
+                            selected
+                        </h1>
+                    </>
+                )}
                 {selectedThemes.size > 0 && (
                     <h1 className="text-lg font-semibold text-muted-foreground">
                         ({totalBuildingsFound} buildings)
