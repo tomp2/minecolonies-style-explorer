@@ -13,7 +13,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
-images_path = Path(__file__).parent.parent.joinpath("public", "minecolonies", "medievalspruce")
+images_path = Path(__file__).parent.parent.joinpath("public", "minecolonies", "pagoda")
 blueprints_path = Path(r"C:\Users\user\Desktop\minecolonies").joinpath(images_path.name)
 
 
@@ -49,6 +49,8 @@ def get_building_max_level(building_screenshot_path: Path) -> int | None:
 
 
 # Recursively iterate over directories here until a directory with .png files is found
+files_affected = 0
+buildings_affected = 0
 for dirpath, dirnames, filenames in os.walk(images_path):
     if not any(f.endswith(".png") for f in filenames):
         continue
@@ -56,7 +58,10 @@ for dirpath, dirnames, filenames in os.walk(images_path):
     # If there is only one image, rename it to front.png
     if len(filenames) == 1:
         path = Path(dirpath).joinpath(filenames[0])
-        path.rename(path.with_name("front.png"))
+        max_level = get_building_max_level(path)
+        path.rename(path.with_name(f"{max_level or ''}front.png"))
+        files_affected += 1
+        buildings_affected += 1
         continue
 
     # If there are two images, rename the first to front.png and the second to back.png
@@ -79,6 +84,8 @@ for dirpath, dirnames, filenames in os.walk(images_path):
 
         frontPath.rename(frontPath.with_name(f"{max_level or ''}front.png"))
         backPath.rename(backPath.with_name(f"{max_level or ''}back.png"))
+        files_affected += 2
+        buildings_affected += 1
         continue
 
     # Sort all .png files by their name which is a date like 2024-11-30_03.22.30.png
@@ -110,3 +117,10 @@ for dirpath, dirnames, filenames in os.walk(images_path):
     for i, (f, _) in enumerate(file_dates):
         new_name = f"{5 - i % 5}{'front' if i < 5 else 'back'}.png"
         f.rename(f.parent.joinpath(new_name))
+        files_affected += 1
+
+    buildings_affected += 1
+
+
+print(f"Files affected: {files_affected}")
+print(f"Buildings affected: {buildings_affected}")

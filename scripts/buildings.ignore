@@ -16,3 +16,10 @@ darkoak/infrastructure/mineshafts
 medievalspruce/decorations/supplies/supply.+
 medievalspruce/education/universitylibrary
 medievalspruce/infrastructure/mineshafts
+pagoda/decorations/decorative/kongming_(green|orange|red|white|yellow)
+pagoda/decorations/planning
+pagoda/decorations/retaining_wall
+pagoda/decorations/supplies/camp
+pagoda/infrastructure/mineshafts
+pagoda/walls/big_walls/(.*medal|cross)
+

@@ -15,6 +15,7 @@ THEME_DIRS = [
     Path(r"C:\Users\user\Desktop\minecolonies\nordic"),
     Path(r"C:\Users\user\Desktop\minecolonies\darkoak"),
     Path(r"C:\Users\user\Desktop\minecolonies\medievalspruce"),
+    Path(r"C:\Users\user\Desktop\minecolonies\pagoda"),
 ]
 
 # --- Constants ---

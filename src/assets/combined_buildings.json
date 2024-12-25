@@ -44,5 +44,14 @@
       "university5.blueprint",
       "library5.blueprint"
     ]
+  },
+  {
+    "name": "barracksfull",
+    "displayName": "[Combined] Barracks + Barrack Towers",
+    "path": "pagoda/military",
+    "blueprints": [
+      "barracks5.blueprint",
+      "barrackstower5.blueprint"
+    ]
   }
 ]
