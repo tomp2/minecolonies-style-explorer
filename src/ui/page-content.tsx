@@ -89,7 +89,7 @@ export function PageContent() {
             </article>
         );
     }
-    if ((selectedThemes.size === 0 && !showFavorites) || favoriteCount == 0) {
+    if (selectedThemes.size === 0 && (!showFavorites || favoriteCount == 0)) {
         return (
             <article className="prose prose-xl mx-auto mt-5 pb-14">
                 <h1 className="text-4xl font-extrabold">
