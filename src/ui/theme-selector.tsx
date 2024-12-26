@@ -28,7 +28,7 @@ function ThemSubCategoryButton({ path }: { path: [string, string] }) {
             newSelections[theme][category] = !isSelected;
 
             const selectedThemesWithCategories = Object.entries(newSelections)
-                .filter(([, categories]) => Object.values(categories).some(value => value))
+                .filter(([, categories]) => Object.values(categories).some(Boolean))
                 .map(([theme, categories]) => ({
                     theme,
                     categories: Object.entries(categories)
@@ -58,14 +58,14 @@ function ThemSubCategoryButton({ path }: { path: [string, string] }) {
 function ThemeButton({ theme }: { theme: Theme }) {
     const delayedCapture = useDelayedCaptureEvent();
     const [selections, setSelections] = useAtom(selectionsAtom);
-    const isSelected = Object.values(selections[theme.name]).some(value => value);
+    const isSelected = Object.values(selections[theme.name]).some(Boolean);
 
     // Send an event when the theme is selected to determine which themes/categories are most popular.
     function toggleTheme(theme: Theme) {
         setSelections(prev => {
             const newSelections = { ...prev };
 
-            const allAreSelected = Object.values(newSelections[theme.name]).every(value => value);
+            const allAreSelected = Object.values(newSelections[theme.name]).every(Boolean);
             if (allAreSelected) {
                 for (const category of Object.keys(newSelections[theme.name])) {
                     newSelections[theme.name][category] = false;
@@ -78,7 +78,7 @@ function ThemeButton({ theme }: { theme: Theme }) {
             }
 
             const selectedThemes = Object.entries(newSelections)
-                .filter(([, categories]) => Object.values(categories).some(value => value))
+                .filter(([, categories]) => Object.values(categories).some(Boolean))
                 .map(([theme]) => theme);
             delayedCapture(10_000, "select_themes", { themes: selectedThemes });
 

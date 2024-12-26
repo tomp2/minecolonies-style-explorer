@@ -1,6 +1,7 @@
 import pluginJs from "@eslint/js";
 import eslintConfigPrettier from "eslint-config-prettier";
 import pluginReact from "eslint-plugin-react";
+import eslintPluginUnicorn from "eslint-plugin-unicorn";
 import globals from "globals";
 import tseslint from "typescript-eslint";
 
@@ -11,6 +12,15 @@ export default [
     },
     {
         ignores: ["dist/", "tailwind.config.js"],
+    },
+    eslintPluginUnicorn.configs["flat/recommended"],
+    {
+        rules: {
+            "unicorn/better-regex": "warn",
+            "unicorn/prevent-abbreviations": "off",
+            "unicorn/no-null": "off",
+            "unicorn/prefer-global-this": "off",
+        },
     },
     pluginJs.configs.recommended,
     ...tseslint.configs.recommended,

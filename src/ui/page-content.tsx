@@ -30,7 +30,7 @@ function BuildingSection({ title, buildings }: { title: string; buildings: Build
             <h2 className="mb-4 ml-2 text-2xl font-extrabold capitalize">{title}</h2>
             <div className="grid grid-cols-[repeat(var(--image-cols),_minmax(0,_1fr))] gap-2">
                 {buildings.sort(sortBuildings).map(building => (
-                    <BuildingCard key={building.path.join() + building.name} building={building} />
+                    <BuildingCard key={building.path.join(",") + building.name} building={building} />
                 ))}
             </div>
         </div>

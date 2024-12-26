@@ -45,7 +45,7 @@ export const favoriteBuildingsAtom = atom(get => {
 
         const categories = pathParts.slice(1, -1);
         const theme = pathParts[0];
-        const name = pathParts[pathParts.length - 1];
+        const name = pathParts.at(-1)!;
 
         let categoryLevel: Category = themes.get(theme)!;
         for (const category of categories) {
@@ -93,11 +93,11 @@ function encodeSelectionsToUrl(selections: Selections) {
     // If all subcategories are selected, store "caledonia=all" instead of
     // "caledonia=agri|craf|deco|mili" (4 first letters of each subcategory).
     for (const [theme, themeSelections] of Object.entries(selections)) {
-        if (!Object.values(themeSelections).some(selected => selected)) {
+        if (!Object.values(themeSelections).some(Boolean)) {
             url.searchParams.delete(theme);
             continue;
         }
-        if (Object.values(themeSelections).every(selected => selected)) {
+        if (Object.values(themeSelections).every(Boolean)) {
             url.searchParams.set(theme, "all");
         } else {
             const selectedCategories = [];
@@ -125,9 +125,7 @@ export const selectionsAtom = atom<Selections>(parseSelectionsFromUrl());
 
 export const selectedThemesAtom = atom<Set<string>>(get => {
     const selections = get(selectionsAtom);
-    return new Set(
-        Object.keys(selections).filter(theme => Object.values(selections[theme]).some(selected => selected)),
-    );
+    return new Set(Object.keys(selections).filter(theme => Object.values(selections[theme]).some(Boolean)));
 });
 
 export const pageContentAtom = atom(get => {

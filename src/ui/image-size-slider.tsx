@@ -8,7 +8,7 @@ const storedValue = localStorage.getItem("imgcols");
 const defaultImgSize = 350;
 const defaultColumns = Math.floor(window.innerWidth / defaultImgSize);
 
-const initialCols = storedValue ? parseInt(storedValue) : defaultColumns;
+const initialCols = storedValue ? Number.parseInt(storedValue) : defaultColumns;
 document.documentElement.style.setProperty("--image-cols", initialCols.toString());
 
 export function ImageSizeSlider() {

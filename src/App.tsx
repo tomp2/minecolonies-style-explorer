@@ -1,5 +1,5 @@
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar.tsx";
-import { Footer } from "@/Footer.tsx";
+import { Footer } from "@/ui/footer.tsx";
 import { FullSidebar } from "@/ui/full-sidebar.tsx";
 import { HiddenDialog, useInitialPersistentIdentity } from "@/ui/hidden-dialog.tsx";
 import { PageContent } from "@/ui/page-content.tsx";
