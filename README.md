@@ -12,12 +12,10 @@ mod.
 
 ## Tech/Libraries etc
 
-- React/Typescript
 - [Vite](https://vite.dev/)
 - [tailwindcss](https://tailwindcss.com/)
 - [shadcn/ui](https://ui.shadcn.com/)
 - [Jotai](https://jotai.org/)
-- [PostGog](https://posthog.com/)
 - [Blurhash](https://blurha.sh/)
 - [prismarine-nbt](https://github.com/PrismarineJS/prismarine-nbt)
 
