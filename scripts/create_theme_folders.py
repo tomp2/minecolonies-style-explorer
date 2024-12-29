@@ -12,14 +12,21 @@ from pathlib import Path
 from tqdm import tqdm
 
 # The directory where the theme blueprints are stored
-theme_source_directory = Path(r"C:\Users\user\Desktop\minecolonies\shire")
+theme_source_directory = Path(r"C:\Users\user\Desktop\minecolonies\truedwarven")
 
 # The directory where the theme directories will be created
 themes_directory = Path(__file__).parent.parent.joinpath("public", "minecolonies")
 
 # Find every .blueprint file and create a directory (and parents) for it in the themes directory
+count = 0
 for image_path in tqdm(list(theme_source_directory.glob('**/*.blueprint'))):
-    blueprint_name = re.sub(r"\d", "", image_path.stem)
+    blueprint_name = re.sub(r"\d?.blueprint", "", image_path.name)
     new_dir_relative_path = image_path.relative_to(theme_source_directory).parent
     new_dir = themes_directory.joinpath(theme_source_directory.stem, new_dir_relative_path, blueprint_name)
-    new_dir.mkdir(parents=True, exist_ok=True)
+    try:
+        new_dir.mkdir(parents=True)
+        count += 1
+    except FileExistsError:
+        pass
+
+print(f"Created {count} directories in {themes_directory}")
