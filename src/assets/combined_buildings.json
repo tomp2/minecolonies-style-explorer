@@ -53,5 +53,23 @@
       "barracks5.blueprint",
       "barrackstower5.blueprint"
     ]
+  },
+  {
+    "name": "barracksfull",
+    "displayName": "[Combined] Barracks + Barrack Towers",
+    "path": "darkoak/military",
+    "blueprints": [
+      "barracks5.blueprint",
+      "barrackstower5.blueprint"
+    ]
+  },
+  {
+    "name": "barracksfull",
+    "displayName": "[Combined] Barracks + Barrack Towers",
+    "path": "truedwarven/military",
+    "blueprints": [
+      "barracks5.blueprint",
+      "barrackstower5.blueprint"
+    ]
   }
 ]

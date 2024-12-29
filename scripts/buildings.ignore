@@ -22,4 +22,5 @@ pagoda/decorations/retaining_wall
 pagoda/decorations/supplies/camp
 pagoda/infrastructure/mineshafts
 pagoda/walls/big_walls/(.*medal|cross)
+truedwarven/decorations/supplies/supply.+
 
