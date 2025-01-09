@@ -1,10 +1,9 @@
 import { Button } from "@/components/ui/button.tsx";
 import { useDelayedCaptureEvent } from "@/hooks/delayed-capture-event.ts";
 import { useCaptureEventOnce } from "@/hooks/use-capture-event-once.ts";
-import { favoritesPathsWriteAtom } from "@/lib/state-atoms.ts";
+import { expandedBuildingAtom, favoritesPathsWriteAtom } from "@/lib/state-atoms.ts";
 import { BuildingData, themes } from "@/lib/theme-data.ts";
 import { cn } from "@/lib/utils.ts";
-import { expandedBuildingAtom } from "@/ui/expanded-image-dialog.tsx";
 import { decode } from "blurhash";
 import { useAtom, useSetAtom } from "jotai";
 import { Expand, Heart } from "lucide-react";
@@ -135,6 +134,36 @@ function ImageButton({ building, view, enableImg, className, ...props }: ImageBu
     );
 }
 
+/**
+ * A button that expands the building card to show the full image.
+ * @param building The building data to display.
+ * @param className
+ */
+function ExpandButton({ building, className }: { building: BuildingData; className?: string }) {
+    const setExpandedBuilding = useSetAtom(expandedBuildingAtom);
+    return (
+        <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            className={cn(
+                "group flex items-center justify-center hover:scale-105 hover:bg-transparent active:scale-95 [&_svg]:size-5",
+                className,
+            )}
+            aria-label={`Expand ${building.displayName || building.name}`}
+            onClick={() => {
+                setExpandedBuilding(building);
+            }}
+        >
+            <Expand className="fill-stone-200 text-stone-300" />
+        </Button>
+    );
+}
+
+/**
+ * A building image with a front and back view that can be toggled by the user.
+ * @param building The building data to display.
+ */
 function BuildingImage({ building }: { building: BuildingData }) {
     const [captureOnce] = useCaptureEventOnce();
     const [view, setView] = useState<"front" | "back">("front");
@@ -235,12 +264,15 @@ export function BuildingCard({ building }: { building: BuildingData }) {
     const pathString = `${theme.displayName}/${building.path.slice(1).join("/")}`;
 
     return (
-        <div className="flex w-full flex-col overflow-x-clip rounded-lg border bg-card p-2 shadow">
+        <div className="group relative flex w-full flex-col overflow-x-clip rounded-lg border bg-card p-2 shadow">
             <BuildingImage building={building} />
+            <ExpandButton
+                className="absolute right-2 top-2 transition-opacity duration-75 focus:opacity-100 group-hover:opacity-100 md:opacity-0"
+                building={building}
+            />
             <div className="relative flex grow flex-col">
                 <BuildingName building={building} />
                 <p className="text-xs capitalize text-muted-foreground">{pathString}</p>
-
                 <p className="min-h-6 text-xs text-muted-foreground">
                     {building.json.size === undefined ? (
                         <span>Unknown size</span>

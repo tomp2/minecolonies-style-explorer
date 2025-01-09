@@ -1,4 +1,5 @@
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar.tsx";
+import { ExpandImageDialog } from "@/ui/expanded-image-dialog.tsx";
 import { Footer } from "@/ui/footer.tsx";
 import { FullSidebar } from "@/ui/full-sidebar.tsx";
 import { HiddenDialog, useInitialPersistentIdentity } from "@/ui/hidden-dialog.tsx";
@@ -10,6 +11,7 @@ function App() {
     return (
         <>
             <HiddenDialog />
+            <ExpandImageDialog />
             <SidebarProvider>
                 <div className="flex h-screen w-full">
                     <FullSidebar />

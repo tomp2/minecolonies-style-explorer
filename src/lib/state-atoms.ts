@@ -1,7 +1,9 @@
 import { BuildingData, Category, Selections, themes } from "@/lib/theme-data.ts";
 import { buildingMatchesSearchTerm } from "@/lib/utils.ts";
-import { atom } from "jotai";
+import { atom } from "jotai/index";
 import { atomWithStorage } from "jotai/utils";
+
+export const expandedBuildingAtom = atom<BuildingData | null>(null);
 
 export const searchEverywhereAtom = atomWithStorage<boolean>("searchEverywhere", false, undefined, {
     getOnInit: true,
