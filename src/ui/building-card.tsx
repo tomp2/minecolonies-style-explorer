@@ -2,20 +2,30 @@ import { Button } from "@/components/ui/button.tsx";
 import { useDelayedCaptureEvent } from "@/hooks/delayed-capture-event.ts";
 import { useCaptureEventOnce } from "@/hooks/use-capture-event-once.ts";
 import { favoritesPathsWriteAtom } from "@/lib/state-atoms.ts";
-import { BuildingData } from "@/lib/theme-data.ts";
+import { BuildingData, themes } from "@/lib/theme-data.ts";
 import { cn } from "@/lib/utils.ts";
+import { expandedBuildingAtom } from "@/ui/expanded-image-dialog.tsx";
 import { decode } from "blurhash";
-import { useAtom } from "jotai";
-import { Heart } from "lucide-react";
+import { useAtom, useSetAtom } from "jotai";
+import { Expand, Heart } from "lucide-react";
 import * as React from "react";
 import { useEffect, useRef, useState } from "react";
 
-export interface BlurhashCanvasProps extends React.ComponentPropsWithoutRef<"canvas"> {
+interface BlurhashCanvasProps extends React.ComponentPropsWithoutRef<"canvas"> {
     hash: string;
     height: number;
     width: number;
 }
 
+/**
+ * A canvas element that displays a blurhash using the library's decode function.
+ * @param hash The blurhash to decode.
+ * @param height The canvas resolution in pixels. Can be smaller than the element.
+ * @param width The canvas resolution in pixels. Can be smaller than the element.
+ * @param className
+ * @param props
+ * @constructor
+ */
 function BlurhashCanvas({ hash, height, width, className, ...props }: BlurhashCanvasProps) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -39,6 +49,11 @@ function BlurhashCanvas({ hash, height, width, className, ...props }: BlurhashCa
     );
 }
 
+/**
+ * Two buttons that allow the user to switch between the front and back images of a building.
+ * This could be made dynamic to support any number of images in the future if needed.
+ * @param setView A function that sets the view to either "front" or "back".
+ */
 function ImageCountIndicator({ setView }: { setView: (view: "front" | "back") => void }) {
     return (
         <div className="absolute bottom-0 mb-1.5 space-x-1 opacity-70">
@@ -58,16 +73,19 @@ function ImageCountIndicator({ setView }: { setView: (view: "front" | "back") =>
     );
 }
 
-export interface ImageButtonProps extends React.ComponentPropsWithoutRef<"div"> {
+interface ImageButtonProps extends React.ComponentPropsWithoutRef<"div"> {
     enableImg?: boolean;
     building: BuildingData;
     view: "front" | "back";
 }
 
 /**
- * @param building
- * @param view
- * @param enableImg can prevent the image from loading before it is needed.
+ * A clickable image button that displays a building image with a blurhash overlay
+ * for smooth loading.
+ * @param building The building data to display.
+ * @param view The view of the building to display ("front" or "back").
+ * @param enableImg Whether to display the image or not. This can be used to prevent
+ * the back image from loading until it is needed.
  * @param className
  * @param props
  */
@@ -152,11 +170,15 @@ function BuildingImage({ building }: { building: BuildingData }) {
                 />
             </button>
             {building.json.back && <ImageCountIndicator setView={setView} />}
-            <FavoriteButton className="absolute right-2 top-2" building={building} />
         </div>
     );
 }
 
+/**
+ * A button that toggles a building as a favorite.
+ * @param building The building data to favorite.
+ * @param className
+ */
 function FavoriteButton({ building, className }: { building: BuildingData; className?: string }) {
     const delayedCapture = useDelayedCaptureEvent();
     const [favorites, setFavorites] = useAtom(favoritesPathsWriteAtom);
@@ -181,26 +203,54 @@ function FavoriteButton({ building, className }: { building: BuildingData; class
         >
             <Heart
                 size={16}
-                className="fill-stone-400 text-secondary drop-shadow-sm group-data-[favorite=true]:fill-rose-500"
+                className="fill-stone-200 text-stone-300 hover:drop-shadow-[0_2px_2px_rgba(0,0,0,0.4)] group-data-[favorite=true]:fill-rose-300 group-data-[favorite=true]:text-rose-500"
             />
         </Button>
     );
 }
 
-export function BuildingCard({ building }: { building: BuildingData }) {
-    const buildingName = building.json.displayName || building.displayName || building.name;
+/**
+ * A building name that displays the building's display name if it exists, otherwise
+ * it displays the building's name.
+ * @param building The building data to display.
+ */
+function BuildingName({ building }: { building: BuildingData }) {
+    if (building.json.displayName) return building.json.displayName;
+    if (!building.displayName) return building.name;
+
+    const displayNameLower = building.displayName.toLowerCase().replace(" ", "");
+    const rawNameLower = building.name.toLowerCase();
+
+    if (displayNameLower.includes(rawNameLower)) return building.displayName;
     return (
-        <div className="w-full rounded-lg border bg-card p-2 text-card-foreground shadow">
+        <h2 className="font-semibold">
+            {building.displayName} ({building.name})
+        </h2>
+    );
+}
+
+/** A card that displays a building's image, name, path, and size. */
+export function BuildingCard({ building }: { building: BuildingData }) {
+    const theme = themes.get(building.path[0])!;
+    const pathString = `${theme.displayName}/${building.path.slice(1).join("/")}`;
+
+    return (
+        <div className="flex w-full flex-col overflow-x-clip rounded-lg border bg-card p-2 shadow">
             <BuildingImage building={building} />
-            <div className="p-1.5">
-                <h2 className="font-semibold">
-                    {buildingName}
-                    {!building.json.displayName && buildingName !== building.name && ` (${building.name})`}
-                </h2>
-                <p className="text-sm capitalize text-muted-foreground">{building.path.join(" > ")}</p>
-                {/*{building.json.levels !== false && (*/}
-                {/*    <p className="text-sm text-muted-foreground">Levels: {building.json.levels}</p>*/}
-                {/*)}*/}
+            <div className="relative flex grow flex-col">
+                <BuildingName building={building} />
+                <p className="text-xs capitalize text-muted-foreground">{pathString}</p>
+
+                <p className="min-h-6 text-xs text-muted-foreground">
+                    {building.json.size === undefined ? (
+                        <span>Unknown size</span>
+                    ) : (
+                        <span>
+                            {building.json.size[0]}x{building.json.size[1]}x{building.json.size[2]}
+                        </span>
+                    )}
+                </p>
+                <FavoriteButton className="absolute bottom-0 right-0 -mb-1 -mr-1" building={building} />
             </div>
         </div>
     );
