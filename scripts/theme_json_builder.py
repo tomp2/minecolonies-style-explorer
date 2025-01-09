@@ -1,8 +1,11 @@
 import json
 import re
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from typing import Dict, Optional, Any, Set, TypedDict, Literal
 
+import numpy as np
+import numpy.typing as npt
 from PIL import Image
 from blurhash import encode
 from nbt import nbt
@@ -55,6 +58,80 @@ def get_building_hut_blocks(nbt_data: nbt.NBTFile) -> Set[str]:
             if short_name in HUT_BLOCKS:
                 hut_blocks.add(short_name)
     return hut_blocks
+
+
+def blocks_array_to_palette(
+        ints: list[int],
+        size_x: int,
+        size_y: int,
+        size_z: int
+) -> npt.NDArray[int]:
+    """
+    The Structurize-mod stored the blocks in a 1-dimensional array of 32-bit integers.
+    The 32-bit integer is split into two 16-bit values, where the left and right 16 bits represent
+    two different blocks (probably to save space?)
+    """
+    data = np.array(ints, dtype=np.uint32)
+    # Split each 32-bit integer into two 16-bit values
+    left_16_bits = (data >> 16) & 0xFFFF
+    right_16_bits = data & 0xFFFF
+    # Combine the left and right
+    one_dim_array = np.concatenate((left_16_bits, right_16_bits))
+
+    # If the size of the building is odd, the last 16-bits are assumed to be padding
+    if (size_x * size_y * size_z) % 2 != 0:
+        one_dim_array = one_dim_array[:-1]
+
+    if size_x * size_y * size_z != len(one_dim_array):
+        raise ValueError("Size of the 1-dimensional array doesn't match the dimensions of the building.")
+
+    mult_dim_array = one_dim_array.reshape((size_y, size_z, size_x))
+    return mult_dim_array
+
+
+IGNORED_BLOCKS = {
+    "minecraft:air",
+    "minecraft:grass_block",
+    "minecraft:dirt",
+    "minecraft:sand",
+    "minecraft:stone",
+    "minecraft:water",
+    "structurize:blocksubstitution",
+    "minecraft:grass",
+    "minecraft:fern",
+}
+
+
+def calculate_building_size(
+        nbt_data: nbt.NBTFile,
+) -> tuple[int, int, int]:
+    size_x = nbt_data.get("size_x").value
+    size_y = nbt_data.get("size_y").value
+    size_z = nbt_data.get("size_z").value
+
+    raw_block_data = nbt_data.get("blocks")
+    palette_indices = blocks_array_to_palette(raw_block_data, size_x, size_y, size_z)
+
+    material_palette = nbt_data.get("palette")
+    solidity_palette = np.array([entry.get("Name").value not in IGNORED_BLOCKS for entry in material_palette],
+                                dtype=bool)
+
+    palette_indices_solidity = solidity_palette[palette_indices]
+
+    y_slices_solidity = palette_indices_solidity.any(axis=(1, 2))
+    x_slices_solidity = palette_indices_solidity.any(axis=(0, 2))
+    z_slices_solidity = palette_indices_solidity.any(axis=(0, 1))
+
+    bottom_y = np.argmax(y_slices_solidity)
+    top_y = size_y - 1 - np.argmax(y_slices_solidity[::-1])
+
+    left_x = np.argmax(x_slices_solidity)
+    right_x = size_x - 1 - np.argmax(x_slices_solidity[::-1])
+
+    front_z = np.argmax(z_slices_solidity)
+    back_z = size_z - 1 - np.argmax(z_slices_solidity[::-1])
+
+    return int(right_x - left_x + 1), int(top_y - bottom_y + 1), int(back_z - front_z + 1)
 
 
 def read_blueprint_nbt(file_path: Path) -> nbt.NBTFile:
@@ -114,12 +191,14 @@ def process_building(
     hut_blocks = get_building_hut_blocks(nbt_data)
     building_images = find_building_image(file_path, building_name, building_level, theme_images_dir, theme_path)
 
+    building_size = calculate_building_size(nbt_data)
+
     if not building_images["frontExists"]:
         print(f"[WARN] Required front image not found: {building_images['front'].relative_to(theme_images_dir.parent)}")
         return
 
     building_obj = parent_category_object.setdefault(
-        building_name, {"levels": building_level}
+        building_name, {"levels": building_level, "size": building_size}
     )
 
     blur_hashes = [encode_image_to_blurhash(building_images["front"])]
@@ -184,6 +263,7 @@ def handle_building_categories(
 
 
 def process_theme(theme_path: Path):
+    theme_name = theme_path.name
     pack_meta_file = theme_path / "pack.json"
     pack_meta = json.loads(pack_meta_file.read_text())
 
@@ -194,7 +274,7 @@ def process_theme(theme_path: Path):
     for item in theme_path.iterdir():
         if item.name in ["pack.json", f"{theme_path.name}.png"]:
             continue
-        print(f"    Processing: {item.relative_to(theme_path)}")
+        print(f"Processing: {theme_name}/{item.relative_to(theme_path)}")
 
         if item.is_file():
             handle_file(item, theme_blueprints, theme_images_dir, theme_path)
@@ -202,10 +282,13 @@ def process_theme(theme_path: Path):
             handle_building_categories(item, theme_categories, theme_images_dir, theme_path)
 
     return {
-        "displayName": pack_meta["name"],
-        "authors": pack_meta["authors"],
-        "blueprints": theme_blueprints,
-        "categories": theme_categories
+        "name": theme_path.name,
+        "json": {
+            "displayName": pack_meta["name"],
+            "authors": pack_meta["authors"],
+            "blueprints": theme_blueprints,
+            "categories": theme_categories
+        }
     }
 
 
@@ -251,6 +334,7 @@ def add_combined_buildings(themes: Dict[str, Any]):
 
         combined_hut_blocks = set()
         combined_level = False
+        building_size = None
         for blueprint in combined_building["blueprints"]:
             blueprint_path = theme_source_dir.joinpath(*category_path).joinpath(blueprint)
             nbt_data = read_blueprint_nbt(blueprint_path)
@@ -261,9 +345,13 @@ def add_combined_buildings(themes: Dict[str, Any]):
             elif building_level:
                 combined_level = max(combined_level, building_level)
 
+            if not building_size:
+                building_size = calculate_building_size(nbt_data)
+
         building_object = {
             "levels": combined_level,
-            "displayName": combined_building["displayName"]
+            "displayName": combined_building["displayName"],
+            "size": building_size
         }
 
         if combined_hut_blocks:
@@ -302,9 +390,11 @@ def main():
     if OUTPUT_JSON.exists():
         themes = json.loads(OUTPUT_JSON.read_text())
 
-    for theme_dir in THEME_DIRS:
-        print(f"Processing theme: {theme_dir.name}")
-        themes[theme_dir.name] = process_theme(theme_dir)
+    with ThreadPoolExecutor() as executor:
+        results = executor.map(process_theme, THEME_DIRS)
+
+    for result in results:
+        themes[result["name"]] = result["json"]
 
     add_combined_buildings(themes)
 

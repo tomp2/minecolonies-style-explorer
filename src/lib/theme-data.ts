@@ -2,11 +2,19 @@ import { blockToDisplayName, HutBlock } from "@/lib/hut-blocks.ts";
 import _themes from "../assets/themes.json";
 
 type BuildingDataJson = {
+    // The building level, or false if the building doesn't have levels.
+    // Currently used in the image path.
     levels: number | false;
+    // The minecolonies hut blocks used in the building.
     hutBlocks?: string[];
+    // Does the building have an image for the back?
     back?: true;
+    // The blurhash for the front and back images.
     blur: [string, string?];
+    // Optional display name for the building that overrides everything else.
     displayName?: string;
+    // Optional size for the building (width, height, depth).
+    size?: [number, number, number];
 };
 
 export type CategoryJson = {
