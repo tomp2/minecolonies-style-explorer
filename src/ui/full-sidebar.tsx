@@ -66,7 +66,7 @@ export function FullSidebar() {
                     <ShowFavorites />
                 </SidebarGroup>
                 <SidebarGroup>
-                    <SidebarGroupLabel>Building Selections</SidebarGroupLabel>
+                    <SidebarGroupLabel>Style Selections</SidebarGroupLabel>
                     <SidebarMenu>
                         {[...themes.values()].map(theme => (
                             <ThemeSelector key={theme.name} theme={theme} />
