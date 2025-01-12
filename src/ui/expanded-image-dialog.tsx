@@ -13,6 +13,8 @@ import { expandedBuildingAtom } from "@/lib/state-atoms.ts";
 import { BuildingData } from "@/lib/theme-data.ts";
 import { cn } from "@/lib/utils";
 import { useAtom } from "jotai";
+import { usePostHog } from "posthog-js/react";
+import { useEffect } from "react";
 import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
 
 function BuildingImage({
@@ -74,7 +76,16 @@ function DialogImages({ expandedBuilding }: { expandedBuilding: BuildingData }) 
 }
 
 export function ExpandImageDialog() {
+    const posthog = usePostHog();
     const [expandedBuilding, setExpandedBuilding] = useAtom(expandedBuildingAtom);
+
+    useEffect(() => {
+        if (!expandedBuilding) return;
+        posthog.capture("expand_building", {
+            building: expandedBuilding.path.join("/") + "/" + expandedBuilding.name,
+        });
+    }, [expandedBuilding]);
+
     return (
         <Dialog
             open={expandedBuilding !== null}
