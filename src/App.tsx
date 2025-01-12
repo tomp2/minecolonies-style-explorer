@@ -18,7 +18,7 @@ function App() {
                     <SidebarInset className="flex min-h-screen w-full flex-col">
                         <PageHeader />
                         <div className="flex grow flex-col overflow-x-auto bg-gray-100">
-                            <div className="flex flex-col p-2">
+                            <div className="flex flex-col">
                                 <PageContent />
                             </div>
                             <div className="grow" />

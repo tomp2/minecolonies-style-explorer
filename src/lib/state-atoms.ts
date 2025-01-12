@@ -129,14 +129,9 @@ function encodeThemesToUrlParameter(selectedThemes: Set<string>) {
 
 /**
  * Parse the selected categories from the URL search parameters.
- * If "category" is not present, returns all categories. Otherwise, returns the selected categories.
  */
 function parseCategoriesFromUrlParams(urlSearchParams: URLSearchParams) {
     const categoryParams = urlSearchParams.get(LOCALSTORAGE_QUERY_PARAMS.category);
-    if (categoryParams === null) {
-        return new Set<string>(categoryNames);
-    }
-
     const selectedCategories = new Set<string>();
     if (categoryParams) {
         const paramCategoryParts = categoryParams.split(selectionUrlSeparator);

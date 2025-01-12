@@ -6,6 +6,7 @@ import {
     showFavoritesAtom,
 } from "@/lib/state-atoms.ts";
 import { type BuildingData } from "@/lib/theme-data.ts";
+import { cn } from "@/lib/utils.ts";
 import { BuildingCard } from "@/ui/building-card.tsx";
 import { useAtomValue } from "jotai";
 
@@ -20,13 +21,21 @@ function sortBuildings(a: BuildingData, b: BuildingData) {
     return aName.localeCompare(bName);
 }
 
-function BuildingSection({ title, buildings }: { title: string; buildings: BuildingData[] }) {
+function BuildingSection({
+    title,
+    buildings,
+    className,
+}: {
+    title: string;
+    buildings: BuildingData[];
+    className?: string;
+}) {
     if (buildings.length === 0) {
         return null;
     }
 
     return (
-        <div className="mb-8">
+        <div className={cn("p-2", className)}>
             <h2 className="mb-4 ml-2 text-2xl font-extrabold capitalize">{title}</h2>
             <div className="grid grid-cols-[repeat(var(--image-cols),_minmax(0,_1fr))] gap-2">
                 {buildings.sort(sortBuildings).map(building => (
@@ -43,9 +52,13 @@ function BuildingsContainer() {
     const { categories, rootBuildings } = useAtomValue(pageContentAtom);
 
     return (
-        <div className="h-full overflow-auto">
+        <div className="h-full space-y-8 overflow-auto">
             {showFavorites && favoriteBuildings.length > 0 && (
-                <BuildingSection title="Favorites" buildings={favoriteBuildings.sort(sortBuildings)} />
+                <BuildingSection
+                    className="rounded-lg bg-pink-200"
+                    title="Favorites"
+                    buildings={favoriteBuildings.sort(sortBuildings)}
+                />
             )}
 
             {/*Root buildings from all selected themes*/}
@@ -53,7 +66,7 @@ function BuildingsContainer() {
 
             {/*Categories and their buildings*/}
             {[...categories.entries()].map(([categoryName, section]) => (
-                <div key={categoryName} className="mb-8">
+                <>
                     <BuildingSection title={categoryName} buildings={section.blueprints} />
                     {[...section.categories.entries()].map(([subcategoryName, subcategory]) => (
                         <BuildingSection
@@ -62,7 +75,7 @@ function BuildingsContainer() {
                             buildings={subcategory}
                         />
                     ))}
-                </div>
+                </>
             ))}
         </div>
     );
@@ -80,7 +93,7 @@ export function PageContent() {
 
     if (searchTerm && totalBuildingsFound === 0) {
         return (
-            <article className="prose prose-xl mx-auto mt-5 text-center [&_*]:m-0">
+            <article className="prose prose-xl mx-auto mt-5 p-2 text-center [&_*]:m-0">
                 <h3>No buildings found</h3>
                 <h4 className="mb-0">You can try:</h4>
                 <ul className="[&_li]: mt-0 list-inside list-disc pl-0 text-left">
@@ -92,7 +105,7 @@ export function PageContent() {
         );
     }
     return (
-        <article className="prose prose-xl mx-auto mt-5 pb-14">
+        <article className="prose prose-xl mx-auto mt-5 p-2 pb-14">
             <h1 className="text-4xl font-extrabold">
                 Welcome to the <em>unofficial</em> MineColonies Style Explorer!
             </h1>
