@@ -1,11 +1,11 @@
-import { BuildingData, Category, Selections, themes } from "@/lib/theme-data.ts";
+import { BuildingData, Category, categoryNames, themes } from "@/lib/theme-data.ts";
 import { buildingMatchesSearchTerm } from "@/lib/utils.ts";
 import { atom } from "jotai/index";
 import { atomWithStorage } from "jotai/utils";
 
 export const expandedBuildingAtom = atom<BuildingData | null>(null);
 
-export const searchEverywhereAtom = atomWithStorage<boolean>("searchEverywhere", false, undefined, {
+export const searchEverywhereAtom = atomWithStorage<boolean>("searchEverywhere", true, undefined, {
     getOnInit: true,
 });
 export const searchTermAtom = atom<string>(new URLSearchParams(window.location.search).get("search") || "");
@@ -57,86 +57,90 @@ export const favoriteBuildingsAtom = atom(get => {
     });
 });
 
-function parseSelectionsFromUrl() {
+const selectionUrlSeparator = "-";
+
+function parseThemesFromUrl() {
     const url = new URL(window.location.href);
-    const selections: Selections = {};
-
-    for (const [theme, categories] of themes.entries()) {
-        if (!url.searchParams.has(theme)) {
-            selections[theme] = Object.fromEntries(
-                [...categories.categories.keys()].map(categoryName => [categoryName, false]),
-            );
-            continue;
-        }
-
-        const rawParamValue = url.searchParams.get(theme)!;
-        selections[theme] = {};
-        if (rawParamValue === "all") {
-            for (const category of categories.categories.keys()) {
-                selections[theme][category] = true;
-            }
-        } else {
-            const inverted = rawParamValue.startsWith("-");
-            const categories = new Set(rawParamValue.slice(inverted ? 1 : 0).split("|"));
-            for (const category of themes.get(theme)!.categories.keys()) {
-                const inList = categories.has(category.slice(0, 4));
-                selections[theme][category] = inverted ? !inList : inList;
+    const selectedThemes = new Set<string>();
+    const themeParams = url.searchParams.get("theme");
+    if (themeParams === "all") {
+        return new Set(themes.keys());
+    }
+    if (themeParams) {
+        const paramThemeParts = themeParams.split(selectionUrlSeparator);
+        for (const theme of paramThemeParts) {
+            if (themes.has(theme)) {
+                selectedThemes.add(theme);
             }
         }
     }
-    return selections;
+    return selectedThemes;
 }
 
-function encodeSelectionsToUrl(selections: Selections) {
-    const url = new URL(window.location.href);
+function encodeThemesToUrl(selectedThemes: Set<string>) {
+    if (selectedThemes.size === themes.size) return "all";
+    return encodeURIComponent([...selectedThemes].join(selectionUrlSeparator));
+}
 
-    // Store the selections in the URL.
-    // Store the category name itself as a parameter, so that the URL is human-readable.
-    // If all subcategories are selected, store "caledonia=all" instead of
-    // "caledonia=agri|craf|deco|mili" (4 first letters of each subcategory).
-    for (const [theme, themeSelections] of Object.entries(selections)) {
-        if (!Object.values(themeSelections).some(Boolean)) {
-            url.searchParams.delete(theme);
-            continue;
-        }
-        if (Object.values(themeSelections).every(Boolean)) {
-            url.searchParams.set(theme, "all");
-        } else {
-            const selectedCategories = [];
-            const nonSelectedCategories = [];
-            for (const [category, selected] of Object.entries(themeSelections)) {
-                if (selected) {
-                    selectedCategories.push(category.slice(0, 4));
-                } else {
-                    nonSelectedCategories.push(category.slice(0, 4));
+function parseCategoriesFromUrl() {
+    const url = new URL(window.location.href);
+    const categoryParams = url.searchParams.get("category");
+    if (categoryParams === null) {
+        return new Set<string>(categoryNames);
+    }
+
+    const selectedCategories = new Set<string>();
+    if (categoryParams) {
+        const paramCategoryParts = categoryParams.split(selectionUrlSeparator);
+        for (const categoryPart of paramCategoryParts) {
+            for (const actualCategory of categoryNames) {
+                if (actualCategory.startsWith(categoryPart)) {
+                    selectedCategories.add(actualCategory);
                 }
-            }
-            // If there are more non-selected categories than selected ones, store them instead
-            // by prefixing them with a minus sign.
-            if (selectedCategories.length > nonSelectedCategories.length) {
-                url.searchParams.set(theme, "-" + nonSelectedCategories.join("|"));
-            } else {
-                url.searchParams.set(theme, selectedCategories.join("|"));
             }
         }
     }
+    return selectedCategories;
+}
+
+function encodeCategoriesToUrl(categories: Set<string>) {
+    if (categories.size === categoryNames.size) return null;
+    return encodeURIComponent(
+        [...categories].map(category => category.slice(0, 4)).join(selectionUrlSeparator),
+    );
+}
+
+function encodeSelectionsToUrl(selectedThemes: Set<string>, selectedCategories: Set<string>) {
+    const url = new URL(window.location.href);
+    const encodedThemes = encodeThemesToUrl(selectedThemes);
+    if (!encodedThemes) {
+        url.searchParams.delete("theme");
+        url.searchParams.delete("category");
+        return url.toString();
+    }
+
+    const encodedCategories = encodeCategoriesToUrl(selectedCategories);
+    if (encodedCategories) {
+        url.searchParams.set("category", encodedCategories);
+    } else {
+        url.searchParams.delete("category");
+    }
+
+    url.searchParams.set("theme", encodedThemes);
     return url.toString();
 }
 
-export const selectionsAtom = atom<Selections>(parseSelectionsFromUrl());
-
-export const selectedThemesAtom = atom<Set<string>>(get => {
-    const selections = get(selectionsAtom);
-    return new Set(Object.keys(selections).filter(theme => Object.values(selections[theme]).some(Boolean)));
-});
+export const selectedThemesAtom = atom<Set<string>>(parseThemesFromUrl());
+export const selectedCategoriesAtom = atom<Set<string>>(parseCategoriesFromUrl());
 
 export const pageContentAtom = atom(get => {
-    const selections = get(selectionsAtom);
     const selectedThemes = get(selectedThemesAtom);
+    const selectedCategories = get(selectedCategoriesAtom);
+
     const searchTerm = get(searchTermAtom);
     const searchEverywhere = get(searchEverywhereAtom);
 
-    window.history.replaceState({}, "", encodeSelectionsToUrl(selections));
+    window.history.replaceState({}, "", encodeSelectionsToUrl(selectedThemes, selectedCategories));
 
     let totalBuildingsFound = 0;
 
@@ -156,33 +160,24 @@ export const pageContentAtom = atom(get => {
     // Root buildings of all themes come first:
     const rootBuildings: BuildingData[] = [];
     const categories = new Map<string, PageBuildingsSection>();
-    for (const themeName of themes.keys()) {
-        if (searchTerm) {
-            if (!searchEverywhere && !selectedThemes.has(themeName)) {
-                continue;
-            }
-        } else {
-            if (!selectedThemes.has(themeName)) {
-                continue;
-            }
+    for (const [themeName, theme] of themes.entries()) {
+        if (!selectedThemes.has(themeName) && (!searchTerm || !searchEverywhere)) {
+            continue;
         }
-        const theme = themes.get(themeName)!;
+
         for (const building of theme.blueprints.values()) {
             if (!buildingMatchesSearchTerm(searchTerm, building)) continue;
             rootBuildings.push(building);
             totalBuildingsFound++;
         }
 
-        const themeCategorySelections = selections[themeName]!;
         for (const [categoryName, categoryData] of theme.categories.entries()) {
-            if (searchTerm) {
-                if (!searchEverywhere && !themeCategorySelections[categoryName]) {
-                    continue;
-                }
-            } else {
-                if (!themeCategorySelections[categoryName]) {
-                    continue;
-                }
+            if (
+                !selectedCategories.has(categoryName) &&
+                (!searchTerm || !searchEverywhere) &&
+                selectedCategories.size > 0
+            ) {
+                continue;
             }
 
             if (!categories.has(categoryName)) {

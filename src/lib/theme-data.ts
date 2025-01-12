@@ -128,3 +128,6 @@ function restructureThemesJson(themesJson: Record<string, ThemeJson>): Map<strin
 }
 
 export const themes = restructureThemesJson(_themes as unknown as Record<string, ThemeJson>);
+export const categoryNames = new Set<string>(
+    [...themes.values()].flatMap(theme => [...theme.categories.keys()]),
+);

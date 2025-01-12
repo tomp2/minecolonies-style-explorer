@@ -12,10 +12,10 @@ import {
     SidebarTrigger,
 } from "@/components/ui/sidebar.tsx";
 import { favoritePaths, showFavoritesAtom } from "@/lib/state-atoms.ts";
-import { themes } from "@/lib/theme-data.ts";
+import { categoryNames, themes } from "@/lib/theme-data.ts";
 import { ImageSizeSlider } from "@/ui/image-size-slider.tsx";
 import { SearchBar } from "@/ui/search-bar.tsx";
-import { ThemeSelector } from "@/ui/theme-selector.tsx";
+import { CategorySelectable, ThemeSelectable } from "@/ui/selectable.tsx";
 import { useAtom, useAtomValue } from "jotai";
 import { House } from "lucide-react";
 
@@ -31,7 +31,7 @@ function ShowFavorites() {
             onPressedChange={toggleShowFavorites}
         >
             <p className="mb-0.5">Show Favorites</p>
-            <p className="ml-auto text-sm text-gray-500">{favoriteCount}</p>
+            <p className="ml-auto text-gray-500">{favoriteCount}</p>
         </CheckboxButton>
     );
 }
@@ -69,7 +69,15 @@ export function FullSidebar() {
                     <SidebarGroupLabel>Style Selections</SidebarGroupLabel>
                     <SidebarMenu>
                         {[...themes.values()].map(theme => (
-                            <ThemeSelector key={theme.name} theme={theme} />
+                            <ThemeSelectable theme={theme} key={theme.name} />
+                        ))}
+                    </SidebarMenu>
+                </SidebarGroup>
+                <SidebarGroup>
+                    <SidebarGroupLabel>Category Selections</SidebarGroupLabel>
+                    <SidebarMenu className="grid grid-cols-2">
+                        {[...categoryNames].map(categoryName => (
+                            <CategorySelectable category={categoryName} key={categoryName} />
                         ))}
                     </SidebarMenu>
                 </SidebarGroup>
