@@ -1,9 +1,11 @@
 import { CheckboxButton } from "@/components/checkbox-button.tsx";
+import { ModeToggleDropdown } from "@/components/mode-toggle.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import {
     Sidebar,
     SidebarContent,
     SidebarGroup,
+    SidebarGroupContent,
     SidebarGroupLabel,
     SidebarHeader,
     SidebarMenu,
@@ -80,6 +82,15 @@ export function FullSidebar() {
                             <CategorySelectable category={categoryName} key={categoryName} />
                         ))}
                     </SidebarMenu>
+                </SidebarGroup>
+
+                <div className="max-h-full grow" />
+
+                <SidebarGroup>
+                    <SidebarGroupLabel>Site theme</SidebarGroupLabel>
+                    <SidebarGroupContent>
+                        <ModeToggleDropdown />
+                    </SidebarGroupContent>
                 </SidebarGroup>
             </SidebarContent>
         </Sidebar>

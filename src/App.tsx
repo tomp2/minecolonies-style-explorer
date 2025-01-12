@@ -1,3 +1,4 @@
+import { ThemeProvider } from "@/components/theme-provider.tsx";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar.tsx";
 import { ExpandImageDialog } from "@/ui/expanded-image-dialog.tsx";
 import { Footer } from "@/ui/footer.tsx";
@@ -10,23 +11,25 @@ function App() {
     useInitialPersistentIdentity();
     return (
         <>
-            <HiddenDialog />
-            <ExpandImageDialog />
-            <SidebarProvider>
-                <div className="flex h-screen w-full">
-                    <FullSidebar />
-                    <SidebarInset className="flex min-h-screen w-full flex-col">
-                        <PageHeader />
-                        <div className="flex grow flex-col overflow-x-auto bg-gray-100">
-                            <div className="flex flex-col">
-                                <PageContent />
+            <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+                <HiddenDialog />
+                <ExpandImageDialog />
+                <SidebarProvider>
+                    <div className="flex h-screen w-full">
+                        <FullSidebar />
+                        <SidebarInset className="flex min-h-screen w-full flex-col">
+                            <PageHeader />
+                            <div className="flex grow flex-col overflow-x-auto bg-gray-100 dark:bg-black">
+                                <div className="flex flex-col">
+                                    <PageContent />
+                                </div>
+                                <div className="grow" />
+                                <Footer />
                             </div>
-                            <div className="grow" />
-                            <Footer />
-                        </div>
-                    </SidebarInset>
-                </div>
-            </SidebarProvider>
+                        </SidebarInset>
+                    </div>
+                </SidebarProvider>
+            </ThemeProvider>
         </>
     );
 }

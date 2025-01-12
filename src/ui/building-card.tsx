@@ -232,7 +232,7 @@ function FavoriteButton({ building, className }: { building: BuildingData; class
         >
             <Heart
                 size={16}
-                className="fill-stone-200 text-stone-300 hover:drop-shadow-[0_2px_2px_rgba(0,0,0,0.4)] group-data-[favorite=true]:fill-rose-300 group-data-[favorite=true]:text-rose-500"
+                className="fill-stone-200 text-stone-300 hover:drop-shadow-[0_2px_2px_rgba(0,0,0,0.4)] group-data-[favorite=true]:fill-rose-300 group-data-[favorite=true]:text-rose-500 dark:fill-stone-500 dark:text-stone-600"
             />
         </Button>
     );

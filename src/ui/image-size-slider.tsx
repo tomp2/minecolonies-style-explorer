@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 
 const defaultColumnSize = 350;
 const minColumnSize = 130;
-const sidebarWidth = 256;
+const sidebarWidth = 272;
 
 function setCssColumns(value: number) {
     document.documentElement.style.setProperty("--image-cols", value.toString());

@@ -52,10 +52,10 @@ function BuildingsContainer() {
     const { categories, rootBuildings } = useAtomValue(pageContentAtom);
 
     return (
-        <div className="h-full space-y-8 overflow-auto">
+        <div className="h-full space-y-8 overflow-auto last:mb-16">
             {showFavorites && favoriteBuildings.length > 0 && (
                 <BuildingSection
-                    className="rounded-lg bg-pink-200"
+                    className="rounded-b-lg bg-pink-200 dark:bg-pink-950/50"
                     title="Favorites"
                     buildings={favoriteBuildings.sort(sortBuildings)}
                 />
@@ -93,7 +93,7 @@ export function PageContent() {
 
     if (searchTerm && totalBuildingsFound === 0) {
         return (
-            <article className="prose prose-xl mx-auto mt-5 p-2 text-center [&_*]:m-0">
+            <article className="prose prose-xl mx-auto mt-5 p-2 text-center dark:prose-invert [&_*]:m-0">
                 <h3>No buildings found</h3>
                 <h4 className="mb-0">You can try:</h4>
                 <ul className="[&_li]: mt-0 list-inside list-disc pl-0 text-left">
@@ -105,7 +105,7 @@ export function PageContent() {
         );
     }
     return (
-        <article className="prose prose-xl mx-auto mt-5 p-2 pb-14">
+        <article className="prose prose-xl mx-auto mt-5 p-2 pb-14 dark:prose-invert">
             <h1 className="text-4xl font-extrabold">
                 Welcome to the <em>unofficial</em> MineColonies Style Explorer!
             </h1>

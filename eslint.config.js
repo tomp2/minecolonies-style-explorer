@@ -20,6 +20,7 @@ export default [
             "unicorn/prevent-abbreviations": "off",
             "unicorn/no-null": "off",
             "unicorn/prefer-global-this": "off",
+            "unicorn/filename-case": "off",
         },
     },
     pluginJs.configs.recommended,
