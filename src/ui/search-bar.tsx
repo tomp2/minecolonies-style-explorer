@@ -1,12 +1,12 @@
 import { Input } from "@/components/ui/input.tsx";
 import { Label } from "@/components/ui/label.tsx";
 import { Switch } from "@/components/ui/switch.tsx";
-import { searchEverywhereAtom, searchTermAtom, writeSearchTermAtom } from "@/lib/state-atoms.ts";
+import { searchSelectedThemesOnlyAtom, searchTermAtom, writeSearchTermAtom } from "@/lib/state-atoms.ts";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { Search, X } from "lucide-react";
 
 export function SearchBar() {
-    const [searchEverywhere, setSearchEverywhere] = useAtom(searchEverywhereAtom);
+    const [searchSelectedThemesOnly, setSearchSelectedThemesOnly] = useAtom(searchSelectedThemesOnlyAtom);
     const searchTerm = useAtomValue(searchTermAtom);
     const writeSearchTerm = useSetAtom(writeSearchTermAtom);
 
@@ -29,11 +29,11 @@ export function SearchBar() {
             </div>
             <div className="mt-2 flex items-center space-x-2">
                 <Switch
-                    checked={searchEverywhere}
-                    onCheckedChange={setSearchEverywhere}
-                    id="search-everywhere"
+                    checked={searchSelectedThemesOnly}
+                    onCheckedChange={setSearchSelectedThemesOnly}
+                    id="search-selected-themes-only"
                 />
-                <Label htmlFor="search-everywhere">Search from everywhere</Label>
+                <Label htmlFor="search-selected-themes-only">Search only from selected styles</Label>
             </div>
         </div>
     );

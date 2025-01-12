@@ -86,7 +86,7 @@ export function PageContent() {
                 <ul className="[&_li]: mt-0 list-inside list-disc pl-0 text-left">
                     <li>different search term</li>
                     <li>selecting more styles/categories</li>
-                    <li>enabling &quot;Search from everywhere&quot; on the sidebar</li>
+                    <li>disabling &quot;Search only from selected styles&quot; on the sidebar</li>
                 </ul>
             </article>
         );

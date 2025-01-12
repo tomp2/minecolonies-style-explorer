@@ -3,26 +3,62 @@ import { buildingMatchesSearchTerm } from "@/lib/utils.ts";
 import { atom } from "jotai/index";
 import { atomWithStorage } from "jotai/utils";
 
+/**
+ * The query parameters stored in localStorage.
+ * These are used to check if the url contains search parameters that affect the buildings shown.
+ * If these are present, the page will not restore the previous selections from localStorage.
+ */
+export const LOCALSTORAGE_QUERY_PARAMS = {
+    search: "search",
+    theme: "theme",
+    category: "category",
+};
+
+/**
+ * The latest URL search parameters are stored in localStorage.
+ * This is used to restore the selections when the page is reloaded if no search parameters are present.
+ */
+let initialUrlSearchParams = new URL(window.location.href).searchParams;
+const hasInitialUrlRelevantParams = [...initialUrlSearchParams.keys()].some(
+    key => key in LOCALSTORAGE_QUERY_PARAMS,
+);
+if (initialUrlSearchParams.size === 0 && !hasInitialUrlRelevantParams) {
+    initialUrlSearchParams = new URLSearchParams(localStorage.getItem("lastUrlParams") || "");
+}
+
+/** The currently expanded building, or null if none are expanded. */
 export const expandedBuildingAtom = atom<BuildingData | null>(null);
 
-export const searchEverywhereAtom = atomWithStorage<boolean>("searchEverywhere", true, undefined, {
-    getOnInit: true,
-});
-export const searchTermAtom = atom<string>(new URLSearchParams(window.location.search).get("search") || "");
+/** Whether to only search from the selected themes. */
+export const searchSelectedThemesOnlyAtom = atomWithStorage<boolean>(
+    "searchSelectionsOnly",
+    false,
+    undefined,
+    {
+        getOnInit: true,
+    },
+);
+
+/** The search term for filtering buildings. Also updates the URL on write. */
+export const searchTermAtom = atom<string>(
+    new URLSearchParams(window.location.search).get(LOCALSTORAGE_QUERY_PARAMS.search) || "",
+);
 export const writeSearchTermAtom = atom(null, (_get, set, searchTerm: string) => {
     const url = new URL(window.location.href);
     if (searchTerm) {
-        url.searchParams.set("search", searchTerm);
+        url.searchParams.set(LOCALSTORAGE_QUERY_PARAMS.search, searchTerm);
     } else {
-        url.searchParams.delete("search");
+        url.searchParams.delete(LOCALSTORAGE_QUERY_PARAMS.search);
     }
     window.history.replaceState({}, "", url.toString());
     set(searchTermAtom, searchTerm);
 });
 
+/** Whether to show favorite buildings at the top of the page. */
 export const showFavoritesAtom = atomWithStorage<boolean>("showFavorites", true, undefined, {
     getOnInit: true,
 });
+/** Locally stored paths of favorite buildings. */
 export const favoritePaths = atomWithStorage<string[]>("favorites", [], undefined, { getOnInit: true });
 export const favoritesPathsWriteAtom = atom(
     get => new Set(get(favoritePaths)),
@@ -40,6 +76,7 @@ export const favoritesPathsWriteAtom = atom(
         }
     },
 );
+/** Atom which reads paths of favorite buildings and returns the actual building objects. */
 export const favoriteBuildingsAtom = atom(get => {
     const paths = get(favoritePaths);
     return paths.map(path => {
@@ -57,12 +94,16 @@ export const favoriteBuildingsAtom = atom(get => {
     });
 });
 
+/** Defines the separator used in the URL for selections. */
 const selectionUrlSeparator = "-";
 
-function parseThemesFromUrl() {
-    const url = new URL(window.location.href);
+/**
+ * Parse the selected themes from the URL search parameters.
+ * Param can either be "all" or a list of theme names separated by the selectionUrlSeparator.
+ */
+function parseThemesFromUrlParams(urlSearchParams: URLSearchParams) {
     const selectedThemes = new Set<string>();
-    const themeParams = url.searchParams.get("theme");
+    const themeParams = urlSearchParams.get(LOCALSTORAGE_QUERY_PARAMS.theme);
     if (themeParams === "all") {
         return new Set(themes.keys());
     }
@@ -77,14 +118,21 @@ function parseThemesFromUrl() {
     return selectedThemes;
 }
 
-function encodeThemesToUrl(selectedThemes: Set<string>) {
+/**
+ * Encode the selected themes into the URL search parameters.
+ * If all themes are selected, returns "all".
+ */
+function encodeThemesToUrlParameter(selectedThemes: Set<string>) {
     if (selectedThemes.size === themes.size) return "all";
     return encodeURIComponent([...selectedThemes].join(selectionUrlSeparator));
 }
 
-function parseCategoriesFromUrl() {
-    const url = new URL(window.location.href);
-    const categoryParams = url.searchParams.get("category");
+/**
+ * Parse the selected categories from the URL search parameters.
+ * If "category" is not present, returns all categories. Otherwise, returns the selected categories.
+ */
+function parseCategoriesFromUrlParams(urlSearchParams: URLSearchParams) {
+    const categoryParams = urlSearchParams.get(LOCALSTORAGE_QUERY_PARAMS.category);
     if (categoryParams === null) {
         return new Set<string>(categoryNames);
     }
@@ -103,6 +151,10 @@ function parseCategoriesFromUrl() {
     return selectedCategories;
 }
 
+/**
+ * Encode the selected categories into the URL search parameters.
+ * If all categories are selected, returns null.
+ */
 function encodeCategoriesToUrl(categories: Set<string>) {
     if (categories.size === categoryNames.size) return null;
     return encodeURIComponent(
@@ -110,37 +162,46 @@ function encodeCategoriesToUrl(categories: Set<string>) {
     );
 }
 
+/** Crafts a URL with the current selections encoded. */
 function encodeSelectionsToUrl(selectedThemes: Set<string>, selectedCategories: Set<string>) {
     const url = new URL(window.location.href);
-    const encodedThemes = encodeThemesToUrl(selectedThemes);
+    const encodedThemes = encodeThemesToUrlParameter(selectedThemes);
     if (!encodedThemes) {
-        url.searchParams.delete("theme");
-        url.searchParams.delete("category");
-        return url.toString();
+        url.searchParams.delete(LOCALSTORAGE_QUERY_PARAMS.theme);
+        url.searchParams.delete(LOCALSTORAGE_QUERY_PARAMS.category);
+        return url;
     }
 
     const encodedCategories = encodeCategoriesToUrl(selectedCategories);
     if (encodedCategories) {
-        url.searchParams.set("category", encodedCategories);
+        url.searchParams.set(LOCALSTORAGE_QUERY_PARAMS.category, encodedCategories);
     } else {
-        url.searchParams.delete("category");
+        url.searchParams.delete(LOCALSTORAGE_QUERY_PARAMS.category);
     }
 
-    url.searchParams.set("theme", encodedThemes);
-    return url.toString();
+    url.searchParams.set(LOCALSTORAGE_QUERY_PARAMS.theme, encodedThemes);
+    return url;
 }
 
-export const selectedThemesAtom = atom<Set<string>>(parseThemesFromUrl());
-export const selectedCategoriesAtom = atom<Set<string>>(parseCategoriesFromUrl());
+export const selectedThemesAtom = atom<Set<string>>(parseThemesFromUrlParams(initialUrlSearchParams));
+export const selectedCategoriesAtom = atom<Set<string>>(parseCategoriesFromUrlParams(initialUrlSearchParams));
 
+/**
+ * Iterates over all themes and categories to gather all buildings that match the search term
+ * and/or are part of the selected themes and categories.
+ *
+ * This organizes the buildings into a structure that can be easily rendered.
+ */
 export const pageContentAtom = atom(get => {
     const selectedThemes = get(selectedThemesAtom);
     const selectedCategories = get(selectedCategoriesAtom);
 
     const searchTerm = get(searchTermAtom);
-    const searchEverywhere = get(searchEverywhereAtom);
+    const searchSelectedThemesOnly = get(searchSelectedThemesOnlyAtom);
 
-    window.history.replaceState({}, "", encodeSelectionsToUrl(selectedThemes, selectedCategories));
+    const url = encodeSelectionsToUrl(selectedThemes, selectedCategories);
+    window.history.replaceState({}, "", url);
+    localStorage.setItem("lastUrlParams", url.searchParams.toString());
 
     let totalBuildingsFound = 0;
 
@@ -160,8 +221,16 @@ export const pageContentAtom = atom(get => {
     // Root buildings of all themes come first:
     const rootBuildings: BuildingData[] = [];
     const categories = new Map<string, PageBuildingsSection>();
+    if (!searchTerm && selectedThemes.size === 0) {
+        return { rootBuildings, categories, totalBuildingsFound };
+    }
+
     for (const [themeName, theme] of themes.entries()) {
-        if (!selectedThemes.has(themeName) && (!searchTerm || !searchEverywhere)) {
+        if (searchTerm) {
+            if (searchSelectedThemesOnly && !selectedThemes.has(themeName)) {
+                continue;
+            }
+        } else if (!selectedThemes.has(themeName)) {
             continue;
         }
 
@@ -172,11 +241,7 @@ export const pageContentAtom = atom(get => {
         }
 
         for (const [categoryName, categoryData] of theme.categories.entries()) {
-            if (
-                !selectedCategories.has(categoryName) &&
-                (!searchTerm || !searchEverywhere) &&
-                selectedCategories.size > 0
-            ) {
+            if (!searchTerm && selectedCategories.size > 0 && !selectedCategories.has(categoryName)) {
                 continue;
             }
 
