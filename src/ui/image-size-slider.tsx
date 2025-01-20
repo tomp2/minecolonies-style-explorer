@@ -51,7 +51,7 @@ function useContainerWidth() {
 }
 
 export function ImageSizeSlider() {
-    const delayedCapture = useDelayedCaptureEvent();
+    const { capture } = useDelayedCaptureEvent();
     const containerWidth = useContainerWidth();
     const [sliderColumns, setSliderColumns] = useState(initialColumns);
     const [storedColumns, setStoredColumns] = useState(initialStoredConfig?.columns);
@@ -66,7 +66,7 @@ export function ImageSizeSlider() {
         writeConfig(columns, containerWidth);
         setStoredColumns(columns);
         setStoredContainerWidth(containerWidth);
-        delayedCapture(10_000, "image_cols_changed_v2", {
+        capture(10_000, "image_cols_changed_v2", {
             columns,
             containerWidth,
             imgSize: Math.floor(containerWidth / columns),

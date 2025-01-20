@@ -25,7 +25,7 @@ function Selectable({ children, ...props }: SelectableProps) {
 }
 
 export function ThemeSelectable({ theme }: { theme: Theme }) {
-    const delayedCapture = useDelayedCaptureEvent();
+    const { capture } = useDelayedCaptureEvent();
     const [selectedThemes, setSelectedThemes] = useAtom(selectedThemesAtom);
     const isSelected = selectedThemes.has(theme.name);
 
@@ -37,7 +37,7 @@ export function ThemeSelectable({ theme }: { theme: Theme }) {
             } else {
                 newSelections.add(theme.name);
             }
-            delayedCapture(10_000, "select_themes", { themes: newSelections });
+            capture(10_000, "select_themes", { themes: newSelections });
             return newSelections;
         });
     }
@@ -58,7 +58,7 @@ export function ThemeSelectable({ theme }: { theme: Theme }) {
 }
 
 export function CategorySelectable({ category }: { category: string }) {
-    const delayedCapture = useDelayedCaptureEvent();
+    const { capture } = useDelayedCaptureEvent();
     const [selectedCategories, setSelectedCategories] = useAtom(selectedCategoriesAtom);
     const isSelected = selectedCategories.has(category);
 
@@ -70,7 +70,7 @@ export function CategorySelectable({ category }: { category: string }) {
             } else {
                 newSelections.add(category);
             }
-            delayedCapture(10_000, "select_categories", { categories: newSelections });
+            capture(10_000, "select_categories", { categories: newSelections });
             return newSelections;
         });
     }

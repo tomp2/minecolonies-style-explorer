@@ -209,7 +209,7 @@ function BuildingImage({ building }: { building: BuildingData }) {
  * @param className
  */
 function FavoriteButton({ building, className }: { building: BuildingData; className?: string }) {
-    const delayedCapture = useDelayedCaptureEvent();
+    const { capture } = useDelayedCaptureEvent();
     const [favorites, setFavorites] = useAtom(favoritesPathsWriteAtom);
 
     const path = building.path.join(">") + ">" + building.name;
@@ -227,7 +227,7 @@ function FavoriteButton({ building, className }: { building: BuildingData; class
             )}
             onClick={() => {
                 const isFavorite = setFavorites(path);
-                delayedCapture(10_000, "toggle_favorite", { building: path, isFavorite });
+                capture(10_000, "toggle_favorite", { building: path, isFavorite });
             }}
         >
             <Heart
