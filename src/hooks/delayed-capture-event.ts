@@ -6,7 +6,7 @@ export function useDelayedCaptureEvent() {
     const posthog = usePostHog();
     const sendEventTimeoutId = useRef<NodeJS.Timeout | null>(null);
 
-    return (
+    const capture = (
         delay: number,
         event_name: EventName,
         properties?: Properties | null,
@@ -17,4 +17,25 @@ export function useDelayedCaptureEvent() {
             posthog.capture(event_name, properties, options);
         }, delay);
     };
+
+    const capturePromise = (
+        delay: number,
+        event_name: EventName,
+        properties?: Properties | null,
+        options?: CaptureOptions,
+    ) => {
+        if (sendEventTimeoutId.current) clearTimeout(sendEventTimeoutId.current);
+        return new Promise<void>(resolve => {
+            sendEventTimeoutId.current = setTimeout(() => {
+                posthog.capture(event_name, properties, options);
+                resolve();
+            }, delay);
+        });
+    };
+
+    const cancel = () => {
+        if (sendEventTimeoutId.current) clearTimeout(sendEventTimeoutId.current);
+    };
+
+    return { capture, capturePromise, cancel };
 }

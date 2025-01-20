@@ -1,6 +1,7 @@
 import { CheckboxButton } from "@/components/checkbox-button.tsx";
 import { ModeToggleDropdown } from "@/components/mode-toggle.tsx";
 import { Button } from "@/components/ui/button.tsx";
+import { Separator } from "@/components/ui/separator";
 import {
     Sidebar,
     SidebarContent,
@@ -18,6 +19,7 @@ import { categoryNames, themes } from "@/lib/theme-data.ts";
 import { ImageSizeSlider } from "@/ui/image-size-slider.tsx";
 import { SearchBar } from "@/ui/search-bar.tsx";
 import { CategorySelectable, ThemeSelectable } from "@/ui/selectable.tsx";
+import StyleVoting from "@/ui/style-voting.tsx";
 import { useAtom, useAtomValue } from "jotai";
 import { House } from "lucide-react";
 
@@ -67,6 +69,7 @@ export function FullSidebar() {
                     <SidebarGroupLabel className="h-fit">Favorites</SidebarGroupLabel>
                     <ShowFavorites />
                 </SidebarGroup>
+                <Separator />
                 <SidebarGroup>
                     <SidebarGroupLabel>Style Selections</SidebarGroupLabel>
                     <SidebarMenu>
@@ -81,6 +84,13 @@ export function FullSidebar() {
                         {[...categoryNames].map(categoryName => (
                             <CategorySelectable category={categoryName} key={categoryName} />
                         ))}
+                    </SidebarMenu>
+                </SidebarGroup>
+                <Separator />
+                <SidebarGroup>
+                    <SidebarGroupLabel>Vote for what style I should add next</SidebarGroupLabel>
+                    <SidebarMenu>
+                        <StyleVoting />
                     </SidebarMenu>
                 </SidebarGroup>
 

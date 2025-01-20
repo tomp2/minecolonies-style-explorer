@@ -1,7 +1,8 @@
+import { Toaster } from "@/components/ui/sonner";
+import "./index.css";
 import { PostHogProvider } from "posthog-js/react";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import "./index.css";
 import App from "./App.tsx";
 
 createRoot(document.querySelector("#root")!).render(
@@ -15,6 +16,7 @@ createRoot(document.querySelector("#root")!).render(
             }}
         >
             <App />
+            <Toaster richColors />
         </PostHogProvider>
     </StrictMode>,
 );
