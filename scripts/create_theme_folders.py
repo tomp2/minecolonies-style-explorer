@@ -12,7 +12,7 @@ from pathlib import Path
 from tqdm import tqdm
 
 # The directory where the theme blueprints are stored
-theme_source_directory = Path(r"C:\Users\user\Desktop\minecolonies\truedwarven")
+theme_source_directory = Path(r"C:\Users\user\Desktop\minecolonies2\caledonia")
 
 # The directory where the theme directories will be created
 themes_directory = Path(__file__).parent.parent.joinpath("public", "minecolonies")

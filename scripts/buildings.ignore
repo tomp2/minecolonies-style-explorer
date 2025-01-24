@@ -23,4 +23,10 @@ pagoda/decorations/supplies/camp
 pagoda/infrastructure/mineshafts
 pagoda/walls/big_walls/(.*medal|cross)
 truedwarven/decorations/supplies/supply.+
+original/walls/basic
+original/infrastructure/misc
+original/infrastructure/mineshafts/miner
+original/infrastructure/mics
+original.+markets/(bla|bro|[c-z]).+
+original/decorations/supplies/supply.+
 

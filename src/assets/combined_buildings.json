@@ -71,5 +71,32 @@
       "barracks5.blueprint",
       "barrackstower5.blueprint"
     ]
+  },
+  {
+    "name": "barracksfull",
+    "displayName": "[Combined] Barracks + Barrack Towers",
+    "path": "original/military",
+    "blueprints": [
+      "barracks5.blueprint",
+      "barrackstower5.blueprint"
+    ]
+  },
+  {
+    "name": "mediumquarrywithshaft",
+    "displayName": "[Combined] mediumquarry + mediumquarryshaft",
+    "path": "original/infrastructure/mineshafts",
+    "blueprints": [
+      "mediumquarry1.blueprint",
+      "mediumquarryshaft1.blueprint"
+    ]
+  },
+  {
+    "name": "simplequarrywithshaft",
+    "displayName": "[Combined] simplequarry + simplequarryshaft",
+    "path": "original/infrastructure/mineshafts",
+    "blueprints": [
+      "simplequarry1.blueprint",
+      "simplequarryshaft1.blueprint"
+    ]
   }
 ]

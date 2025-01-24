@@ -13,7 +13,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
-images_path = Path(__file__).parent.parent.joinpath("public", "minecolonies", "pagoda")
+images_path = Path(__file__).parent.parent.joinpath("public", "minecolonies")
 blueprints_path = Path(r"C:\Users\user\Desktop\minecolonies").joinpath(images_path.name)
 
 
