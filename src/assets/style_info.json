@@ -10,6 +10,20 @@
     ]
   },
   {
+    "name": "Antique",
+    "displayName": "Antique",
+    "authors": [
+      "IchHabeHunger54"
+    ]
+  },
+  {
+    "name": "aquatica",
+    "displayName": "Aquatica",
+    "authors": [
+      "m00b13n"
+    ]
+  },
+  {
     "name": "byzantine",
     "displayName": "Byzantine",
     "authors": [
@@ -41,6 +55,20 @@
     ]
   },
   {
+    "name": "corrupted",
+    "displayName": "Corrupted",
+    "authors": [
+      "jug1000"
+    ]
+  },
+  {
+    "name": "Crimson_Keep",
+    "displayName": "Crimson Keep",
+    "authors": [
+      "PrincessWendy, Dylbert93"
+    ]
+  },
+  {
     "name": "darkoak",
     "displayName": "Dark Oak Treehouse",
     "authors": [
@@ -60,10 +88,40 @@
     ]
   },
   {
+    "name": "fairytale",
+    "displayName": "FairyTale",
+    "authors": [
+      "Visteria_",
+      "Koala_Kat_"
+    ]
+  },
+  {
     "name": "fortress",
     "displayName": "Fortress",
     "authors": [
       "Aravan"
+    ]
+  },
+  {
+    "name": "frontier",
+    "displayName": "Frontier",
+    "authors": [
+      "m00b13n"
+    ]
+  },
+  {
+    "name": "Functional Fantasy",
+    "displayName": "Functional Fantasy",
+    "authors": [
+      "Anastasia590",
+      "DarkCold"
+    ]
+  },
+  {
+    "name": "High Magic",
+    "displayName": "High Magic",
+    "authors": [
+      "Five Tais, Private Panda"
     ]
   },
   {
@@ -170,6 +228,21 @@
     "displayName": "Stalactite Caves",
     "authors": [
       "Luna"
+    ]
+  },
+  {
+    "name": "steampunk",
+    "displayName": "Steampunk",
+    "authors": [
+      "m00b13n, MotionlessTrain, Yalokivi"
+    ]
+  },
+  {
+    "name": "underwaterbase",
+    "displayName": "Underwater Base",
+    "authors": [
+      "matlom",
+      "McSassa"
     ]
   },
   {
