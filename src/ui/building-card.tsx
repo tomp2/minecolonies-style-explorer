@@ -168,7 +168,6 @@ function BuildingImage({ building }: { building: BuildingData }) {
                         setView(view === "front" ? "back" : "front");
                         captureOnce("click_building", {
                             building: [...building.path, building.name].join("/"),
-                            view: view,
                         });
                     }
                 }}
