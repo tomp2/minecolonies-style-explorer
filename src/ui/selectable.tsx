@@ -25,7 +25,7 @@ function Selectable({ children, ...props }: SelectableProps) {
 }
 
 export function ThemeSelectable({ theme }: { theme: Theme }) {
-    const { capture } = useDelayedCaptureEvent();
+    const { capture, cancel } = useDelayedCaptureEvent();
     const [selectedThemes, setSelectedThemes] = useAtom(selectedThemesAtom);
     const isSelected = selectedThemes.has(theme.name);
 
@@ -34,10 +34,11 @@ export function ThemeSelectable({ theme }: { theme: Theme }) {
             const newSelections = new Set(prev);
             if (newSelections.has(theme.name)) {
                 newSelections.delete(theme.name);
+                cancel();
             } else {
+                capture(10_000, "view_style", { style: theme.name });
                 newSelections.add(theme.name);
             }
-            capture(10_000, "select_themes", { themes: newSelections });
             return newSelections;
         });
     }
@@ -58,7 +59,7 @@ export function ThemeSelectable({ theme }: { theme: Theme }) {
 }
 
 export function CategorySelectable({ category }: { category: string }) {
-    const { capture } = useDelayedCaptureEvent();
+    const { capture, cancel } = useDelayedCaptureEvent();
     const [selectedCategories, setSelectedCategories] = useAtom(selectedCategoriesAtom);
     const isSelected = selectedCategories.has(category);
 
@@ -67,10 +68,11 @@ export function CategorySelectable({ category }: { category: string }) {
             const newSelections = new Set(prev);
             if (newSelections.has(category)) {
                 newSelections.delete(category);
+                cancel();
             } else {
+                capture(10_000, "view_category", { category });
                 newSelections.add(category);
             }
-            capture(10_000, "select_categories", { categories: newSelections });
             return newSelections;
         });
     }

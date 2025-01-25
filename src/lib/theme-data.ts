@@ -64,7 +64,13 @@ function getBuildingDisplayName(hutBlocks: string[]): string | undefined {
 
 function createBuildingObject(name: string, data: BuildingDataJson, path: string[]): BuildingData {
     const displayName = data.hutBlocks && getBuildingDisplayName(data.hutBlocks);
-    const searchString = [name, displayName, data.displayName, data.hutBlocks?.join(" "), path.join(" ")]
+    const searchString = [
+        name,
+        displayName,
+        data.displayName,
+        data.hutBlocks?.join(" "),
+        path.slice(2).join(" "),
+    ]
         .join(" ")
         .toLowerCase();
     return { name, path, displayName, searchString, json: data };

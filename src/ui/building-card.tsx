@@ -73,7 +73,7 @@ function ImageCountIndicator({ setView }: { setView: (view: "front" | "back") =>
 }
 
 interface ImageButtonProps extends React.ComponentPropsWithoutRef<"div"> {
-    enableImg?: boolean;
+    disableFading?: boolean;
     building: BuildingData;
     view: "front" | "back";
 }
@@ -83,15 +83,12 @@ interface ImageButtonProps extends React.ComponentPropsWithoutRef<"div"> {
  * for smooth loading.
  * @param building The building data to display.
  * @param view The view of the building to display ("front" or "back").
- * @param enableImg Whether to display the image or not. This can be used to prevent
- * the back image from loading until it is needed.
  * @param className
  * @param props
  */
-function ImageButton({ building, view, enableImg, className, ...props }: ImageButtonProps) {
+function ImageButton({ building, view, className, ...props }: ImageButtonProps) {
     const [error, setError] = useState(false);
-    const [loading, setLoading] = useState(true);
-    const [showBlurhash, setShowBlurhash] = useState(true);
+    const [isLoaded, setIsLoaded] = useState(false);
 
     const buildingName = building.displayName || building.name;
     const blurhash = building.json.blur[view === "front" ? 0 : 1];
@@ -100,35 +97,25 @@ function ImageButton({ building, view, enableImg, className, ...props }: ImageBu
 
     return (
         <div className={cn("inset-0 h-full w-full", className)} {...props}>
-            {blurhash && (showBlurhash || error) && (
-                <BlurhashCanvas
-                    className={cn(
-                        "absolute rounded-sm opacity-0 transition-opacity duration-100",
-                        (loading || error) && "opacity-100",
-                    )}
-                    hash={blurhash}
-                    width={25}
-                    height={25}
-                />
+            {blurhash && (
+                <BlurhashCanvas className="absolute rounded-sm" hash={blurhash} width={25} height={25} />
             )}
             {error ? (
                 <div className="absolute flex h-full w-full items-center justify-center text-secondary">
                     Error loading {view} image
                 </div>
             ) : (
-                (enableImg === undefined || enableImg) && (
-                    <img
-                        loading="lazy"
-                        src={imgSrc}
-                        alt={`${buildingName} (${view})`}
-                        className="size-full rounded-sm object-cover"
-                        onError={() => setError(true)}
-                        onLoad={() => {
-                            setLoading(false);
-                            setTimeout(() => setShowBlurhash(false), 150);
-                        }}
-                    />
-                )
+                <img
+                    loading="lazy"
+                    src={imgSrc}
+                    alt={`${buildingName} (${view})`}
+                    className={cn(
+                        "absolute rounded-sm object-cover opacity-0 transition-opacity duration-100",
+                        isLoaded && "opacity-100",
+                    )}
+                    onError={() => setError(true)}
+                    onLoad={() => setIsLoaded(true)}
+                />
             )}
         </div>
     );
@@ -167,7 +154,6 @@ function ExpandButton({ building, className }: { building: BuildingData; classNa
 function BuildingImage({ building }: { building: BuildingData }) {
     const [captureOnce] = useCaptureEventOnce();
     const [view, setView] = useState<"front" | "back">("front");
-    const [mountBack, setMountBack] = useState(false);
 
     const buildingName = building.displayName || building.name;
 
@@ -180,22 +166,18 @@ function BuildingImage({ building }: { building: BuildingData }) {
                 onClick={() => {
                     if (building.json.back) {
                         setView(view === "front" ? "back" : "front");
-                        if (!mountBack) setMountBack(true);
-                        captureOnce("toggle_building_view", { building: buildingName, view: view });
+                        captureOnce("click_building", {
+                            building: [...building.path, building.name].join("/"),
+                            view: view,
+                        });
                     }
                 }}
             >
-                <ImageButton
-                    className="absolute"
-                    building={building}
-                    view="front"
-                    onMouseEnter={() => !mountBack && building.json.back && setMountBack(true)}
-                />
+                <ImageButton className="absolute" building={building} view="front" />
                 <ImageButton
                     className="absolute group-data-[view='front']/card:hidden"
                     building={building}
                     view="back"
-                    enableImg={mountBack}
                 />
             </button>
             {building.json.back && <ImageCountIndicator setView={setView} />}

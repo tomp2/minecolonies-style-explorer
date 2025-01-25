@@ -1,5 +1,5 @@
 import { BuildingData, Category, categoryNames, themes } from "@/lib/theme-data.ts";
-import { buildingMatchesSearchTerm } from "@/lib/utils.ts";
+import { buildingMatchesStringSearchTerm } from "@/lib/utils.ts";
 import { atom } from "jotai/index";
 import { atomWithStorage } from "jotai/utils";
 
@@ -194,6 +194,13 @@ export const pageContentAtom = atom(get => {
     const searchTerm = get(searchTermAtom);
     const searchSelectedThemesOnly = get(searchSelectedThemesOnlyAtom);
 
+    const isRegex = !/^[\d\sA-Za-zäåö]*$/.test(searchTerm);
+    const bakedSearchTerm = isRegex ? new RegExp(searchTerm, "i") : searchTerm;
+    const buildingMatchesSearchTerm =
+        bakedSearchTerm instanceof RegExp
+            ? (building: BuildingData) => bakedSearchTerm.test(building.searchString)
+            : (building: BuildingData) => buildingMatchesStringSearchTerm(searchTerm, building);
+
     const url = encodeSelectionsToUrl(selectedThemes, selectedCategories);
     window.history.replaceState({}, "", url);
     localStorage.setItem("lastUrlParams", url.searchParams.toString());
@@ -202,7 +209,7 @@ export const pageContentAtom = atom(get => {
 
     function recursivelyGatherAllBuildings(category: Category, results: BuildingData[]) {
         for (const building of category.blueprints.values()) {
-            if (!buildingMatchesSearchTerm(searchTerm, building)) continue;
+            if (!buildingMatchesSearchTerm(building)) continue;
             results.push(building);
             totalBuildingsFound++;
         }
@@ -230,7 +237,7 @@ export const pageContentAtom = atom(get => {
         }
 
         for (const building of theme.blueprints.values()) {
-            if (!buildingMatchesSearchTerm(searchTerm, building)) continue;
+            if (!buildingMatchesSearchTerm(building)) continue;
             rootBuildings.push(building);
             totalBuildingsFound++;
         }
@@ -246,7 +253,7 @@ export const pageContentAtom = atom(get => {
             const section = categories.get(categoryName)!;
 
             for (const building of categoryData.blueprints.values()) {
-                if (!buildingMatchesSearchTerm(searchTerm, building)) continue;
+                if (!buildingMatchesSearchTerm(building)) continue;
                 section.blueprints.push(building);
                 totalBuildingsFound++;
             }

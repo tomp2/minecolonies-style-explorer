@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-theme_source_directory = Path(r"C:\Users\user\Desktop\minecolonies")
+theme_source_directory = Path(r"C:\Users\user\Desktop\minecolonies2")
 REPO_DIR = Path(__file__).parent.parent
 OUTPUT_JSON = REPO_DIR / "src/assets/style_info.json"
 
