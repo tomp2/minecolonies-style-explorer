@@ -1,14 +1,15 @@
 import json
 import re
 from concurrent.futures import ThreadPoolExecutor
+from functools import cached_property, lru_cache
 from pathlib import Path
-from typing import Dict, Optional, Any, Set, TypedDict, Literal
+from typing import Dict, Optional, Any, TypedDict, Literal
 
 import numpy as np
-import numpy.typing as npt
 from PIL import Image
 from blurhash import encode
 from nbt import nbt
+from nbt.nbt import TAG_Compound
 
 # --- Configuration ---
 ONE_LEVEL_ONLY = True
@@ -25,7 +26,7 @@ THEME_DIRS = [
 
 # --- Constants ---
 REPO_DIR = Path(__file__).parent.parent
-COMBINED_BUILDINGS_JSON = REPO_DIR / "src/assets/combined_buildings.json"
+COMBINED_BUILDINGS_JSON = REPO_DIR / "scripts/combined_buildings.json"
 IMAGES_DIR = REPO_DIR / "public/minecolonies"
 OUTPUT_JSON = REPO_DIR / "src/assets/themes.json"
 BUILDING_IGNORE_FILE = Path(__file__).parent / "buildings.ignore"
@@ -42,52 +43,120 @@ ignored_pattern = re.compile(
     "|".join([line.strip() for line in BUILDING_IGNORE_FILE.read_text().splitlines() if line.strip()]))
 
 
-def parse_building_filename(file_name: str) -> TypedDict("BuildingName",
-                                                         {"buildingName": str, "buildingLevel": int | Literal[False]}):
-    match = re.match(r"^(.+?)(\d?)\.blueprint$", file_name)
-    if not match:
-        raise ValueError(f"File name doesn't match the pattern: {file_name}")
-    return {"buildingName": match[1], "buildingLevel": int(match[2]) if match[2] else False}
+class BlueprintFile:
+    def __init__(self, file_path: Path):
+        self.file_path = file_path
 
+    @lru_cache
+    def read(self):
+        with self.file_path.open("rb") as f:
+            return nbt.NBTFile(fileobj=f)
 
-def get_building_hut_blocks(nbt_data: nbt.NBTFile) -> Set[str]:
-    hut_blocks = set()
-    for block in nbt_data.get("palette"):
-        block_name = block.get("Name").value
-        if block_name.startswith("minecolonies:blockhut"):
-            short_name = block_name[len("minecolonies:blockhut"):]
-            if short_name in HUT_BLOCKS:
-                hut_blocks.add(short_name)
-    return hut_blocks
+    @cached_property
+    def size_x(self):
+        return self.read().get("size_x").value
 
+    @cached_property
+    def size_y(self):
+        return self.read().get("size_y").value
 
-def blocks_array_to_palette(
-        ints: list[int],
-        size_x: int,
-        size_y: int,
-        size_z: int
-) -> npt.NDArray[int]:
-    """
-    The Structurize-mod stored the blocks in a 1-dimensional array of 32-bit integers.
-    The 32-bit integer is split into two 16-bit values, where the left and right 16 bits represent
-    two different blocks (probably to save space?)
-    """
-    data = np.array(ints, dtype=np.uint32)
-    # Split each 32-bit integer into two 16-bit values
-    left_16_bits = (data >> 16) & 0xFFFF
-    right_16_bits = data & 0xFFFF
-    # Combine the left and right
-    one_dim_array = np.concatenate((left_16_bits, right_16_bits))
+    @cached_property
+    def size_z(self):
+        return self.read().get("size_z").value
 
-    # If the size of the building is odd, the last 16-bits are assumed to be padding
-    if (size_x * size_y * size_z) % 2 != 0:
-        one_dim_array = one_dim_array[:-1]
+    def get_is_minecolonies_building(self):
+        tile_entity: TAG_Compound
+        for tile_entity in self.read().get("tile_entities"):
+            if block_id := tile_entity.get("id"):
+                block_id_str: str = block_id.value
+                if block_id_str == "minecolonies:colony_flag":
+                    continue
 
-    if size_x * size_y * size_z != len(one_dim_array):
-        raise ValueError("Size of the 1-dimensional array doesn't match the dimensions of the building.")
+                if block_id_str.startswith("minecolonies"):
+                    return True
 
-    mult_dim_array = one_dim_array.reshape((size_y, size_z, size_x))
-    return mult_dim_array
+            if block_type := tile_entity.get("type"):
+                if block_type.value.startswith("minecolonies"):
+                    return True
+
+        return False
+
+    @cached_property
+    def name_and_level(self) -> TypedDict("BuildingName",
+                                          {"buildingName": str, "buildingLevel": int | Literal[False]}):
+        # If the building is a leveling building, the last number on the name indicates the level.
+        # Otherwise, the building doesn't have levels, and number suffixes are to be included in the name.
+        match = re.match(r"^(.+?)(\d*?)\.blueprint$", self.file_path.name)
+        if not match:
+            raise ValueError(f"File name doesn't match the pattern: {self.file_path.name}")
+
+        if self.get_is_minecolonies_building():
+            if len(match.groups()) == 1:
+                return {"buildingName": match[0], "buildingLevel": False}
+            else:
+                return {"buildingName": match[1], "buildingLevel": int(match[2]) if match[2] else False}
+
+        return {"buildingName": self.file_path.stem, "buildingLevel": False}
+
+    @cached_property
+    def name(self):
+        return self.name_and_level["buildingName"]
+
+    @cached_property
+    def level(self):
+        return self.name_and_level["buildingLevel"]
+
+    def get_hut_blocks(self):
+        hut_blocks = set()
+        for block in self.read().get("palette"):
+            block_name = block.get("Name").value
+            if block_name.startswith("minecolonies:blockhut"):
+                short_name = block_name[len("minecolonies:blockhut"):]
+                if short_name in HUT_BLOCKS:
+                    hut_blocks.add(short_name)
+        return hut_blocks
+
+    def get_raw_block_data(self):
+        """
+        The Structurize-mod stored the blocks in a 1-dimensional array of 32-bit integers.
+        The 32-bit integer is split into two 16-bit values, where the left and right 16 bits represent
+        two different blocks (probably to save space?)
+        """
+        raw_block_data = self.read().get("blocks")
+        data = np.array(raw_block_data, dtype=np.uint32)
+        # Split each 32-bit integer into two 16-bit values
+        left_16_bits = (data >> 16) & 0xFFFF
+        right_16_bits = data & 0xFFFF
+        # Combine the left and right
+        one_dim_array = np.concatenate((left_16_bits, right_16_bits))
+        # If the size of the building is odd, the last 16-bits are assumed to be padding
+        if (self.size_x * self.size_y * self.size_z) % 2 != 0:
+            one_dim_array = one_dim_array[:-1]
+        return one_dim_array.reshape((self.size_y, self.size_x, self.size_z))
+
+    def calculate_building_size(self):
+        palette_indices = self.get_raw_block_data()
+
+        material_palette = self.read().get("palette")
+        solidity_palette = np.array([entry.get("Name").value not in IGNORED_BLOCKS for entry in material_palette],
+                                    dtype=bool)
+
+        palette_indices_solidity = solidity_palette[palette_indices]
+
+        y_slices_solidity = palette_indices_solidity.any(axis=(1, 2))
+        x_slices_solidity = palette_indices_solidity.any(axis=(0, 2))
+        z_slices_solidity = palette_indices_solidity.any(axis=(0, 1))
+
+        bottom_y = np.argmax(y_slices_solidity)
+        top_y = self.size_y - 1 - np.argmax(y_slices_solidity[::-1])
+
+        left_x = np.argmax(x_slices_solidity)
+        right_x = self.size_x - 1 - np.argmax(x_slices_solidity[::-1])
+
+        front_z = np.argmax(z_slices_solidity)
+        back_z = self.size_z - 1 - np.argmax(z_slices_solidity[::-1])
+
+        return int(right_x - left_x + 1), int(top_y - bottom_y + 1), int(back_z - front_z + 1)
 
 
 IGNORED_BLOCKS = {
@@ -101,43 +170,6 @@ IGNORED_BLOCKS = {
     "minecraft:grass",
     "minecraft:fern",
 }
-
-
-def calculate_building_size(
-        nbt_data: nbt.NBTFile,
-) -> tuple[int, int, int]:
-    size_x = nbt_data.get("size_x").value
-    size_y = nbt_data.get("size_y").value
-    size_z = nbt_data.get("size_z").value
-
-    raw_block_data = nbt_data.get("blocks")
-    palette_indices = blocks_array_to_palette(raw_block_data, size_x, size_y, size_z)
-
-    material_palette = nbt_data.get("palette")
-    solidity_palette = np.array([entry.get("Name").value not in IGNORED_BLOCKS for entry in material_palette],
-                                dtype=bool)
-
-    palette_indices_solidity = solidity_palette[palette_indices]
-
-    y_slices_solidity = palette_indices_solidity.any(axis=(1, 2))
-    x_slices_solidity = palette_indices_solidity.any(axis=(0, 2))
-    z_slices_solidity = palette_indices_solidity.any(axis=(0, 1))
-
-    bottom_y = np.argmax(y_slices_solidity)
-    top_y = size_y - 1 - np.argmax(y_slices_solidity[::-1])
-
-    left_x = np.argmax(x_slices_solidity)
-    right_x = size_x - 1 - np.argmax(x_slices_solidity[::-1])
-
-    front_z = np.argmax(z_slices_solidity)
-    back_z = size_z - 1 - np.argmax(z_slices_solidity[::-1])
-
-    return int(right_x - left_x + 1), int(top_y - bottom_y + 1), int(back_z - front_z + 1)
-
-
-def read_blueprint_nbt(file_path: Path) -> nbt.NBTFile:
-    with file_path.open("rb") as f:
-        return nbt.NBTFile(fileobj=f)
 
 
 def find_building_image(
@@ -174,32 +206,30 @@ def process_building(
         theme_images_dir: Path,
         theme_path: Path
 ):
-    file_name = file_path.name
-    parsed = parse_building_filename(file_name)
-
-    building_level = parsed["buildingLevel"]
-    building_name = parsed["buildingName"]
+    blueprint = BlueprintFile(file_path)
 
     # When ONE_LEVEL_ONLY is True, only process the max level of each building
     # Find out if there exists a higher level of the building
     if ONE_LEVEL_ONLY:
-        higher_level_name = f"{building_name}{building_level + 1}.blueprint"
+        higher_level_name = f"{blueprint.name}{blueprint.level + 1}.blueprint"
         higher_level_path = file_path.parent / higher_level_name
         if higher_level_path.exists():
             return
 
-    nbt_data = read_blueprint_nbt(file_path)
-    hut_blocks = get_building_hut_blocks(nbt_data)
-    building_images = find_building_image(file_path, building_name, building_level, theme_images_dir, theme_path)
-
-    building_size = calculate_building_size(nbt_data)
+    building_images = find_building_image(
+        file_path,
+        blueprint.name,
+        blueprint.level,
+        theme_images_dir,
+        theme_path
+    )
 
     if not building_images["frontExists"]:
         print(f"[WARN] Required front image not found: {building_images['front'].relative_to(theme_images_dir.parent)}")
         return
 
     building_obj = parent_category_object.setdefault(
-        building_name, {"levels": building_level, "size": building_size}
+        blueprint.name, {"levels": blueprint.level, "size": blueprint.calculate_building_size()}
     )
 
     blur_hashes = [encode_image_to_blurhash(building_images["front"])]
@@ -208,18 +238,18 @@ def process_building(
         building_obj["back"] = True
         blur_hashes.append(encode_image_to_blurhash(building_images["back"]))
 
-    if hut_blocks:
+    if hut_blocks := blueprint.get_hut_blocks():
         building_obj["hutBlocks"] = list(hut_blocks)
 
     building_obj["blur"] = blur_hashes
 
-    if building_obj["levels"] is False and building_level is not False:
+    if building_obj["levels"] is False and blueprint.level is not False:
         raise ValueError(
             "Existing building object has levels=False, but a leveled version was found."
         )
 
-    if building_obj["levels"] is not False and parsed["buildingLevel"] is not False:
-        building_obj["levels"] = max(building_obj["levels"], parsed["buildingLevel"])
+    if building_obj["levels"] is not False and blueprint.level is not False:
+        building_obj["levels"] = max(building_obj["levels"], blueprint.level)
 
 
 def handle_file(
@@ -231,11 +261,7 @@ def handle_file(
     if ignored_pattern.search(str(file_path.as_posix())):
         return
 
-    if file_path.name in ["icon.png", "icon_disabled.png"]:
-        return
-
     if file_path.suffix != ".blueprint":
-        print(f"[WARN] File is not a blueprint: {file_path}")
         return
 
     process_building(file_path, parent_category_object, theme_images_dir, theme_path)
@@ -338,16 +364,16 @@ def add_combined_buildings(themes: Dict[str, Any]):
         building_size = None
         for blueprint in combined_building["blueprints"]:
             blueprint_path = theme_source_dir.joinpath(*category_path).joinpath(blueprint)
-            nbt_data = read_blueprint_nbt(blueprint_path)
-            combined_hut_blocks |= get_building_hut_blocks(nbt_data)
-            building_level = parse_building_filename(blueprint)["buildingLevel"]
+            blueprint = BlueprintFile(blueprint_path)
+
+            combined_hut_blocks |= blueprint.get_hut_blocks()
             if not combined_level:
-                combined_level = building_level
-            elif building_level:
-                combined_level = max(combined_level, building_level)
+                combined_level = blueprint.level
+            elif blueprint.level:
+                combined_level = max(combined_level, blueprint.level)
 
             if not building_size:
-                building_size = calculate_building_size(nbt_data)
+                building_size = blueprint.calculate_building_size()
 
         building_object = {
             "levels": combined_level,
