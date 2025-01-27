@@ -51,6 +51,22 @@ function BuildingsContainer() {
     const favoriteBuildings = useAtomValue(favoriteBuildingsAtom);
     const { categories, rootBuildings } = useAtomValue(pageContentAtom);
 
+    const dynamicSections = [];
+    for (const [categoryName, section] of categories.entries()) {
+        dynamicSections.push(
+            <BuildingSection title={categoryName} buildings={section.blueprints} key={categoryName} />,
+        );
+        for (const [subcategoryName, subcategory] of section.categories.entries()) {
+            dynamicSections.push(
+                <BuildingSection
+                    title={subcategoryName}
+                    buildings={subcategory}
+                    key={categoryName + subcategoryName}
+                />,
+            );
+        }
+    }
+
     return (
         <div className="h-full space-y-8 overflow-auto last:mb-16">
             {showFavorites && favoriteBuildings.length > 0 && (
@@ -60,23 +76,8 @@ function BuildingsContainer() {
                     buildings={favoriteBuildings.sort(sortBuildings)}
                 />
             )}
-
-            {/*Root buildings from all selected themes*/}
             <BuildingSection title="Top-level Buildings" buildings={rootBuildings} />
-
-            {/*Categories and their buildings*/}
-            {[...categories.entries()].map(([categoryName, section]) => (
-                <>
-                    <BuildingSection title={categoryName} buildings={section.blueprints} />
-                    {[...section.categories.entries()].map(([subcategoryName, subcategory]) => (
-                        <BuildingSection
-                            key={subcategoryName}
-                            title={subcategoryName}
-                            buildings={subcategory}
-                        />
-                    ))}
-                </>
-            ))}
+            {dynamicSections}
         </div>
     );
 }

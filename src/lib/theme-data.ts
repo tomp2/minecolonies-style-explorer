@@ -27,6 +27,7 @@ export type ThemeJson = {
     authors: string[];
     blueprints: { [key: string]: BuildingDataJson };
     categories: { [key: string]: CategoryJson };
+    added?: string;
 };
 
 export type BuildingData = {
@@ -49,9 +50,8 @@ export type Theme = {
     authors: string[];
     blueprints: Map<string, BuildingData>;
     categories: Map<string, Category>;
+    added?: Date;
 };
-
-export type Selections = Record<string, Record<string, boolean>>;
 
 function getBuildingDisplayName(hutBlocks: string[]): string | undefined {
     for (const hutBlock of hutBlocks) {
@@ -123,6 +123,9 @@ function restructureThemesJson(themesJson: Record<string, ThemeJson>): Map<strin
             blueprints: new Map<string, BuildingData>(),
             categories: new Map<string, Category>(),
         };
+        if (theme.added) {
+            themeObject.added = new Date(theme.added);
+        }
         for (const [name, data] of Object.entries(theme.blueprints)) {
             const building = createBuildingObject(name, data, [themeName]);
             themeObject.blueprints.set(name, building);

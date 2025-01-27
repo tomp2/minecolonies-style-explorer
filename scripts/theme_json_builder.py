@@ -22,6 +22,7 @@ THEME_DIRS = [
     Path(r"C:\Users\user\Desktop\minecolonies\pagoda"),
     Path(r"C:\Users\user\Desktop\minecolonies\truedwarven"),
     Path(r"C:\Users\user\Desktop\minecolonies\original"),
+    Path(r"C:\Users\user\Desktop\minecolonies\byzantine"),
 ]
 
 # --- Constants ---
@@ -40,7 +41,8 @@ HUT_BLOCKS = {"field", "plantationfield", "alchemist", "kitchen", "graveyard", "
 
 # --- Globals ---
 ignored_pattern = re.compile(
-    "|".join([line.strip() for line in BUILDING_IGNORE_FILE.read_text().splitlines() if line.strip()]))
+    "|".join([line.strip() for line in BUILDING_IGNORE_FILE.read_text().splitlines() if
+              line.strip() and not line.startswith("#")]))
 
 
 class BlueprintFile:
@@ -421,7 +423,9 @@ def main():
         results = executor.map(process_theme, THEME_DIRS)
 
     for result in results:
-        themes[result["name"]] = result["json"]
+        previous = themes[result["name"]]
+        for key, value in result["json"].items():
+            previous[key] = value
 
     add_combined_buildings(themes)
 

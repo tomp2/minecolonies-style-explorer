@@ -43,6 +43,7 @@ export function ThemeSelectable({ theme }: { theme: Theme }) {
         });
     }
 
+    const isNew = theme.added && theme.added > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000); // 7 days
     return (
         <Selectable
             aria-label={theme.displayName}
@@ -54,6 +55,11 @@ export function ThemeSelectable({ theme }: { theme: Theme }) {
                 {theme.displayName}
                 <p className="text-muted-foreground">({theme.authors.join(", ")})</p>
             </div>
+            {isNew && (
+                <p className="-mb-0.5 -mr-2 ml-auto rounded-full bg-green-200 px-1.5 pb-0.5 text-xs font-semibold opacity-80 dark:bg-green-700">
+                    New
+                </p>
+            )}
         </Selectable>
     );
 }

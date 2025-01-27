@@ -14,7 +14,7 @@ from pathlib import Path
 from typing import Any
 
 images_path = Path(__file__).parent.parent.joinpath("public", "minecolonies")
-blueprints_path = Path(r"C:\Users\user\Desktop\minecolonies").joinpath(images_path.name)
+blueprints_path = Path(r"C:\Users\user\Desktop\minecolonies2").joinpath(images_path.name)
 
 
 def parse_building_filename(file_name: str) -> dict[str, Any]:
@@ -62,6 +62,7 @@ for dirpath, dirnames, filenames in os.walk(images_path):
         path.rename(path.with_name(f"{max_level or ''}front.png"))
         files_affected += 1
         buildings_affected += 1
+        print(f"Renamed {path} to {path.with_name(f'{max_level or str()}front.png').name}")
         continue
 
     # If there are two images, rename the first to front.png and the second to back.png
@@ -86,41 +87,7 @@ for dirpath, dirnames, filenames in os.walk(images_path):
         backPath.rename(backPath.with_name(f"{max_level or ''}back.png"))
         files_affected += 2
         buildings_affected += 1
-        continue
-
-    # Sort all .png files by their name which is a date like 2024-11-30_03.22.30.png
-    # The first image to front5.png, the second to front4.png, etc.
-    # The sixth image to back5.png, the seventh to back4.png, etc.
-    # If there are more than 10 images, throw an error
-    file_dates = []
-    skip_this_dir = False
-    for f in Path(dirpath).iterdir():
-        if not f.name.endswith(".png"):
-            skip_this_dir = True
-            break
-
-        try:
-            date = datetime.strptime(f.stem, "%Y-%m-%d_%H.%M.%S")
-        except ValueError:
-            skip_this_dir = True
-            break
-        file_dates.append((f, date))
-
-    if skip_this_dir:
-        continue
-
-    if len(filenames) > 10:
-        raise ValueError("More than 10 images found")
-
-    file_dates.sort(key=lambda x: x[1], reverse=False)
-
-    for i, (f, _) in enumerate(file_dates):
-        new_name = f"{5 - i % 5}{'front' if i < 5 else 'back'}.png"
-        f.rename(f.parent.joinpath(new_name))
-        files_affected += 1
-
-    buildings_affected += 1
-
+        print(f"Renamed {frontPath} to {frontPath.with_name(f'{max_level or str()}front.png').name}")
 
 print(f"Files affected: {files_affected}")
 print(f"Buildings affected: {buildings_affected}")
