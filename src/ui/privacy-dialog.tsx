@@ -1,14 +1,6 @@
 import { Button } from "@/components/ui/button.tsx";
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogTrigger } from "@/components/ui/dialog.tsx";
-import {
-    Table,
-    TableBody,
-    TableCaption,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table.tsx";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table.tsx";
 import { ScrollText } from "lucide-react";
 
 export function PrivacyDialog() {
@@ -22,9 +14,9 @@ export function PrivacyDialog() {
                 <article className="max-h-[70vh] max-w-none overflow-y-auto">
                     <h1 className="text-3xl font-extrabold">Privacy Policy</h1>
                     <p className="mt-4">
-                        This site does not use cookies or track any personal information. No ip addresses,
-                        monitor sizes, user agents, locations, languages, browser info, or any other personal
-                        data is stored. The site collects some very basic data with{" "}
+                        This site doesn&apos;t have ads, doesn&apos;t use cookies, doesn&apos;t collect
+                        personal information, and doesn&apos;t track you in any way. The site sends some very
+                        basic anonymous events using{" "}
                         <a
                             href="https://posthog.com/"
                             target="_blank"
@@ -33,11 +25,9 @@ export function PrivacyDialog() {
                         >
                             PostHog
                         </a>{" "}
-                        to help me understand how people use the site. This data is not shared with anyone
-                        else and is only used to improve the site.
+                        to help me make the site better and prioritize what to work on next:
                     </p>
                     <Table>
-                        <TableCaption>Data collected</TableCaption>
                         <TableHeader>
                             <TableRow>
                                 <TableHead>What</TableHead>
@@ -46,31 +36,36 @@ export function PrivacyDialog() {
                         </TableHeader>
                         <TableBody>
                             <TableRow>
-                                <TableCell>Page view</TableCell>
-                                <TableCell>To see if people even use the site</TableCell>
-                            </TableRow>
-                            <TableRow>
                                 <TableCell>Page loading speed</TableCell>
                                 <TableCell>
-                                    To see if the page gets too heavy and needs to be optimized, for example
-                                    by reducing image sizes
+                                    To monitor if the page gets too heavy and needs to be optimized, for
+                                    example needs to reduce image sizes
                                 </TableCell>
                             </TableRow>
                             <TableRow>
-                                <TableCell>Style selections</TableCell>
-                                <TableCell>Which styles are priority to keep updated</TableCell>
+                                <TableCell>Style voting</TableCell>
+                                <TableCell>I use this to decide what style I will add next.</TableCell>
                             </TableRow>
                             <TableRow>
-                                <TableCell>Used image size</TableCell>
+                                <TableCell>Select style</TableCell>
                                 <TableCell>
-                                    To see if the default image size is good enough for most people
+                                    I use this to see what styles are most popular and decide if I should
+                                    perhaps add special features for them, and prioritize keeping them updated
                                 </TableCell>
                             </TableRow>
                             <TableRow>
-                                <TableCell>Device type</TableCell>
+                                <TableCell>Used image column count</TableCell>
                                 <TableCell>
-                                    If there are more mobile users than I expect, I might make the site more
-                                    mobile friendly
+                                    To see if the default image size is what most people want
+                                </TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell>Favorite building</TableCell>
+                                <TableCell>
+                                    This is to see if people often use this feature. If people use it a lot, I
+                                    could add some more depth to it, like collections, sharing, etc. This
+                                    doesn&apos;t include a list of what you have favorited, this is just
+                                    counting the clicks on the heart icon.
                                 </TableCell>
                             </TableRow>
                         </TableBody>
@@ -79,7 +74,8 @@ export function PrivacyDialog() {
                         If you have any questions or concerns, please contact me at{" "}
                         <a href="mailto:tomp.code@gmail.com">
                             <span className="underline">tomp.code@gmail.com</span>
-                        </a>
+                        </a>{" "}
+                        or use the feedback button at the top right.
                     </p>
                 </article>
                 <DialogFooter className="sm:justify-start">

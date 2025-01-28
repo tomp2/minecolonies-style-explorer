@@ -107,52 +107,40 @@ export function PageContent() {
     }
     return (
         <article className="prose prose-xl mx-auto mt-5 p-2 pb-14 dark:prose-invert">
-            <h1 className="text-4xl font-extrabold">
+            <h1 className="text-4xl">
                 Welcome to the <em>unofficial</em> MineColonies Style Explorer!
             </h1>
+            <h3>Introduction</h3>
             <p>
-                This is an <em>unofficial</em> site for browsing screenshots of the{" "}
+                This is an <em>unofficial</em> site for browsing the styles and buildings for the{" "}
                 <a className="text-blue-500" href="https://minecolonies.com/">
                     MineColonies
                 </a>{" "}
-                mod theme/style buildings. <b>Credits</b> for the buildings go to the style authors listed in
-                the sidebar next to the style name. I created this site to make it easy to visually browse the
-                buildings from different styles and categories at the same time.
+                mod. I created this site to make it easy to visually explore buildings by style and category.
             </p>
             <p>
-                To get started, select one or more styles/categories from the sidebar and start exploring the
-                buildings! You can also search for a building name, hut block, or category—just select all the
-                styles you want to search from first. You can see the back of most buildings by clicking on
-                the image.
+                Start by selecting styles from the sidebar or searching for buildings. Click images to see
+                alternative angles, and use the heart icon to save favorites.
             </p>
+            <h3>Support MineColonies</h3>
             <p>
-                Note: This page only shows simple pics of the buildings. Minecolonies has a Patreon where you
-                can support them and get access to their official <b>schematics server</b> if you want to
-                browse and inspect the buildings more closely in-game. Read more about it on their{" "}
+                Style-pack authors are next to the style name. If you want to browse the buildings in-game,
+                Minecolonies has a Patreon where you can get access to their official <b>schematics server</b>
+                . Read more about it on their{" "}
                 <a className="text-blue-500" href="https://www.patreon.com/minecolonies">
                     Patreon page
                 </a>
             </p>
-            <p className="mb-0">
-                Some of the styles, categories, or buildings may be
-                <strong> missing or excluded</strong> for reasons like:
-            </p>
-            <ul className="mt-0">
-                <li>I haven&#39;t used the style in my own worlds yet.</li>
-                <li>The builds have been updated and I have not taken new screenshots.</li>
-                <li>
-                    Some styles have a lot off little pieces that I decided not to include for now to save
-                    space and time (mostly roads, mineshafts and some infrastructure).
-                </li>
-                <li>New buildings have been added, or I have forgotten some.</li>
-            </ul>
+            <h3>FAQ & Missing Stuff</h3>
             <p>
-                Send me some feedback (button on top right) if you notice changed or missing buildings!
-                I&#39;ll add styles here if people request them and I have time :)
+                <strong>Vote</strong> for the next stylepack in the sidebar! Screenshotting styles takes some
+                time, so new styles may take a while to be added. If you notice outdated/missing buildings, or
+                have any other suggestions (like new features), send feedback using the button at the top
+                right.
             </p>
             <p>
-                Viewing buildings at different levels is not supported yet, but I might add it in the future.
-                Currently the screenshots are of the maximum level of the building.
+                Currently the screenshots are of the maximum level of the building. Taking screenshots of
+                different levels would take too much <time className=""></time>
             </p>
         </article>
     );
