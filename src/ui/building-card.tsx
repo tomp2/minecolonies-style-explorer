@@ -158,11 +158,11 @@ function BuildingImage({ building }: { building: BuildingData }) {
     const buildingName = building.displayName || building.name;
 
     return (
-        <div className="group/card relative flex aspect-square justify-center" data-view={view}>
+        <div className="group/card relative flex justify-center" data-view={view}>
             <button
                 aria-label={`${view} view of ${buildingName}`}
                 type="button"
-                className="relative size-full rounded-sm focus-visible:ring-1 focus-visible:ring-ring"
+                className="relative aspect-square size-full overflow-hidden rounded-sm focus-visible:ring-1 focus-visible:ring-ring"
                 onClick={() => {
                     if (building.json.back) {
                         setView(view === "front" ? "back" : "front");
