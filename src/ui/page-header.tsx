@@ -1,14 +1,33 @@
 import { InstantModeToggleButton } from "@/components/mode-toggle.tsx";
 import { SidebarTrigger } from "@/components/ui/sidebar.tsx";
+import { useTitle } from "@/hooks/use-title.ts";
 import { pageContentAtom, searchTermAtom, selectedThemesAtom } from "@/lib/state-atoms.ts";
 import { themes } from "@/lib/theme-data.ts";
 import { FeedbackDialog } from "@/ui/feedback-dialog.tsx";
 import { useAtomValue } from "jotai";
+import { useEffect } from "react";
 
 function PageTitle() {
+    const { setTitle, resetTitle } = useTitle();
     const selectedThemes = useAtomValue(selectedThemesAtom);
     const { totalBuildingsFound } = useAtomValue(pageContentAtom);
     const searchTerm = useAtomValue(searchTermAtom);
+
+    useEffect(() => {
+        if (selectedThemes.size === 0) {
+            resetTitle();
+            return;
+        }
+        if (selectedThemes.size === 1) {
+            const theme = themes.get([...selectedThemes][0])!;
+            const title = `All ${theme.displayName} buildings - Minecolonies style explorer`;
+            setTitle(title);
+            return;
+        }
+        const styles = [...selectedThemes].map(theme => themes.get(theme)!.displayName);
+        const title = `${styles.join(" and ")} - Minecolonies style explorer`;
+        setTitle(title);
+    }, [selectedThemes, resetTitle, setTitle]);
 
     if (searchTerm) {
         return <h1>Results for &#34;{searchTerm}&#34;</h1>;
