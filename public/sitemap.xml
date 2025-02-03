@@ -1,9 +1,69 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
         <loc>https://tomp2.github.io/minecolonies-style-explorer/</loc>
         <lastmod>2025-01-27T21:15:49.963Z</lastmod>
         <changefreq>daily</changefreq>
         <priority>1.0</priority>
+    </url>
+    <url>
+        <loc>https://tomp2.github.io/minecolonies-style-explorer/?theme=medievaloak</loc>
+        <lastmod>2025-02-03T19:12:40.077693</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://tomp2.github.io/minecolonies-style-explorer/?theme=caledonia</loc>
+        <lastmod>2025-02-03T19:12:40.077693</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://tomp2.github.io/minecolonies-style-explorer/?theme=nordic</loc>
+        <lastmod>2025-02-03T19:12:40.077693</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://tomp2.github.io/minecolonies-style-explorer/?theme=darkoak</loc>
+        <lastmod>2025-02-03T19:12:40.077693</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://tomp2.github.io/minecolonies-style-explorer/?theme=medievalspruce</loc>
+        <lastmod>2025-02-03T19:12:40.077693</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://tomp2.github.io/minecolonies-style-explorer/?theme=pagoda</loc>
+        <lastmod>2025-02-03T19:12:40.077693</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://tomp2.github.io/minecolonies-style-explorer/?theme=truedwarven</loc>
+        <lastmod>2025-02-03T19:12:40.077693</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://tomp2.github.io/minecolonies-style-explorer/?theme=original</loc>
+        <lastmod>2025-02-03T19:12:40.077693</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://tomp2.github.io/minecolonies-style-explorer/?theme=byzantine</loc>
+        <lastmod>2025-02-03T19:12:40.077693</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://tomp2.github.io/minecolonies-style-explorer/?theme=shogun</loc>
+        <lastmod>2025-02-03T19:12:40.077693</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
     </url>
 </urlset>
