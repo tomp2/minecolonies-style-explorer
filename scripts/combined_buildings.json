@@ -76,5 +76,11 @@
     "displayName": "[Combined] Barracks + Barrack Towers",
     "path": "byzantine/military/barracks",
     "blueprints": ["barracks5.blueprint"]
+  },
+  {
+    "name": "mediumquarrywithshaft",
+    "displayName": "[Combined] mediumquarry + mediumquarryshaft",
+    "path": "shogun/fundamentals/resources",
+    "blueprints": ["mediumquarry1.blueprint", "mediumquarryshaft1.blueprint"]
   }
 ]

@@ -14,15 +14,16 @@ from nbt.nbt import TAG_Compound
 # --- Configuration ---
 ONE_LEVEL_ONLY = True
 THEME_DIRS = [
-    Path(r"C:\Users\user\Desktop\minecolonies\medievaloak"),
-    Path(r"C:\Users\user\Desktop\minecolonies\caledonia"),
-    Path(r"C:\Users\user\Desktop\minecolonies\nordic"),
-    Path(r"C:\Users\user\Desktop\minecolonies\darkoak"),
-    Path(r"C:\Users\user\Desktop\minecolonies\medievalspruce"),
-    Path(r"C:\Users\user\Desktop\minecolonies\pagoda"),
-    Path(r"C:\Users\user\Desktop\minecolonies\truedwarven"),
-    Path(r"C:\Users\user\Desktop\minecolonies\original"),
-    Path(r"C:\Users\user\Desktop\minecolonies\byzantine"),
+    Path(r"C:\Users\user\Desktop\minecolonies2\medievaloak"),
+    Path(r"C:\Users\user\Desktop\minecolonies2\caledonia"),
+    Path(r"C:\Users\user\Desktop\minecolonies2\nordic"),
+    Path(r"C:\Users\user\Desktop\minecolonies2\darkoak"),
+    Path(r"C:\Users\user\Desktop\minecolonies2\medievalspruce"),
+    Path(r"C:\Users\user\Desktop\minecolonies2\pagoda"),
+    Path(r"C:\Users\user\Desktop\minecolonies2\truedwarven"),
+    Path(r"C:\Users\user\Desktop\minecolonies2\original"),
+    Path(r"C:\Users\user\Desktop\minecolonies2\byzantine"),
+    Path(r"C:\Users\user\Desktop\minecolonies2\shogun"),
 ]
 
 # --- Constants ---
@@ -423,9 +424,12 @@ def main():
         results = executor.map(process_theme, THEME_DIRS)
 
     for result in results:
-        previous = themes[result["name"]]
-        for key, value in result["json"].items():
-            previous[key] = value
+        previous = themes.get(result["name"])
+        if previous:
+            for key, value in result["json"].items():
+                previous[key] = value
+        else:
+            themes[result["name"]] = result["json"]
 
     add_combined_buildings(themes)
 

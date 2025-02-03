@@ -70,3 +70,18 @@ byzantine/military/warship/insulaeguard
 byzantine/mystic/(ArenaAcademy|arenaacademy_m|hipstables|hiptoweracademy|nethermine|deliveryman|hiparchery|hipray|raycoms|insulaeguard)
 byzantine/walls/wall_main/(footing_fill|insulaeguard)
 byzantine/walls/wall_small/(footing_fill|insulaeguard)
+
+# Shogun
+shogun/infrastructure/retainingwall/wall/short/fillbrush
+shogun/infrastructure/mineshafts.+
+shogun/infrastructure/harbor/pier/wharffooting
+shogun/infrastructure/harbor/pier/footingfill
+shogun/infrastructure/bridge/avenue/spruce/footingfill
+shogun/infrastructure/bridge/avenue/pier/footingfill
+shogun/fundamentals/resources/mediumquarryshaft
+shogun/decorations/misc/lampstand_a
+shogun/decorations/misc/lampstand_b
+shogun/decorations/misc/lampstand_c
+shogun/decorations/misc/lampstand_chenoko
+shogun/decorations/supplies/hqcart
+shogun/fundamentals/resources/mediumquarry1
