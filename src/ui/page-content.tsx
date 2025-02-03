@@ -9,6 +9,7 @@ import { type BuildingData } from "@/lib/theme-data.ts";
 import { cn } from "@/lib/utils.ts";
 import { BuildingCard } from "@/ui/building-card.tsx";
 import { useAtomValue } from "jotai";
+import { Link } from "lucide-react";
 
 function sortBuildings(a: BuildingData, b: BuildingData) {
     for (let i = 1; i < Math.min(a.path.length - 1, b.path.length - 1); i++) {
@@ -34,9 +35,30 @@ function BuildingSection({
         return null;
     }
 
+    const sectionId = title.toLowerCase().replace(/[^\d>a-z]/g, "");
+
+    function copyLinkToSection() {
+        const url = new URL(window.location.href);
+        url.hash = sectionId;
+        const urlString = url.toString();
+        window.history.replaceState({}, "", urlString);
+        navigator.clipboard.writeText(urlString);
+    }
+
     return (
         <div className={cn("p-2", className)}>
-            <h2 className="mb-4 ml-2 text-2xl font-extrabold capitalize">{title}</h2>
+            <div className="group mb-4 ml-2 flex items-center gap-2">
+                <h2 id={sectionId} className="text-2xl font-extrabold capitalize">
+                    {title}
+                </h2>
+                <button
+                    onClick={copyLinkToSection}
+                    className="-m-2 p-2 opacity-0 transition-opacity group-hover:opacity-100"
+                >
+                    <Link className="size-5 stroke-[3]" />
+                </button>
+            </div>
+
             <div className="grid grid-cols-[repeat(var(--image-cols),_minmax(0,_1fr))] gap-2">
                 {buildings.sort(sortBuildings).map(building => (
                     <BuildingCard key={building.path.join(",") + building.name} building={building} />
