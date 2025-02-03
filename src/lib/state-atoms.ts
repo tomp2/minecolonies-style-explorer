@@ -206,68 +206,46 @@ export const pageContentAtom = atom(get => {
     localStorage.setItem("lastUrlParams", url.searchParams.toString());
 
     let totalBuildingsFound = 0;
+    type Section = { blueprints: BuildingData[]; title: string };
+    const sections = new Map<string, Section>();
 
-    function recursivelyGatherAllBuildings(category: Category, results: BuildingData[]) {
-        for (const building of category.blueprints.values()) {
-            if (!buildingMatchesSearchTerm(building)) continue;
-            results.push(building);
+    function processBlueprints(blueprints: Iterable<BuildingData>) {
+        for (const blueprint of blueprints) {
+            if (!buildingMatchesSearchTerm(blueprint)) continue;
+            const path = blueprint.path.slice(1).join(" > ");
+            if (!sections.has(path)) {
+                sections.set(path, { blueprints: [], title: path });
+            }
+            sections.get(path)!.blueprints.push(blueprint);
             totalBuildingsFound++;
         }
-        for (const subcategory of category.categories.values()) {
-            recursivelyGatherAllBuildings(subcategory, results);
+    }
+
+    function processCategories(categories: Iterable<Category>) {
+        for (const category of categories) {
+            processBlueprints(category.blueprints.values());
+            processCategories(category.categories.values());
         }
     }
 
-    type PageBuildingsSection = { blueprints: BuildingData[]; categories: Map<string, BuildingData[]> };
-
-    // Root buildings of all themes come first:
-    const rootBuildings: BuildingData[] = [];
-    const categories = new Map<string, PageBuildingsSection>();
-    if (!searchTerm && selectedThemes.size === 0) {
-        return { rootBuildings, categories, totalBuildingsFound };
-    }
-
-    for (const [themeName, theme] of themes.entries()) {
+    for (const themeData of themes.values()) {
         if (searchTerm) {
-            if (searchSelectedThemesOnly && !selectedThemes.has(themeName)) {
+            if (searchSelectedThemesOnly && !selectedThemes.has(themeData.name)) {
                 continue;
             }
-        } else if (!selectedThemes.has(themeName)) {
+        } else if (!selectedThemes.has(themeData.name)) {
             continue;
         }
+        processBlueprints(themeData.blueprints.values());
 
-        for (const building of theme.blueprints.values()) {
-            if (!buildingMatchesSearchTerm(building)) continue;
-            rootBuildings.push(building);
-            totalBuildingsFound++;
-        }
-
-        for (const [categoryName, categoryData] of theme.categories.entries()) {
-            if (!searchTerm && selectedCategories.size > 0 && !selectedCategories.has(categoryName)) {
+        for (const category of themeData.categories.values()) {
+            if (!searchTerm && selectedCategories.size > 0 && !selectedCategories.has(category.name)) {
                 continue;
             }
-
-            if (!categories.has(categoryName)) {
-                categories.set(categoryName, { blueprints: [], categories: new Map() });
-            }
-            const section = categories.get(categoryName)!;
-
-            for (const building of categoryData.blueprints.values()) {
-                if (!buildingMatchesSearchTerm(building)) continue;
-                section.blueprints.push(building);
-                totalBuildingsFound++;
-            }
-
-            for (const [subcategoryName, subcategoryData] of categoryData.categories.entries()) {
-                if (!section.categories.has(subcategoryName)) {
-                    section.categories.set(subcategoryName, []);
-                }
-                const subcategoryBuildingList = section.categories.get(subcategoryName)!;
-
-                recursivelyGatherAllBuildings(subcategoryData, subcategoryBuildingList);
-            }
+            processBlueprints(category.blueprints.values());
+            processCategories(category.categories.values());
         }
     }
 
-    return { rootBuildings, categories, totalBuildingsFound };
+    return { totalBuildingsFound, sections };
 });
