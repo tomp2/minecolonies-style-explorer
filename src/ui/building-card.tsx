@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button.tsx";
 import { useDelayedCaptureEvent } from "@/hooks/delayed-capture-event.ts";
 import { useCaptureEventOnce } from "@/hooks/use-capture-event-once.ts";
 import { expandedBuildingAtom, favoritesPathsWriteAtom } from "@/lib/state-atoms.ts";
-import { BuildingData, themes } from "@/lib/theme-data.ts";
+import { BuildingData } from "@/lib/theme-data.ts";
 import { cn } from "@/lib/utils.ts";
 import { decode } from "blurhash";
 import { useAtom, useSetAtom } from "jotai";
@@ -241,9 +241,7 @@ function BuildingName({ building }: { building: BuildingData }) {
 
 /** A card that displays a building's image, name, path, and size. */
 export function BuildingCard({ building }: { building: BuildingData }) {
-    const theme = themes.get(building.path[0])!;
-    const pathString = `${theme.displayName}/${building.path.slice(1).join("/")}`;
-
+    const pathString = `${building.styleDisplayName}/${building.path.slice(1).join("/")}`;
     return (
         <div className="group relative flex w-full flex-col overflow-x-clip rounded-lg border bg-card p-2 shadow">
             <BuildingImage building={building} />

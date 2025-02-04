@@ -1,9 +1,9 @@
 # Medieval Oak
-medievaloak/infrastructure/mineshafts
+medievaloak/infrastructure/mineshafts/.+
 medievaloak/education/universitylibrary
 
 # Caledonia
-caledonia/infrastructure/mineshafts
+caledonia/infrastructure/mineshafts/.+
 caledonia/military/barrackstower
 caledonia/walls/.+_base
 
@@ -13,26 +13,26 @@ nordic/infrastructure
 
 # Dark Oak
 darkoak/decorations/supplies/supply.+
-darkoak/infrastructure/mineshafts
+darkoak/infrastructure/mineshafts/.+
 
 # Medieval Spruce
 medievalspruce/decorations/supplies/supply.+
 medievalspruce/education/universitylibrary
-medievalspruce/infrastructure/mineshafts
+medievalspruce/infrastructure/mineshafts/.+
 
 # Pagoda
 pagoda/decorations/decorative/kongming_(green|orange|red|white|yellow)
 pagoda/decorations/supplies/camp
-pagoda/infrastructure/mineshafts
+pagoda/infrastructure/mineshafts/.+
 
 # Stalactite Caves
 truedwarven/decorations/supplies/supply.+
 
 # Minecolonies
-original/walls/basic
-original/infrastructure/misc
-original/infrastructure/mineshafts/miner
-original/infrastructure/mics
+original/walls/basic.+
+original/infrastructure/misc.+
+original/infrastructure/mineshafts/miner.+
+original/infrastructure/mics.+
 original.+markets/(bla|bro|[c-z]).+
 original/decorations/supplies/supply.+
 
@@ -73,7 +73,7 @@ byzantine/walls/wall_small/(footing_fill|insulaeguard)
 
 # Shogun
 shogun/infrastructure/retainingwall/wall/short/fillbrush
-shogun/infrastructure/mineshafts.+
+shogun/infrastructure/mineshafts/.+
 shogun/infrastructure/harbor/pier/wharffooting
 shogun/infrastructure/harbor/pier/footingfill
 shogun/infrastructure/bridge/avenue/spruce/footingfill
@@ -87,7 +87,7 @@ shogun/decorations/supplies/hqcart
 shogun/fundamentals/resources/mediumquarry1
 
 # ancientathens
-ancientathens/infrastructure/mineshafts
+ancientathens/infrastructure/mineshafts/.+
 ancientathens/decorations/supplies/supply.+
 
 # steampunk

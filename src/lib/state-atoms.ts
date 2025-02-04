@@ -1,4 +1,4 @@
-import { BuildingData, Category, categoryNames, themes } from "@/lib/theme-data.ts";
+import { BuildingData, Category, categoryNames, getStyle, styleInfo, Theme } from "@/lib/theme-data.ts";
 import { buildingMatchesStringSearchTerm } from "@/lib/utils.ts";
 import { atom } from "jotai/index";
 import { atomWithStorage } from "jotai/utils";
@@ -76,22 +76,25 @@ export const favoritesPathsWriteAtom = atom(
         }
     },
 );
+
+async function loadFavoriteBuilding(path: string) {
+    const pathParts = path.split(">");
+    const categories = pathParts.slice(1, -1);
+    const styleId = pathParts[0];
+    const buildingId = pathParts.at(-1)!;
+
+    let categoryLevel: Category = await getStyle(styleId);
+    for (const category of categories) {
+        categoryLevel = categoryLevel.categories.get(category)!;
+    }
+    return categoryLevel.blueprints.get(buildingId);
+}
+
 /** Atom which reads paths of favorite buildings and returns the actual building objects. */
-export const favoriteBuildingsAtom = atom(get => {
+export const favoriteBuildingsAtom = atom(async get => {
     const paths = get(favoritePaths);
-    return paths.map(path => {
-        const pathParts = path.split(">");
-
-        const categories = pathParts.slice(1, -1);
-        const theme = pathParts[0];
-        const name = pathParts.at(-1)!;
-
-        let categoryLevel: Category = themes.get(theme)!;
-        for (const category of categories) {
-            categoryLevel = categoryLevel.categories.get(category)!;
-        }
-        return categoryLevel.blueprints.get(name)!;
-    });
+    const buildings = await Promise.all(paths.map(element => loadFavoriteBuilding(element)));
+    return buildings.filter((building): building is BuildingData => building !== undefined);
 });
 
 /** Defines the separator used in the URL for selections. */
@@ -105,12 +108,12 @@ function parseThemesFromUrlParams(urlSearchParams: URLSearchParams) {
     const selectedThemes = new Set<string>();
     const themeParams = urlSearchParams.get(LOCALSTORAGE_QUERY_PARAMS.theme);
     if (themeParams === "all") {
-        return new Set(themes.keys());
+        return new Set(styleInfo.keys());
     }
     if (themeParams) {
         const paramThemeParts = themeParams.split(selectionUrlSeparator);
         for (const theme of paramThemeParts) {
-            if (themes.has(theme)) {
+            if (styleInfo.has(theme)) {
                 selectedThemes.add(theme);
             }
         }
@@ -123,7 +126,7 @@ function parseThemesFromUrlParams(urlSearchParams: URLSearchParams) {
  * If all themes are selected, returns "all".
  */
 function encodeThemesToUrlParameter(selectedThemes: Set<string>) {
-    if (selectedThemes.size === themes.size) return "all";
+    if (selectedThemes.size === styleInfo.size) return "all";
     return encodeURIComponent([...selectedThemes].join(selectionUrlSeparator));
 }
 
@@ -187,19 +190,12 @@ export const selectedCategoriesAtom = atom<Set<string>>(parseCategoriesFromUrlPa
  *
  * This organizes the buildings into a structure that can be easily rendered.
  */
-export const pageContentAtom = atom(get => {
+export const pageContentAtom = atom(async get => {
     const selectedThemes = get(selectedThemesAtom);
     const selectedCategories = get(selectedCategoriesAtom);
 
     const searchTerm = get(searchTermAtom);
     const searchSelectedThemesOnly = get(searchSelectedThemesOnlyAtom);
-
-    const isRegex = !/^[\d\sA-Za-zäåö]*$/.test(searchTerm);
-    const bakedSearchTerm = isRegex ? new RegExp(searchTerm, "i") : searchTerm;
-    const buildingMatchesSearchTerm =
-        bakedSearchTerm instanceof RegExp
-            ? (building: BuildingData) => bakedSearchTerm.test(building.searchString)
-            : (building: BuildingData) => buildingMatchesStringSearchTerm(searchTerm, building);
 
     const url = encodeSelectionsToUrl(selectedThemes, selectedCategories);
     window.history.replaceState({}, "", url);
@@ -208,6 +204,17 @@ export const pageContentAtom = atom(get => {
     let totalBuildingsFound = 0;
     type Section = { blueprints: BuildingData[]; title: string };
     const sections = new Map<string, Section>();
+
+    if (selectedThemes.size === 0 && !searchTerm) {
+        return { totalBuildingsFound, sections };
+    }
+
+    const isRegex = !/^[\d\sA-Za-zäåö]*$/.test(searchTerm);
+    const bakedSearchTerm = isRegex ? new RegExp(searchTerm, "i") : searchTerm;
+    const buildingMatchesSearchTerm =
+        bakedSearchTerm instanceof RegExp
+            ? (building: BuildingData) => bakedSearchTerm.test(building.searchString)
+            : (building: BuildingData) => buildingMatchesStringSearchTerm(searchTerm, building);
 
     function processBlueprints(blueprints: Iterable<BuildingData>) {
         for (const blueprint of blueprints) {
@@ -228,7 +235,8 @@ export const pageContentAtom = atom(get => {
         }
     }
 
-    for (const themeData of themes.values()) {
+    const themes: Theme[] = await Promise.all([...selectedThemes].map(theme => getStyle(theme)));
+    for (const themeData of themes) {
         if (searchTerm) {
             if (searchSelectedThemesOnly && !selectedThemes.has(themeData.name)) {
                 continue;

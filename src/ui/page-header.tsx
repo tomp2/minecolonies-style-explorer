@@ -2,15 +2,23 @@ import { InstantModeToggleButton } from "@/components/mode-toggle.tsx";
 import { SidebarTrigger } from "@/components/ui/sidebar.tsx";
 import { useTitle } from "@/hooks/use-title.ts";
 import { pageContentAtom, searchTermAtom, selectedThemesAtom } from "@/lib/state-atoms.ts";
-import { themes } from "@/lib/theme-data.ts";
+import { styleInfo } from "@/lib/theme-data.ts";
 import { FeedbackDialog } from "@/ui/feedback-dialog.tsx";
 import { useAtomValue } from "jotai";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
+
+function TotalCountLoader() {
+    return <span className="ml-2 text-muted-foreground">(Counting...)</span>;
+}
+
+function TotalCount() {
+    const { totalBuildingsFound } = useAtomValue(pageContentAtom);
+    return <span className="ml-2 text-muted-foreground">({totalBuildingsFound} buildings)</span>;
+}
 
 function PageTitle() {
     const { setTitle, resetTitle } = useTitle();
     const selectedThemes = useAtomValue(selectedThemesAtom);
-    const { totalBuildingsFound } = useAtomValue(pageContentAtom);
     const searchTerm = useAtomValue(searchTermAtom);
 
     useEffect(() => {
@@ -19,12 +27,12 @@ function PageTitle() {
             return;
         }
         if (selectedThemes.size === 1) {
-            const theme = themes.get([...selectedThemes][0])!;
+            const theme = styleInfo.get([...selectedThemes][0])!;
             const title = `All ${theme.displayName} buildings - Minecolonies style explorer`;
             setTitle(title);
             return;
         }
-        const styles = [...selectedThemes].map(theme => themes.get(theme)!.displayName);
+        const styles = [...selectedThemes].map(theme => styleInfo.get(theme)!.displayName);
         const title = `${styles.join(" and ")} - Minecolonies style explorer`;
         setTitle(title);
     }, [selectedThemes, resetTitle, setTitle]);
@@ -37,17 +45,19 @@ function PageTitle() {
         return <h1>Select a style</h1>;
     }
 
-    if (selectedThemes.size === themes.size) {
+    if (selectedThemes.size === styleInfo.size) {
         return (
             <h1>
                 All styles
-                <span className="text-muted-foreground"> ({totalBuildingsFound} buildings)</span>
+                <Suspense fallback={<TotalCountLoader />}>
+                    <TotalCount />
+                </Suspense>
             </h1>
         );
     }
 
     if (selectedThemes.size <= 3) {
-        const path = [...selectedThemes].map(theme => themes.get(theme)!.displayName);
+        const path = [...selectedThemes].map(theme => styleInfo.get(theme)!.displayName);
         return (
             <h1 className="flex flex-wrap gap-x-2 leading-none">
                 <span className="hidden text-nowrap sm:block">{path.join(", ")}</span>
@@ -57,7 +67,9 @@ function PageTitle() {
                     {"  "}
                     selected
                 </span>
-                <span className="text-nowrap text-muted-foreground">({totalBuildingsFound} buildings)</span>
+                <Suspense fallback={<TotalCountLoader />}>
+                    <TotalCount />
+                </Suspense>
             </h1>
         );
     }
@@ -65,7 +77,9 @@ function PageTitle() {
     return (
         <h1>
             {selectedThemes.size} styles selected
-            <span className="text-muted-foreground"> ({totalBuildingsFound} buildings)</span>
+            <Suspense fallback={<TotalCountLoader />}>
+                <TotalCount />
+            </Suspense>
         </h1>
     );
 }

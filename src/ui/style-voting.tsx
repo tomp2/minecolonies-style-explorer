@@ -1,25 +1,17 @@
-import _style_info from "@/assets/style_info.json";
 import { SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar.tsx";
 import { Toggle } from "@/components/ui/toggle.tsx";
 import { useDelayedCaptureEvent } from "@/hooks/delayed-capture-event.ts";
-import { themes } from "@/lib/theme-data.ts";
+import { MissingStyleInfoJson, missingStyles } from "@/lib/theme-data.ts";
 import { cn } from "@/lib/utils.ts";
 import { atom, useAtom } from "jotai";
 import { atomWithStorage } from "jotai/utils";
 import { Vote } from "lucide-react";
 import { toast } from "sonner";
 
-type Style = {
-    name: string;
-    displayName: string;
-    authors: string[];
-};
-const STYLE_INFO = _style_info as Style[];
-
 const votesAtom = atom<string[]>([]);
 const votesSentAtom = atomWithStorage<string[]>("votesSent", []);
 
-function Style({ style }: { style: Style }) {
+function Style({ style }: { style: MissingStyleInfoJson }) {
     const { capturePromise, cancel } = useDelayedCaptureEvent();
     const [votes, setVotes] = useAtom(votesAtom);
     const [votesSent, setVotesSent] = useAtom(votesSentAtom);
@@ -75,11 +67,9 @@ function Style({ style }: { style: Style }) {
 }
 
 export default function StyleVoting() {
-    const missingThemes = STYLE_INFO.filter(style => !themes.has(style.name));
-
     return (
         <>
-            {missingThemes.map(style => (
+            {[...missingStyles.values()].map(style => (
                 <Style style={style} key={style.name} />
             ))}
         </>

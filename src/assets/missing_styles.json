@@ -1,12 +1,9 @@
 [
   {
-    "name": "ancientathens",
-    "displayName": "Ancient Athens",
+    "name": "acacia",
+    "displayName": "Urban Savanna",
     "authors": [
-      "John Reiher",
-      "Pixblockus",
-      "_Raycoms_",
-      "Thodor12"
+      "John Reiher"
     ]
   },
   {
@@ -24,17 +21,12 @@
     ]
   },
   {
-    "name": "byzantine",
-    "displayName": "Byzantine",
+    "name": "birch",
+    "displayName": "Urban Birch",
     "authors": [
-      "Spumantii"
-    ]
-  },
-  {
-    "name": "caledonia",
-    "displayName": "Caledonia",
-    "authors": [
-      "Thaylar"
+      "Raycoms",
+      "Aravan",
+      "Cugo"
     ]
   },
   {
@@ -66,25 +58,6 @@
     "displayName": "Crimson Keep",
     "authors": [
       "PrincessWendy, Dylbert93"
-    ]
-  },
-  {
-    "name": "darkoak",
-    "displayName": "Dark Oak Treehouse",
-    "authors": [
-      "Annie",
-      "Cugo"
-    ]
-  },
-  {
-    "name": "sandstone",
-    "displayName": "Desert Oasis",
-    "authors": [
-      "Raycoms",
-      "John Reiher",
-      "SomeAddons",
-      "AravanFox",
-      "Moobien"
     ]
   },
   {
@@ -165,39 +138,14 @@
     ]
   },
   {
-    "name": "medievaloak",
-    "displayName": "Medieval Oak",
+    "name": "sandstone",
+    "displayName": "Desert Oasis",
     "authors": [
-      "Carlansor"
-    ]
-  },
-  {
-    "name": "medievalspruce",
-    "displayName": "Medieval Spruce",
-    "authors": [
-      "Carlansor"
-    ]
-  },
-  {
-    "name": "original",
-    "displayName": "Minecolonies Original",
-    "authors": [
-      "many"
-    ]
-  },
-  {
-    "name": "nordic",
-    "displayName": "Nordic Spruce",
-    "authors": [
-      "Luna",
-      "John Reiher"
-    ]
-  },
-  {
-    "name": "pagoda",
-    "displayName": "Pagoda",
-    "authors": [
-      "Thaylar"
+      "Raycoms",
+      "John Reiher",
+      "SomeAddons",
+      "AravanFox",
+      "Moobien"
     ]
   },
   {
@@ -210,31 +158,10 @@
     ]
   },
   {
-    "name": "shogun",
-    "displayName": "Shogun",
-    "authors": [
-      "Spumantii"
-    ]
-  },
-  {
     "name": "spacewars",
     "displayName": "Space Wars",
     "authors": [
       "JohnReiher & Raycoms"
-    ]
-  },
-  {
-    "name": "truedwarven",
-    "displayName": "Stalactite Caves",
-    "authors": [
-      "Luna"
-    ]
-  },
-  {
-    "name": "steampunk",
-    "displayName": "Steampunk",
-    "authors": [
-      "m00b13n, MotionlessTrain, Yalokivi"
     ]
   },
   {
@@ -243,22 +170,6 @@
     "authors": [
       "matlom",
       "McSassa"
-    ]
-  },
-  {
-    "name": "birch",
-    "displayName": "Urban Birch",
-    "authors": [
-      "Raycoms",
-      "Aravan",
-      "Cugo"
-    ]
-  },
-  {
-    "name": "acacia",
-    "displayName": "Urban Savanna",
-    "authors": [
-      "John Reiher"
     ]
   },
   {

@@ -1,0 +1,227 @@
+[
+  {
+    "name": "ancientathens",
+    "displayName": "Ancient Athens",
+    "authors": [
+      "John Reiher",
+      "Pixblockus",
+      "_Raycoms_",
+      "Thodor12"
+    ],
+    "categories": [
+      "agriculture",
+      "craftsmanship",
+      "decorations",
+      "education",
+      "fundamentals",
+      "infrastructure",
+      "military",
+      "mystic",
+      "walls"
+    ]
+  },
+  {
+    "name": "byzantine",
+    "displayName": "Byzantine",
+    "authors": [
+      "Spumantii"
+    ],
+    "categories": [
+      "agriculture",
+      "craftsmanship",
+      "decorations",
+      "education",
+      "fundamentals",
+      "infrastructure",
+      "military",
+      "mystic",
+      "walls"
+    ],
+    "addedAt": "2025-01-27T23:15:31.306Z"
+  },
+  {
+    "name": "caledonia",
+    "displayName": "Caledonia",
+    "authors": [
+      "Thaylar"
+    ],
+    "categories": [
+      "agriculture",
+      "craftsmanship",
+      "decorations",
+      "education",
+      "fundamentals",
+      "infrastructure",
+      "military",
+      "mystic",
+      "walls"
+    ]
+  },
+  {
+    "name": "darkoak",
+    "displayName": "Dark Oak Treehouse",
+    "authors": [
+      "Annie",
+      "Cugo"
+    ],
+    "categories": [
+      "agriculture",
+      "craftsmanship",
+      "decorations",
+      "education",
+      "fundamentals",
+      "infrastructure",
+      "military",
+      "mystic",
+      "walls"
+    ]
+  },
+  {
+    "name": "medievaloak",
+    "displayName": "Medieval Oak",
+    "authors": [
+      "Carlansor"
+    ],
+    "categories": [
+      "agriculture",
+      "craftsmanship",
+      "decorations",
+      "education",
+      "fundamentals",
+      "infrastructure",
+      "military",
+      "mystic",
+      "walls"
+    ]
+  },
+  {
+    "name": "medievalspruce",
+    "displayName": "Medieval Spruce",
+    "authors": [
+      "Carlansor"
+    ],
+    "categories": [
+      "agriculture",
+      "craftsmanship",
+      "decorations",
+      "education",
+      "fundamentals",
+      "infrastructure",
+      "military",
+      "mystic",
+      "walls"
+    ]
+  },
+  {
+    "name": "original",
+    "displayName": "Minecolonies Original",
+    "authors": [
+      "many"
+    ],
+    "categories": [
+      "agriculture",
+      "craftsmanship",
+      "decorations",
+      "education",
+      "fundamentals",
+      "infrastructure",
+      "military",
+      "mystic",
+      "walls"
+    ],
+    "addedAt": "2025-01-25T00:35:31.306Z"
+  },
+  {
+    "name": "nordic",
+    "displayName": "Nordic Spruce",
+    "authors": [
+      "Luna",
+      "John Reiher"
+    ],
+    "categories": [
+      "agriculture",
+      "craftsmanship",
+      "decorations",
+      "education",
+      "fundamentals",
+      "infrastructure",
+      "military",
+      "mystic",
+      "walls"
+    ]
+  },
+  {
+    "name": "pagoda",
+    "displayName": "Pagoda",
+    "authors": [
+      "Thaylar"
+    ],
+    "categories": [
+      "agriculture",
+      "craftsmanship",
+      "decorations",
+      "education",
+      "fundamentals",
+      "infrastructure",
+      "military",
+      "mystic",
+      "walls"
+    ]
+  },
+  {
+    "name": "shogun",
+    "displayName": "Shogun",
+    "authors": [
+      "Spumantii"
+    ],
+    "categories": [
+      "agriculture",
+      "craftsmanship",
+      "decorations",
+      "education",
+      "fundamentals",
+      "infrastructure",
+      "military",
+      "mystic",
+      "walls"
+    ],
+    "addedAt": "2025-02-03T21:00:00.000Z"
+  },
+  {
+    "name": "truedwarven",
+    "displayName": "Stalactite Caves",
+    "authors": [
+      "Luna"
+    ],
+    "categories": [
+      "agriculture",
+      "craftsmanship",
+      "decorations",
+      "education",
+      "fundamentals",
+      "infrastructure",
+      "military",
+      "mystic",
+      "walls"
+    ]
+  },
+  {
+    "name": "steampunk",
+    "displayName": "Steampunk",
+    "authors": [
+      "m00b13n, MotionlessTrain, Yalokivi"
+    ],
+    "categories": [
+      "agriculture",
+      "craftsmanship",
+      "decorations",
+      "education",
+      "fundamentals",
+      "infrastructure",
+      "military",
+      "mystic",
+      "walls"
+    ],
+    "addedAt": "2025-02-17T18:00:00.000Z"
+  }
+]

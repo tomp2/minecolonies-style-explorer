@@ -1,5 +1,15 @@
 import { blockToDisplayName, HutBlock } from "@/lib/hut-blocks.ts";
-import _themes from "../assets/themes.json";
+import _missing_styles from "../assets/missing_styles.json";
+import _styles from "../assets/styles.json";
+
+export type StyleInfoJson = {
+    name: string;
+    displayName: string;
+    authors: string[];
+    categories: string[];
+    addedAt?: string;
+};
+export type MissingStyleInfoJson = Omit<StyleInfoJson, "categories" | "addedAt">;
 
 type BuildingDataJson = {
     // The building level, or false if the building doesn't have levels.
@@ -27,10 +37,10 @@ export type ThemeJson = {
     authors: string[];
     blueprints: { [key: string]: BuildingDataJson };
     categories: { [key: string]: CategoryJson };
-    added?: string;
 };
 
 export type BuildingData = {
+    styleDisplayName: string;
     name: string;
     path: string[];
     displayName?: string;
@@ -62,7 +72,12 @@ function getBuildingDisplayName(hutBlocks: string[]): string | undefined {
     return undefined;
 }
 
-function createBuildingObject(name: string, data: BuildingDataJson, path: string[]): BuildingData {
+function createBuildingObject(
+    name: string,
+    data: BuildingDataJson,
+    path: string[],
+    styleDisplayName: string,
+): BuildingData {
     const displayName = data.hutBlocks && getBuildingDisplayName(data.hutBlocks);
     const searchString = [
         name,
@@ -73,7 +88,7 @@ function createBuildingObject(name: string, data: BuildingDataJson, path: string
     ]
         .join(" ")
         .toLowerCase();
-    return { name, path, displayName, searchString, json: data };
+    return { name, path, displayName, searchString, json: data, styleDisplayName };
 }
 
 function recurseCategories(
@@ -81,6 +96,7 @@ function recurseCategories(
     categories: { [key: string]: CategoryJson },
     parent: Map<string, Category>,
     limit: number,
+    styleDisplayName: string,
 ): Map<string, Category> {
     for (const [categoryName, categoryDataJson] of Object.entries(categories)) {
         const categoryObject: Category = {
@@ -90,7 +106,7 @@ function recurseCategories(
         };
         const categoryPath = [...path, categoryName];
         for (const [name, data] of Object.entries(categoryDataJson.blueprints)) {
-            const building = createBuildingObject(name, data, categoryPath);
+            const building = createBuildingObject(name, data, categoryPath, styleDisplayName);
             categoryObject.blueprints.set(name, building);
         }
         parent.set(categoryName, categoryObject);
@@ -100,6 +116,7 @@ function recurseCategories(
                 categoryDataJson.categories,
                 categoryObject.categories,
                 limit - 1,
+                styleDisplayName,
             );
         }
     }
@@ -107,36 +124,39 @@ function recurseCategories(
     return parent;
 }
 
-/**
- * Convert the JSON data into a more usable format.
- * The JSON doesn't have display names or paths for the buildings, so we add those.
- */
-function restructureThemesJson(themesJson: Record<string, ThemeJson>): Map<string, Theme> {
-    const themes = new Map<string, Theme>();
+const rawBasicStyles = _styles as unknown as StyleInfoJson[];
+const rawMissingStyles = _missing_styles as unknown as MissingStyleInfoJson[];
 
-    for (const themeName of Object.keys(themesJson)) {
-        const theme = themesJson[themeName];
-        const themeObject: Theme = {
-            name: themeName,
-            displayName: theme.displayName,
-            authors: theme.authors,
-            blueprints: new Map<string, BuildingData>(),
-            categories: new Map<string, Category>(),
-        };
-        if (theme.added) {
-            themeObject.added = new Date(theme.added);
-        }
-        for (const [name, data] of Object.entries(theme.blueprints)) {
-            const building = createBuildingObject(name, data, [themeName]);
-            themeObject.blueprints.set(name, building);
-        }
-        recurseCategories([themeName], theme.categories, themeObject.categories, 5);
-        themes.set(themeName, themeObject);
+export const categoryNames = new Set<string>(rawBasicStyles.flatMap(style => style.categories));
+export const styleInfo = new Map<string, StyleInfoJson>(rawBasicStyles.map(style => [style.name, style]));
+export const missingStyles = new Map<string, MissingStyleInfoJson>(
+    rawMissingStyles.map(style => [style.name, style]),
+);
+
+const themes = new Map<string, Theme>();
+
+export async function downloadStyle(style: string): Promise<Theme> {
+    const response = await fetch(`/minecolonies/${style}/style.json`);
+    const themeJson = (await response.json()) as ThemeJson;
+    const themeObject: Theme = {
+        name: style,
+        displayName: themeJson.displayName,
+        authors: themeJson.authors,
+        blueprints: new Map<string, BuildingData>(),
+        categories: new Map<string, Category>(),
+    };
+    for (const [name, data] of Object.entries(themeJson.blueprints)) {
+        const building = createBuildingObject(name, data, [style], themeJson.displayName);
+        themeObject.blueprints.set(name, building);
     }
-    return themes;
+    recurseCategories([style], themeJson.categories, themeObject.categories, 5, themeJson.displayName);
+    themes.set(style, themeObject);
+    return themeObject;
 }
 
-export const themes = restructureThemesJson(_themes as unknown as Record<string, ThemeJson>);
-export const categoryNames = new Set<string>(
-    [...themes.values()].flatMap(theme => [...theme.categories.keys()]),
-);
+export async function getStyle(style: string): Promise<Theme> {
+    if (!themes.has(style)) {
+        await downloadStyle(style);
+    }
+    return themes.get(style)!;
+}
