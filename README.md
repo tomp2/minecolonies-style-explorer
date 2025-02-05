@@ -3,6 +3,8 @@
 This is a small and unofficial web app to view organized screenshots of the buildings from the Minecolonies Minecraft
 mod.
 
+![preview](./public/ogp.jpg)
+
 ## Features
 
 - View screenshots of various buildings from the Minecolonies mod
