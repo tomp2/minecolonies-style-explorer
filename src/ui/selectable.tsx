@@ -15,7 +15,7 @@ export type SelectableProps = React.ComponentPropsWithoutRef<typeof TogglePrimit
 function Selectable({ children, ...props }: SelectableProps) {
     return (
         <SidebarMenuItem className="p-0">
-            <SidebarGroupLabel asChild>
+            <SidebarGroupLabel asChild className="h-fit">
                 <SidebarMenuButton asChild>
                     <CheckboxButton {...props}>{children}</CheckboxButton>
                 </SidebarMenuButton>

@@ -1,6 +1,6 @@
 import json
 import re
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures.process import ProcessPoolExecutor
 from functools import cached_property, lru_cache
 from pathlib import Path
 from typing import Dict, Optional, Any, TypedDict, Literal
@@ -24,6 +24,7 @@ THEME_DIRS = [
     Path(r"C:\Users\user\Desktop\minecolonies2\original"),
     Path(r"C:\Users\user\Desktop\minecolonies2\byzantine"),
     Path(r"C:\Users\user\Desktop\minecolonies2\shogun"),
+    Path(r"C:\Users\user\Desktop\minecolonies2\ancientathens"),
 ]
 
 # --- Constants ---
@@ -420,7 +421,7 @@ def main():
     if OUTPUT_JSON.exists():
         themes = json.loads(OUTPUT_JSON.read_text())
 
-    with ThreadPoolExecutor() as executor:
+    with ProcessPoolExecutor() as executor:
         results = executor.map(process_theme, THEME_DIRS)
 
     for result in results:
