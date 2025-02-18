@@ -58,6 +58,28 @@
     ]
   },
   {
+    "name": "colonial",
+    "displayName": "Colonial",
+    "authors": [
+      "Raycoms",
+      "John Reiher",
+      "SomeAddons",
+      "Thodor12"
+    ],
+    "categories": [
+      "agriculture",
+      "craftsmanship",
+      "decorations",
+      "education",
+      "fundamentals",
+      "infrastructure",
+      "military",
+      "mystic",
+      "walls"
+    ],
+    "addedAt": "2025-02-19T23:15:00.000Z"
+  },
+  {
     "name": "darkoak",
     "displayName": "Dark Oak Treehouse",
     "authors": [

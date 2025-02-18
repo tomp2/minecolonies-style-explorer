@@ -34,7 +34,7 @@ mod.
 4. Run [optimize-images](https://pypi.org/project/optimize-images/) to scale the images down, convert to jpg and
    optimize them:
    ```bash
-   optimize-images -ca -fd -q 90 -mw 700 -mh 700 .\public\minecolonies
+   optimize-images -ca -fd -q 90 -mw 700 -mh 700 .\public\minecolonies\colonial
     ```
 5. Run `theme_json_builder.py` to create the main `themes.json`. Add the theme to the file's config object.
 

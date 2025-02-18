@@ -125,3 +125,7 @@ steampunk/infrastructure/mineshafts/minerx3topleft
 steampunk/infrastructure/mineshafts/minerx3topright
 steampunk/infrastructure/mineshafts/minerx4
 steampunk/military/barrackstower
+
+# colonial
+colonial/decorations/supplies/supply.+
+colonial/infrastructure/mineshafts/.+
