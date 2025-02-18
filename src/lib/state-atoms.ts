@@ -91,10 +91,15 @@ async function loadFavoriteBuilding(path: string) {
 }
 
 /** Atom which reads paths of favorite buildings and returns the actual building objects. */
-export const favoriteBuildingsAtom = atom(async get => {
+export const favoriteBuildingsAtom = atom(async (get): Promise<[BuildingData[], null] | [null, Error]> => {
     const paths = get(favoritePaths);
-    const buildings = await Promise.all(paths.map(element => loadFavoriteBuilding(element)));
-    return buildings.filter((building): building is BuildingData => building !== undefined);
+    try {
+        const buildings = await Promise.all(paths.map(element => loadFavoriteBuilding(element)));
+        return [buildings.filter((building): building is BuildingData => building !== undefined), null];
+    } catch (error) {
+        console.error("Failed to load favorite buildings", error);
+        return [null, error as Error];
+    }
 });
 
 /** Defines the separator used in the URL for selections. */
@@ -190,70 +195,89 @@ export const selectedCategoriesAtom = atom<Set<string>>(parseCategoriesFromUrlPa
  *
  * This organizes the buildings into a structure that can be easily rendered.
  */
-export const pageContentAtom = atom(async get => {
-    const selectedThemes = get(selectedThemesAtom);
-    const selectedCategories = get(selectedCategoriesAtom);
+export const pageContentAtom = atom(
+    async (
+        get,
+    ): Promise<
+        | [
+              {
+                  totalBuildingsFound: number;
+                  sections: Map<string, { blueprints: BuildingData[]; title: string }>;
+              },
+              null,
+          ]
+        | [null, Error]
+    > => {
+        const selectedThemes = get(selectedThemesAtom);
+        const selectedCategories = get(selectedCategoriesAtom);
 
-    const searchTerm = get(searchTermAtom);
-    const searchSelectedThemesOnly = get(searchSelectedThemesOnlyAtom);
+        const searchTerm = get(searchTermAtom);
+        const searchSelectedThemesOnly = get(searchSelectedThemesOnlyAtom);
 
-    const url = encodeSelectionsToUrl(selectedThemes, selectedCategories);
-    window.history.replaceState({}, "", url);
-    localStorage.setItem("lastUrlParams", url.searchParams.toString());
+        const url = encodeSelectionsToUrl(selectedThemes, selectedCategories);
+        window.history.replaceState({}, "", url);
+        localStorage.setItem("lastUrlParams", url.searchParams.toString());
 
-    let totalBuildingsFound = 0;
-    type Section = { blueprints: BuildingData[]; title: string };
-    const sections = new Map<string, Section>();
+        let totalBuildingsFound = 0;
+        type Section = { blueprints: BuildingData[]; title: string };
+        const sections = new Map<string, Section>();
 
-    if (selectedThemes.size === 0 && !searchTerm) {
-        return { totalBuildingsFound, sections };
-    }
+        if (selectedThemes.size === 0 && !searchTerm) {
+            return [{ totalBuildingsFound, sections }, null];
+        }
 
-    const isRegex = !/^[\d\sA-Za-zäåö]*$/.test(searchTerm);
-    const bakedSearchTerm = isRegex ? new RegExp(searchTerm, "i") : searchTerm;
-    const buildingMatchesSearchTerm =
-        bakedSearchTerm instanceof RegExp
-            ? (building: BuildingData) => bakedSearchTerm.test(building.searchString)
-            : (building: BuildingData) => buildingMatchesStringSearchTerm(searchTerm, building);
+        const isRegex = !/^[\d\sA-Za-zäåö]*$/.test(searchTerm);
+        const bakedSearchTerm = isRegex ? new RegExp(searchTerm, "i") : searchTerm;
+        const buildingMatchesSearchTerm =
+            bakedSearchTerm instanceof RegExp
+                ? (building: BuildingData) => bakedSearchTerm.test(building.searchString)
+                : (building: BuildingData) => buildingMatchesStringSearchTerm(searchTerm, building);
 
-    function processBlueprints(blueprints: Iterable<BuildingData>) {
-        for (const blueprint of blueprints) {
-            if (!buildingMatchesSearchTerm(blueprint)) continue;
-            const path = blueprint.path.slice(1).join(" > ");
-            if (!sections.has(path)) {
-                sections.set(path, { blueprints: [], title: path });
+        function processBlueprints(blueprints: Iterable<BuildingData>) {
+            for (const blueprint of blueprints) {
+                if (!buildingMatchesSearchTerm(blueprint)) continue;
+                const path = blueprint.path.slice(1).join(" > ");
+                if (!sections.has(path)) {
+                    sections.set(path, { blueprints: [], title: path });
+                }
+                sections.get(path)!.blueprints.push(blueprint);
+                totalBuildingsFound++;
             }
-            sections.get(path)!.blueprints.push(blueprint);
-            totalBuildingsFound++;
         }
-    }
 
-    function processCategories(categories: Iterable<Category>) {
-        for (const category of categories) {
-            processBlueprints(category.blueprints.values());
-            processCategories(category.categories.values());
+        function processCategories(categories: Iterable<Category>) {
+            for (const category of categories) {
+                processBlueprints(category.blueprints.values());
+                processCategories(category.categories.values());
+            }
         }
-    }
 
-    const themes: Theme[] = await Promise.all([...selectedThemes].map(theme => getStyle(theme)));
-    for (const themeData of themes) {
-        if (searchTerm) {
-            if (searchSelectedThemesOnly && !selectedThemes.has(themeData.name)) {
+        let themes: Theme[];
+        try {
+            themes = await Promise.all([...selectedThemes].map(theme => getStyle(theme)));
+        } catch (error) {
+            console.error("Failed to load themes", error);
+            return [null, error as Error];
+        }
+        for (const themeData of themes) {
+            if (searchTerm) {
+                if (searchSelectedThemesOnly && !selectedThemes.has(themeData.name)) {
+                    continue;
+                }
+            } else if (!selectedThemes.has(themeData.name)) {
                 continue;
             }
-        } else if (!selectedThemes.has(themeData.name)) {
-            continue;
-        }
-        processBlueprints(themeData.blueprints.values());
+            processBlueprints(themeData.blueprints.values());
 
-        for (const category of themeData.categories.values()) {
-            if (!searchTerm && selectedCategories.size > 0 && !selectedCategories.has(category.name)) {
-                continue;
+            for (const category of themeData.categories.values()) {
+                if (!searchTerm && selectedCategories.size > 0 && !selectedCategories.has(category.name)) {
+                    continue;
+                }
+                processBlueprints(category.blueprints.values());
+                processCategories(category.categories.values());
             }
-            processBlueprints(category.blueprints.values());
-            processCategories(category.categories.values());
         }
-    }
 
-    return { totalBuildingsFound, sections };
-});
+        return [{ totalBuildingsFound, sections }, null];
+    },
+);

@@ -12,8 +12,11 @@ function TotalCountLoader() {
 }
 
 function TotalCount() {
-    const { totalBuildingsFound } = useAtomValue(pageContentAtom);
-    return <span className="ml-2 text-muted-foreground">({totalBuildingsFound} buildings)</span>;
+    const [data, error] = useAtomValue(pageContentAtom);
+    if (error) {
+        return <span className="ml-2 text-muted-foreground">(? buildings)</span>;
+    }
+    return <span className="ml-2 text-muted-foreground">({data.totalBuildingsFound} buildings)</span>;
 }
 
 function PageTitle() {

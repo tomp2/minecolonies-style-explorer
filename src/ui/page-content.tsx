@@ -1,3 +1,4 @@
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert.tsx";
 import {
     favoriteBuildingsAtom,
     favoritePaths,
@@ -9,7 +10,7 @@ import { type BuildingData } from "@/lib/theme-data.ts";
 import { cn } from "@/lib/utils.ts";
 import { BuildingCard } from "@/ui/building-card.tsx";
 import { useAtomValue } from "jotai";
-import { Link } from "lucide-react";
+import { AlertCircle, Link } from "lucide-react";
 
 function sortBuildings(a: BuildingData, b: BuildingData) {
     for (let i = 1; i < Math.min(a.path.length - 1, b.path.length - 1); i++) {
@@ -70,20 +71,53 @@ function BuildingSection({
 
 function BuildingsContainer() {
     const showFavorites = useAtomValue(showFavoritesAtom);
-    const favoriteBuildings = useAtomValue(favoriteBuildingsAtom);
-    const { sections } = useAtomValue(pageContentAtom);
+    const [favoriteBuildings, favoritesError] = useAtomValue(favoriteBuildingsAtom);
+    const [content, contentError] = useAtomValue(pageContentAtom);
+
     return (
         <div className="h-full space-y-8 overflow-auto last:mb-16">
-            {showFavorites && favoriteBuildings.length > 0 && (
-                <BuildingSection
-                    className="rounded-b-lg bg-pink-200 dark:bg-pink-950/50"
-                    title="Favorites"
-                    buildings={favoriteBuildings.sort(sortBuildings)}
-                />
+            {favoritesError ? (
+                <Alert variant="destructive" className="mx-auto mt-10 w-fit bg-card shadow-lg">
+                    <AlertCircle className="h-4 w-4" />
+                    <AlertTitle>Error</AlertTitle>
+                    <AlertDescription>
+                        An error occurred while loading the buildings!
+                        <br />
+                        Try selecting different styles and check your internet connection.
+                    </AlertDescription>
+                </Alert>
+            ) : (
+                showFavorites &&
+                favoriteBuildings.length > 0 && (
+                    <BuildingSection
+                        className="rounded-b-lg bg-pink-200 dark:bg-pink-950/50"
+                        title="Favorites"
+                        buildings={favoriteBuildings.sort(sortBuildings)}
+                    />
+                )
             )}
-            {[...sections.values()].map(section => (
-                <BuildingSection title={section.title} buildings={section.blueprints} key={section.title} />
-            ))}
+
+            {contentError ? (
+                <Alert variant="destructive" className="mx-auto mt-10 w-fit bg-card shadow-lg">
+                    <AlertCircle className="h-4 w-4" />
+                    <AlertTitle>Error</AlertTitle>
+                    <AlertDescription>
+                        An error occurred while loading the buildings!
+                        <br />
+                        Try selecting different styles and check your internet connection.
+                    </AlertDescription>
+                </Alert>
+            ) : (
+                <>
+                    {[...content.sections.values()].map(section => (
+                        <BuildingSection
+                            title={section.title}
+                            buildings={section.blueprints}
+                            key={section.title}
+                        />
+                    ))}
+                </>
+            )}
         </div>
     );
 }
@@ -92,7 +126,23 @@ export function PageContent() {
     const searchTerm = useAtomValue(searchTermAtom);
     const showFavorites = useAtomValue(showFavoritesAtom);
     const favoriteCount = useAtomValue(favoritePaths).length;
-    const { totalBuildingsFound } = useAtomValue(pageContentAtom);
+    const [content, error] = useAtomValue(pageContentAtom);
+
+    if (error) {
+        return (
+            <Alert variant="destructive" className="mx-auto mt-10 w-fit bg-card shadow-lg">
+                <AlertCircle className="h-4 w-4" />
+                <AlertTitle>Error</AlertTitle>
+                <AlertDescription>
+                    An error occurred while loading the buildings!
+                    <br />
+                    Try selecting different styles and check your internet connection.
+                </AlertDescription>
+            </Alert>
+        );
+    }
+
+    const { totalBuildingsFound } = content;
 
     if (totalBuildingsFound > 0 || (showFavorites && favoriteCount > 0)) {
         return <BuildingsContainer />;

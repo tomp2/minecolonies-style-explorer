@@ -135,8 +135,13 @@ export const missingStyles = new Map<string, MissingStyleInfoJson>(
 
 const themes = new Map<string, Theme>();
 
-export async function downloadStyle(style: string): Promise<Theme> {
-    const response = await fetch(`/minecolonies/${style}/style.json`);
+const urlPrefix =
+    process.env.NODE_ENV === "production" && window.location.hostname === "localhost"
+        ? "/minecolonies-style-explorer"
+        : "";
+
+async function downloadStyle(style: string): Promise<Theme> {
+    const response = await fetch(`${urlPrefix}/minecolonies/${style}/style.json`);
     const themeJson = (await response.json()) as ThemeJson;
     const themeObject: Theme = {
         name: style,
