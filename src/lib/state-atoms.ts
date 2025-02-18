@@ -252,13 +252,24 @@ export const pageContentAtom = atom(
             }
         }
 
+        const stylesToDownload = new Set<string>();
+        for (const theme of selectedThemes) {
+            stylesToDownload.add(theme);
+        }
+        if (searchTerm && !searchSelectedThemesOnly) {
+            for (const style of styleInfo.keys()) {
+                stylesToDownload.add(style);
+            }
+        }
+
         let themes: Theme[];
         try {
-            themes = await Promise.all([...selectedThemes].map(theme => getStyle(theme)));
+            themes = await Promise.all([...stylesToDownload].map(theme => getStyle(theme)));
         } catch (error) {
             console.error("Failed to load themes", error);
             return [null, error as Error];
         }
+
         for (const themeData of themes) {
             if (searchTerm) {
                 if (searchSelectedThemesOnly && !selectedThemes.has(themeData.name)) {
