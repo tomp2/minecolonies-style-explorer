@@ -9,7 +9,7 @@ caledonia/walls/.+_base
 
 # Nordic
 nordic/decorations/supplies/supply.+
-nordic/infrastructure
+nordic/infrastructure/mineshafts/.+
 
 # Dark Oak
 darkoak/decorations/supplies/supply.+
@@ -30,6 +30,7 @@ truedwarven/decorations/supplies/supply.+
 
 # Minecolonies
 original/walls/basic.+
+original/decorations/housing/playermansion_invisible
 original/infrastructure/misc.+
 original/infrastructure/mineshafts/miner.+
 original/infrastructure/mics.+
@@ -79,6 +80,7 @@ shogun/infrastructure/harbor/pier/footingfill
 shogun/infrastructure/bridge/avenue/spruce/footingfill
 shogun/infrastructure/bridge/avenue/pier/footingfill
 shogun/fundamentals/resources/mediumquarryshaft
+shogun/fundamentals/resources/mediumquarry
 shogun/decorations/misc/lampstand_a
 shogun/decorations/misc/lampstand_b
 shogun/decorations/misc/lampstand_c
@@ -87,6 +89,7 @@ shogun/decorations/supplies/hqcart
 shogun/fundamentals/resources/mediumquarry1
 
 # ancientathens
+ancientathens/craftsmanship/storage/harborintegratedcourier
 ancientathens/infrastructure/mineshafts/.+
 ancientathens/decorations/supplies/supply.+
 
