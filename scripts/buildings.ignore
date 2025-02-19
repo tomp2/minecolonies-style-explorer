@@ -129,3 +129,10 @@ steampunk/military/barrackstower
 # colonial
 colonial/decorations/supplies/supply.+
 colonial/infrastructure/mineshafts/.+
+
+# shire
+shire/craftsmanship/storage/warehousealt
+shire/decorations/supplies/supply.+
+shire/infrastructure/mineshafts/miner.+
+shire/infrastructure/mineshafts/.+shaft.+
+shire/military/barrackstower

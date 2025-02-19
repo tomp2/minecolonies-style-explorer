@@ -30,6 +30,7 @@ THEME_DIRS = [
     THEME_SOURCE_DIR / "ancientathens",
     THEME_SOURCE_DIR / "steampunk",
     THEME_SOURCE_DIR / "colonial",
+    THEME_SOURCE_DIR / "shire",
 ]
 REPO_DIR = Path(__file__).parent.parent
 STYLE_DIRECTORIES_PATH = REPO_DIR / "public/minecolonies"

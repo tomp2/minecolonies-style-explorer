@@ -78,4 +78,10 @@
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
     </url>
+    <url>
+        <loc>https://tomp2.github.io/minecolonies-style-explorer/?theme=shire</loc>
+        <lastmod>2025-02-19T02:40:59.422103</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
 </urlset>
