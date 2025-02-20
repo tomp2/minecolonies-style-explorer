@@ -128,8 +128,8 @@ const rawBasicStyles = _styles as unknown as StyleInfoJson[];
 const rawMissingStyles = _missing_styles as unknown as MissingStyleInfoJson[];
 
 export const categoryNames = new Set<string>(rawBasicStyles.flatMap(style => style.categories));
-export const styleInfo = new Map<string, StyleInfoJson>(rawBasicStyles.map(style => [style.name, style]));
-export const missingStyles = new Map<string, MissingStyleInfoJson>(
+export const styleInfoMap = new Map<string, StyleInfoJson>(rawBasicStyles.map(style => [style.name, style]));
+export const missingStylesMap = new Map<string, MissingStyleInfoJson>(
     rawMissingStyles.map(style => [style.name, style]),
 );
 

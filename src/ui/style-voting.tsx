@@ -1,7 +1,7 @@
 import { SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar.tsx";
 import { Toggle } from "@/components/ui/toggle.tsx";
 import { useDelayedCaptureEvent } from "@/hooks/delayed-capture-event.ts";
-import { MissingStyleInfoJson, missingStyles } from "@/lib/theme-data.ts";
+import { MissingStyleInfoJson, missingStylesMap } from "@/lib/theme-data.ts";
 import { cn } from "@/lib/utils.ts";
 import { atom, useAtom } from "jotai";
 import { atomWithStorage } from "jotai/utils";
@@ -69,7 +69,7 @@ function Style({ style }: { style: MissingStyleInfoJson }) {
 export default function StyleVoting() {
     return (
         <>
-            {[...missingStyles.values()].map(style => (
+            {[...missingStylesMap.values()].map(style => (
                 <Style style={style} key={style.name} />
             ))}
         </>

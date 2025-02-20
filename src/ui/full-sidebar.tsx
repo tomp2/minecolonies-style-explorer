@@ -15,7 +15,7 @@ import {
     SidebarTrigger,
 } from "@/components/ui/sidebar.tsx";
 import { favoritePaths, showFavoritesAtom } from "@/lib/state-atoms.ts";
-import { categoryNames, styleInfo } from "@/lib/theme-data.ts";
+import { categoryNames, styleInfoMap } from "@/lib/theme-data.ts";
 import { ImageSizeSlider } from "@/ui/image-size-slider.tsx";
 import { SearchBar } from "@/ui/search-bar.tsx";
 import { CategorySelectable, ThemeSelectable } from "@/ui/selectable.tsx";
@@ -73,7 +73,7 @@ export function FullSidebar() {
                 <SidebarGroup>
                     <SidebarGroupLabel>Style Selections</SidebarGroupLabel>
                     <SidebarMenu>
-                        {[...styleInfo.values()].map(style => (
+                        {[...styleInfoMap.values()].map(style => (
                             <ThemeSelectable style={style} key={style.name} />
                         ))}
                     </SidebarMenu>

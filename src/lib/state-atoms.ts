@@ -1,4 +1,4 @@
-import { BuildingData, Category, categoryNames, getStyle, styleInfo, Theme } from "@/lib/theme-data.ts";
+import { BuildingData, Category, categoryNames, getStyle, styleInfoMap, Theme } from "@/lib/theme-data.ts";
 import { buildingMatchesStringSearchTerm } from "@/lib/utils.ts";
 import { atom } from "jotai/index";
 import { atomWithStorage } from "jotai/utils";
@@ -113,12 +113,12 @@ function parseThemesFromUrlParams(urlSearchParams: URLSearchParams) {
     const selectedThemes = new Set<string>();
     const themeParams = urlSearchParams.get(LOCALSTORAGE_QUERY_PARAMS.theme);
     if (themeParams === "all") {
-        return new Set(styleInfo.keys());
+        return new Set(styleInfoMap.keys());
     }
     if (themeParams) {
         const paramThemeParts = themeParams.split(selectionUrlSeparator);
         for (const theme of paramThemeParts) {
-            if (styleInfo.has(theme)) {
+            if (styleInfoMap.has(theme)) {
                 selectedThemes.add(theme);
             }
         }
@@ -131,7 +131,7 @@ function parseThemesFromUrlParams(urlSearchParams: URLSearchParams) {
  * If all themes are selected, returns "all".
  */
 function encodeThemesToUrlParameter(selectedThemes: Set<string>) {
-    if (selectedThemes.size === styleInfo.size) return "all";
+    if (selectedThemes.size === styleInfoMap.size) return "all";
     return encodeURIComponent([...selectedThemes].join(selectionUrlSeparator));
 }
 
@@ -257,7 +257,7 @@ export const pageContentAtom = atom(
             stylesToDownload.add(theme);
         }
         if (searchTerm && !searchSelectedThemesOnly) {
-            for (const style of styleInfo.keys()) {
+            for (const style of styleInfoMap.keys()) {
                 stylesToDownload.add(style);
             }
         }
