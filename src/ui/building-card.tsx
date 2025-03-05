@@ -110,7 +110,7 @@ function ImageButton({ building, view, className, ...props }: ImageButtonProps) 
                     src={imgSrc}
                     alt={`${buildingName} (${view})`}
                     className={cn(
-                        "absolute rounded-sm object-cover opacity-0 transition-opacity duration-100",
+                        "absolute size-full rounded-sm object-cover opacity-0 transition-opacity duration-100",
                         isLoaded && "opacity-100",
                     )}
                     onError={() => setError(true)}
