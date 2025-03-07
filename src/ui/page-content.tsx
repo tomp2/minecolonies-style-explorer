@@ -1,16 +1,13 @@
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert.tsx";
-import {
-    favoriteBuildingsAtom,
-    favoritePaths,
-    pageContentAtom,
-    searchTermAtom,
-    showFavoritesAtom,
-} from "@/lib/state-atoms.ts";
+import { loadableFavoriteBuildingsAtom, pageContentAtom } from "@/lib/state-atoms.ts";
 import { type BuildingData } from "@/lib/theme-data.ts";
 import { cn } from "@/lib/utils.ts";
 import { BuildingCard } from "@/ui/building-card.tsx";
+import { readCssColumns, useContainerWidth } from "@/ui/image-size-slider.tsx";
+import { useVirtualizer } from "@tanstack/react-virtual";
 import { useAtomValue } from "jotai";
 import { AlertCircle, Link } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
 function sortBuildings(a: BuildingData, b: BuildingData) {
     for (let i = 1; i < Math.min(a.path.length - 1, b.path.length - 1); i++) {
@@ -48,7 +45,7 @@ function BuildingSection({
 
     return (
         <div className={cn("p-2", className)}>
-            <div className="group mb-4 ml-2 flex items-center gap-2">
+            <div className="group flex items-center gap-2 pb-4 pl-2">
                 <h2 id={sectionId} className="text-2xl font-extrabold capitalize">
                     {title}
                 </h2>
@@ -69,66 +66,113 @@ function BuildingSection({
     );
 }
 
-function BuildingsContainer() {
-    const showFavorites = useAtomValue(showFavoritesAtom);
-    const [favoriteBuildings, favoritesError] = useAtomValue(favoriteBuildingsAtom);
-    const [content, contentError] = useAtomValue(pageContentAtom);
+export function FavoritesSection() {
+    const value = useAtomValue(loadableFavoriteBuildingsAtom);
+
+    const [buildings, setBuildings] = useState<BuildingData[]>(value.state === "hasData" ? value.data : []);
+
+    useEffect(() => {
+        if (value.state === "hasData") {
+            setBuildings(value.data);
+        }
+    }, [value]);
+
+    if (value.state === "hasError") {
+        return (
+            <Alert className="mx-auto mt-10 w-fit shadow-sm">
+                <AlertCircle className="h-4 w-4" />
+                <AlertTitle>Error</AlertTitle>
+                <AlertDescription>
+                    An error occurred while loading the favorites!
+                    <br />
+                    Try refreshing the page.
+                </AlertDescription>
+            </Alert>
+        );
+    }
+
+    if (value.state === "loading" && buildings.length === 0) {
+        return (
+            <Alert className="mx-auto mt-10 w-fit shadow-sm">
+                <AlertCircle className="h-4 w-4" />
+                <AlertTitle>Loading favorites</AlertTitle>
+                <AlertDescription>Loading buildings from favorites...</AlertDescription>
+            </Alert>
+        );
+    }
+
+    if (buildings.length === 0) {
+        return (
+            <Alert className="mx-auto mt-10 w-fit shadow-sm">
+                <AlertCircle className="h-4 w-4" />
+                <AlertTitle>No favorites</AlertTitle>
+                <AlertDescription>
+                    You can add buildings to your favorites by clicking the heart icon on the building card.
+                </AlertDescription>
+            </Alert>
+        );
+    }
 
     return (
-        <div className="h-full space-y-8 overflow-auto last:mb-16">
-            {favoritesError ? (
-                <Alert variant="destructive" className="mx-auto mt-10 w-fit bg-card shadow-lg">
-                    <AlertCircle className="h-4 w-4" />
-                    <AlertTitle>Error</AlertTitle>
-                    <AlertDescription>
-                        An error occurred while loading the buildings!
-                        <br />
-                        Try selecting different styles and check your internet connection.
-                    </AlertDescription>
-                </Alert>
-            ) : (
-                showFavorites &&
-                favoriteBuildings.length > 0 && (
-                    <BuildingSection
-                        className="rounded-b-lg bg-pink-200 dark:bg-pink-950/50"
-                        title="Favorites"
-                        buildings={favoriteBuildings.sort(sortBuildings)}
-                    />
-                )
-            )}
-
-            {contentError ? (
-                <Alert variant="destructive" className="mx-auto mt-10 w-fit bg-card shadow-lg">
-                    <AlertCircle className="h-4 w-4" />
-                    <AlertTitle>Error</AlertTitle>
-                    <AlertDescription>
-                        An error occurred while loading the buildings!
-                        <br />
-                        Try selecting different styles and check your internet connection.
-                    </AlertDescription>
-                </Alert>
-            ) : (
-                <>
-                    {[...content.sections.values()].map(section => (
-                        <BuildingSection
-                            title={section.title}
-                            buildings={section.blueprints}
-                            key={section.title}
-                        />
-                    ))}
-                </>
-            )}
+        <div className="mb-20 grid grid-cols-[repeat(var(--image-cols),_minmax(0,_1fr))] gap-2 p-2">
+            {buildings.sort(sortBuildings).map(building => (
+                <BuildingCard
+                    key={building.path.join(",") + building.name}
+                    building={building}
+                    isFavorite={true}
+                />
+            ))}
         </div>
     );
 }
 
-export function PageContent() {
-    const searchTerm = useAtomValue(searchTermAtom);
-    const showFavorites = useAtomValue(showFavoritesAtom);
-    const favoriteCount = useAtomValue(favoritePaths).length;
-    const [content, error] = useAtomValue(pageContentAtom);
+function BuildingsContainer() {
+    const containerWidth = useContainerWidth();
+    const parentRef = useRef<HTMLDivElement>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
+    const cardHeight = useRef(350);
 
-    if (error) {
+    const [content, contentError] = useAtomValue(pageContentAtom);
+
+    useEffect(() => {
+        if (!containerRef.current) return;
+
+        const containerWidth = containerRef.current.clientWidth;
+        const columnCount = readCssColumns();
+        const cardBorder = 1;
+        const containerPadding = 8;
+        const cardGap = 8;
+        const cardPadding = 8;
+        const cardDescriptionHeight = 80;
+        const widthForImages =
+            containerWidth -
+            containerPadding * 2 -
+            (columnCount - 1) * cardGap -
+            columnCount * cardPadding * 2 -
+            columnCount * cardBorder * 2;
+        const imageWidth = widthForImages / columnCount;
+        cardHeight.current = imageWidth + cardPadding * 2 + cardDescriptionHeight + cardBorder * 2;
+    }, [containerWidth]);
+
+    const sections = content ? [...content.sections.values()] : [];
+    const virtualizer = useVirtualizer({
+        count: sections.length,
+        getScrollElement: () => parentRef.current,
+        estimateSize: i => {
+            const section = sections[i];
+
+            const columns = readCssColumns();
+            const rowCount = Math.ceil(section.blueprints.length / columns);
+
+            const sectionGap = (rowCount - 1) * 8;
+            const sectionTitleHeight = 48;
+            const sectionPadding = 2 * 8;
+
+            return rowCount * cardHeight.current + sectionGap + sectionTitleHeight + sectionPadding;
+        },
+    });
+
+    if (contentError) {
         return (
             <Alert variant="destructive" className="mx-auto mt-10 w-fit bg-card shadow-lg">
                 <AlertCircle className="h-4 w-4" />
@@ -142,62 +186,72 @@ export function PageContent() {
         );
     }
 
-    const { totalBuildingsFound } = content;
+    const items = virtualizer.getVirtualItems();
+    return (
+        <div
+            className="relative h-[calc(100vh-var(--h-navbar))] overflow-y-auto contain-strict"
+            ref={parentRef}
+        >
+            <div
+                className="relative mb-20 w-full"
+                style={{
+                    height: virtualizer.getTotalSize(),
+                }}
+            >
+                <div
+                    className="absolute left-0 top-0 w-full"
+                    style={{ transform: `translateY(${items[0]?.start ?? 0}px)` }}
+                    ref={containerRef}
+                >
+                    {items.map(virtualRow => (
+                        <div
+                            key={virtualRow.key}
+                            data-index={virtualRow.index}
+                            ref={virtualizer.measureElement}
+                        >
+                            <BuildingSection
+                                title={sections[virtualRow.index].title}
+                                buildings={sections[virtualRow.index].blueprints}
+                                key={sections[virtualRow.index].title}
+                            />
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </div>
+    );
+}
 
-    if (totalBuildingsFound > 0 || (showFavorites && favoriteCount > 0)) {
-        return <BuildingsContainer />;
-    }
-
-    if (searchTerm && totalBuildingsFound === 0) {
+export function PageContent() {
+    const [content, error] = useAtomValue(pageContentAtom);
+    if (error) {
         return (
-            <article className="prose prose-xl mx-auto mt-5 p-2 text-center dark:prose-invert [&_*]:m-0">
-                <h3>No buildings found</h3>
-                <h4 className="mb-0">You can try:</h4>
-                <ul className="[&_li]: mt-0 list-inside list-disc pl-0 text-left">
-                    <li>different search term</li>
-                    <li>selecting more styles/categories</li>
-                    <li>disabling &quot;Search only from selected styles&quot; on the sidebar</li>
-                </ul>
-            </article>
+            <div className="flex h-full grow flex-col justify-between">
+                <Alert variant="destructive" className="mx-auto mt-10 w-fit bg-card shadow-lg">
+                    <AlertCircle className="h-4 w-4" />
+                    <AlertTitle>Error</AlertTitle>
+                    <AlertDescription>
+                        An error occurred while loading the buildings!
+                        <br />
+                        Try selecting different styles and check your internet connection.
+                    </AlertDescription>
+                </Alert>
+            </div>
         );
     }
-    return (
-        <article className="prose prose-xl mx-auto mt-5 p-2 pb-14 dark:prose-invert">
-            <h1 className="text-4xl">
-                Welcome to the <em>unofficial</em> MineColonies Style Explorer!
-            </h1>
-            <h3>Introduction</h3>
-            <p>
-                This is an <em>unofficial</em> site for browsing the styles and buildings for the{" "}
-                <a className="text-blue-500" href="https://minecolonies.com/">
-                    MineColonies
-                </a>{" "}
-                mod. I created this site to make it easy to visually explore buildings by style and category.
-            </p>
-            <p>
-                Start by selecting styles from the sidebar or searching for buildings. Click images to see
-                alternative angles, and use the heart icon to save favorites.
-            </p>
-            <h3>Support MineColonies</h3>
-            <p>
-                Style-pack authors are next to the style name. If you want to browse the buildings in-game,
-                Minecolonies has a Patreon where you can get access to their official <b>schematics server</b>
-                . Read more about it on their{" "}
-                <a className="text-blue-500" href="https://www.patreon.com/minecolonies">
-                    Patreon page
-                </a>
-            </p>
-            <h3>FAQ & Missing Stuff</h3>
-            <p>
-                <strong>Vote</strong> for the next stylepack in the sidebar! Screenshotting styles takes some
-                time, so new styles may take a while to be added. If you notice outdated/missing buildings, or
-                have any other suggestions (like new features), send feedback using the button at the top
-                right.
-            </p>
-            <p>
-                Currently the screenshots are of the maximum level of the building. Taking screenshots of
-                different levels would take too much <time className=""></time>
-            </p>
-        </article>
-    );
+    if (content.totalBuildingsFound === 0) {
+        return (
+            <div className="flex h-full grow flex-col justify-between">
+                <Alert className="mx-auto mt-10 w-fit bg-card shadow-lg">
+                    <AlertCircle className="h-4 w-4" />
+                    <AlertTitle>No buildings found</AlertTitle>
+                    <AlertDescription>
+                        Try selecting different styles and categories or check your search term.
+                    </AlertDescription>
+                </Alert>
+            </div>
+        );
+    }
+
+    return <BuildingsContainer />;
 }

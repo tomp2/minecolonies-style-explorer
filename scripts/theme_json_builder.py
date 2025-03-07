@@ -15,27 +15,32 @@ from nbt.nbt import TAG_Compound
 from scripts.sitemap_gen import generate_sitemap
 
 # --- Configuration ---
-THEME_SOURCE_DIR = Path(r"C:\Users\user\Desktop\minecolonies3")
-THEME_DIRS = [
-    THEME_SOURCE_DIR / "medievaloak",
-    THEME_SOURCE_DIR / "caledonia",
-    THEME_SOURCE_DIR / "nordic",
-    THEME_SOURCE_DIR / "darkoak",
-    THEME_SOURCE_DIR / "medievalspruce",
-    THEME_SOURCE_DIR / "pagoda",
-    THEME_SOURCE_DIR / "truedwarven",
-    THEME_SOURCE_DIR / "original",
-    THEME_SOURCE_DIR / "byzantine",
-    THEME_SOURCE_DIR / "shogun",
-    THEME_SOURCE_DIR / "ancientathens",
-    THEME_SOURCE_DIR / "steampunk",
-    THEME_SOURCE_DIR / "colonial",
-    THEME_SOURCE_DIR / "shire",
-]
 REPO_DIR = Path(__file__).parent.parent
-STYLE_DIRECTORIES_PATH = REPO_DIR / "public/minecolonies"
+BLUEPRINTS = REPO_DIR / "blueprints"
+IMAGES_ROOT = REPO_DIR / "public/minecolonies"
+
+MINECOLONIES = BLUEPRINTS / "minecolonies"
+STYLECOLONIES = BLUEPRINTS / "stylecolonies"
+UNOFFICIAL = BLUEPRINTS / "other"
+
+THEME_DIRS = [
+    MINECOLONIES / "medievaloak",
+    MINECOLONIES / "caledonia",
+    MINECOLONIES / "nordic",
+    MINECOLONIES / "darkoak",
+    MINECOLONIES / "medievalspruce",
+    MINECOLONIES / "pagoda",
+    MINECOLONIES / "truedwarven",
+    MINECOLONIES / "original",
+    MINECOLONIES / "ancientathens",
+    MINECOLONIES / "colonial",
+    MINECOLONIES / "shire",
+    STYLECOLONIES / "steampunk",
+    UNOFFICIAL / "byzantine",
+    UNOFFICIAL / "shogun",
+]
 COMBINED_BUILDINGS_PATH = REPO_DIR / "scripts/combined_buildings.json"
-BUILDING_IGNORE_PATH = Path(__file__).parent / "buildings.ignore"
+BUILDING_IGNORE = REPO_DIR / "scripts/buildings.ignore"
 STYLE_INFO_PATH = REPO_DIR / "src/assets/styles.json"
 MISSING_STYLE_INFO_PATH = REPO_DIR / "src/assets/missing_styles.json"
 
@@ -43,13 +48,23 @@ logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 
 # --- Prepared file contents ---
 COMBINED_BUILDINGS = json.loads(COMBINED_BUILDINGS_PATH.read_text())
-STYLE_INFO = {style["name"]: style for style in
-              STYLE_INFO_PATH.exists() and json.loads(STYLE_INFO_PATH.read_text()) or []}
+STYLE_INFO = {style["name"]: style for style in json.loads(STYLE_INFO_PATH.read_text())}
 ignored_pattern = re.compile(
-    "|".join([f"^{line.strip()}$" for line in BUILDING_IGNORE_PATH.read_text().splitlines() if
+    "|".join([f"^{line.strip()}$" for line in BUILDING_IGNORE.read_text().splitlines() if
               line.strip() and not line.startswith("#")]))
 
 # --- Constants ---
+IGNORED_BLOCKS = {
+    "minecraft:air",
+    "minecraft:grass_block",
+    "minecraft:dirt",
+    "minecraft:sand",
+    "minecraft:stone",
+    "minecraft:water",
+    "structurize:blocksubstitution",
+    "minecraft:grass",
+    "minecraft:fern",
+}
 HUT_BLOCKS = {"field", "plantationfield", "alchemist", "kitchen", "graveyard", "netherworker", "archery", "baker",
               "barracks", "barrackstower", "beekeeper", "blacksmith", "builder", "chickenherder", "citizen",
               "combatacademy", "composter", "concretemixer", "cook", "cowboy", "crusher", "deliveryman", "dyer",
@@ -78,6 +93,7 @@ type ThemeJson = TypedDict("ThemeJson", {
 })
 type Theme = TypedDict("Theme", {
     "name": str,
+    "type": str,
     "json": ThemeJson
 })
 type CategoriesRoot = TypedDict(
@@ -205,19 +221,6 @@ class BlueprintFile:
         return int(right_x - left_x + 1), int(top_y - bottom_y + 1), int(back_z - front_z + 1)
 
 
-IGNORED_BLOCKS = {
-    "minecraft:air",
-    "minecraft:grass_block",
-    "minecraft:dirt",
-    "minecraft:sand",
-    "minecraft:stone",
-    "minecraft:water",
-    "structurize:blocksubstitution",
-    "minecraft:grass",
-    "minecraft:fern",
-}
-
-
 def find_building_image(
         blueprint_path: Path,
         building_name: str,
@@ -260,7 +263,7 @@ def process_building(
         logging.warning(f"Failed to read blueprint file: {file_path}: {e}")
         return
 
-    blueprint_dir = blueprint.file_path.relative_to(THEME_SOURCE_DIR).parent.as_posix()
+    blueprint_dir = blueprint.file_path.relative_to(theme_path.parent).parent.as_posix()
     blueprint_path = f"{blueprint_dir}/{blueprint.name}"
 
     if ignored_pattern.match(blueprint_path):
@@ -362,7 +365,7 @@ def add_combined_buildings(theme_id: str, categories_root: CategoriesRoot):
         if not theme_name == theme_id:
             continue
 
-        theme_source_dir = THEME_SOURCE_DIR / theme_name
+        theme_source_dir = BLUEPRINTS / theme_name
         if not theme_source_dir.exists():
             logging.warning(f"Theme directory not found: {theme_name}")
             continue
@@ -397,7 +400,7 @@ def add_combined_buildings(theme_id: str, categories_root: CategoriesRoot):
         if combined_hut_blocks:
             building_object["hutBlocks"] = list(combined_hut_blocks)
 
-        combined_images_dir = STYLE_DIRECTORIES_PATH / theme_name / "/".join(category_path) / name
+        combined_images_dir = IMAGES_ROOT / theme_name / "/".join(category_path) / name
         front = combined_images_dir / (f"{combined_level}front.jpg" if combined_level else "front.jpg")
         back = combined_images_dir / (f"{combined_level}back.jpg" if combined_level else "back.jpg")
 
@@ -405,7 +408,7 @@ def add_combined_buildings(theme_id: str, categories_root: CategoriesRoot):
         backExists = back.exists()
 
         if not frontExists:
-            logging.warning(f"Required front image not found: {front.relative_to(STYLE_DIRECTORIES_PATH)}")
+            logging.warning(f"Required front image not found: {front.relative_to(IMAGES_ROOT)}")
             continue
 
         blur_hashes = [encode_image_to_blurhash(front)]
@@ -425,12 +428,13 @@ def add_combined_buildings(theme_id: str, categories_root: CategoriesRoot):
 
 
 def process_theme(theme_path: Path) -> Theme:
+    theme_type = theme_path.relative_to(BLUEPRINTS).parent.as_posix()
     theme_name = theme_path.name
     pack_meta_file = theme_path / "pack.json"
     pack_meta = json.loads(pack_meta_file.read_text())
     logging.info(f"Processing theme: {theme_name}")
 
-    theme_images_dir = STYLE_DIRECTORIES_PATH / theme_path.name
+    theme_images_dir = IMAGES_ROOT / theme_path.name
     categories_root: CategoriesRoot = {
         "blueprints": {},
         "categories": {}
@@ -447,6 +451,7 @@ def process_theme(theme_path: Path) -> Theme:
 
     theme_json: Theme = {
         "name": theme_path.name,
+        "type": theme_type,
         "json": {
             "displayName": pack_meta["name"],
             "authors": pack_meta["authors"],
@@ -467,12 +472,13 @@ def main():
     logging.info("Saving themes...")
     for theme in theme_results:
         logging.info(f"Saving theme: {theme['name']}")
-        STYLE_DIRECTORIES_PATH.joinpath(theme["name"], "style.json").write_text(json.dumps(theme["json"]))
+        IMAGES_ROOT.joinpath(theme["name"], "style.json").write_text(json.dumps(theme["json"]))
 
     logging.info("Saving style info...")
     styles = []
+    categories = set()
     for style in theme_results:
-        style_dir = STYLE_DIRECTORIES_PATH / style["name"]
+        style_dir = IMAGES_ROOT / style["name"]
         if not style_dir.exists():
             logging.info(f"[WARN] Style directory not found: {style_dir}")
             continue
@@ -481,33 +487,41 @@ def main():
             "name": style["name"],
             "displayName": style["json"]["displayName"],
             "authors": style["json"]["authors"],
-            "categories": list(style["json"]["categories"].keys())
+            "type": style["type"],
         }
+        categories.update(style["json"]["categories"].keys())
         prev_record = STYLE_INFO.get(style["name"])
         if prev_record and "addedAt" in prev_record:
             new_record["addedAt"] = prev_record["addedAt"]
         styles.append(new_record)
 
     styles.sort(key=lambda x: x["displayName"])
-    STYLE_INFO_PATH.write_text(json.dumps(styles, indent=2))
+    output = {
+        "styles": styles,
+        "categories": list(categories)
+    }
+    STYLE_INFO_PATH.write_text(json.dumps(output, indent=2))
 
     logging.info("Listing missing styles for voting...")
     found_style_ids = {style["name"] for style in styles}
     missing_styles_ids = []
-    for style_dir in THEME_SOURCE_DIR.iterdir():
-        if style_dir.is_dir() and style_dir.name not in found_style_ids:
-            missing_styles_ids.append(style_dir.name)
+    for style_type in BLUEPRINTS.iterdir():
+        for style_dir in style_type.iterdir():
+            if style_dir.is_dir() and style_dir.name not in found_style_ids:
+                missing_styles_ids.append([style_type.name, style_dir.name])
 
     missing_styles = []
     for missing_style in missing_styles_ids:
-        style_meta_path = THEME_SOURCE_DIR.joinpath(missing_style, "pack.json")
+        style_meta_path = BLUEPRINTS.joinpath(*missing_style, "pack.json")
         if not style_meta_path.exists():
             logging.warning(f"Style meta file not found: {style_meta_path}")
             continue
 
+        [_, style_name] = missing_style
+
         style_meta = json.loads(style_meta_path.read_text())
         missing_styles.append({
-            "name": missing_style,
+            "name": style_name,
             "displayName": style_meta["name"],
             "authors": style_meta["authors"],
         })

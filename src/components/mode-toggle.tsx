@@ -10,7 +10,7 @@ import {
 import { Moon, Sun } from "lucide-react";
 import { useRef } from "react";
 
-export function InstantModeToggleButton() {
+export function InstantModeToggleButton({ className }: { className?: string }) {
     const theme = useTheme();
     const wasUsingSystemTheme = useRef(theme.theme === "system");
     const initialSystemTheme = useRef<"light" | "dark">(
@@ -18,6 +18,7 @@ export function InstantModeToggleButton() {
     );
     return (
         <Button
+            className={className}
             variant="outline"
             size="icon"
             onClick={() => {

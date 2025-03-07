@@ -9,12 +9,13 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog";
+import { cn } from "@/lib/utils";
 import { MessageCircle } from "lucide-react";
 
-export function FeedbackDialog() {
+export function FeedbackDialog({ className }: { className?: string }) {
     return (
         <Dialog>
-            <DialogTrigger className="ml-auto flex items-center text-lg font-semibold">
+            <DialogTrigger className={cn("flex items-center text-lg font-semibold", className)}>
                 <MessageCircle className="size-5" />
                 Feedback
             </DialogTrigger>

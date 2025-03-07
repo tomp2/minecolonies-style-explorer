@@ -1,270 +1,143 @@
-[
-  {
-    "name": "ancientathens",
-    "displayName": "Ancient Athens",
-    "authors": [
-      "John Reiher",
-      "Pixblockus",
-      "_Raycoms_",
-      "Thodor12"
-    ],
-    "categories": [
-      "agriculture",
-      "craftsmanship",
-      "decorations",
-      "education",
-      "fundamentals",
-      "infrastructure",
-      "military",
-      "mystic",
-      "walls"
-    ]
-  },
-  {
-    "name": "byzantine",
-    "displayName": "Byzantine",
-    "authors": [
-      "Spumantii"
-    ],
-    "categories": [
-      "agriculture",
-      "craftsmanship",
-      "decorations",
-      "education",
-      "fundamentals",
-      "infrastructure",
-      "military",
-      "mystic",
-      "walls"
-    ],
-    "addedAt": "2025-01-27T23:15:31.306Z"
-  },
-  {
-    "name": "caledonia",
-    "displayName": "Caledonia",
-    "authors": [
-      "Thaylar"
-    ],
-    "categories": [
-      "agriculture",
-      "craftsmanship",
-      "decorations",
-      "education",
-      "fundamentals",
-      "infrastructure",
-      "military",
-      "mystic",
-      "walls"
-    ]
-  },
-  {
-    "name": "colonial",
-    "displayName": "Colonial",
-    "authors": [
-      "Raycoms",
-      "John Reiher",
-      "SomeAddons",
-      "Thodor12"
-    ],
-    "categories": [
-      "agriculture",
-      "craftsmanship",
-      "decorations",
-      "education",
-      "fundamentals",
-      "infrastructure",
-      "military",
-      "mystic",
-      "walls"
-    ],
-    "addedAt": "2025-02-19T02:15:00.000Z"
-  },
-  {
-    "name": "darkoak",
-    "displayName": "Dark Oak Treehouse",
-    "authors": [
-      "Annie",
-      "Cugo"
-    ],
-    "categories": [
-      "agriculture",
-      "craftsmanship",
-      "decorations",
-      "education",
-      "fundamentals",
-      "infrastructure",
-      "military",
-      "mystic",
-      "walls"
-    ]
-  },
-  {
-    "name": "medievaloak",
-    "displayName": "Medieval Oak",
-    "authors": [
-      "Carlansor"
-    ],
-    "categories": [
-      "agriculture",
-      "craftsmanship",
-      "decorations",
-      "education",
-      "fundamentals",
-      "infrastructure",
-      "military",
-      "mystic",
-      "walls"
-    ]
-  },
-  {
-    "name": "medievalspruce",
-    "displayName": "Medieval Spruce",
-    "authors": [
-      "Carlansor"
-    ],
-    "categories": [
-      "agriculture",
-      "craftsmanship",
-      "decorations",
-      "education",
-      "fundamentals",
-      "infrastructure",
-      "military",
-      "mystic",
-      "walls"
-    ]
-  },
-  {
-    "name": "original",
-    "displayName": "Minecolonies Original",
-    "authors": [
-      "many"
-    ],
-    "categories": [
-      "agriculture",
-      "craftsmanship",
-      "decorations",
-      "education",
-      "fundamentals",
-      "infrastructure",
-      "military",
-      "mystic",
-      "walls"
-    ],
-    "addedAt": "2025-01-25T00:35:31.306Z"
-  },
-  {
-    "name": "nordic",
-    "displayName": "Nordic Spruce",
-    "authors": [
-      "Luna",
-      "John Reiher"
-    ],
-    "categories": [
-      "agriculture",
-      "craftsmanship",
-      "decorations",
-      "education",
-      "fundamentals",
-      "infrastructure",
-      "military",
-      "mystic",
-      "walls"
-    ]
-  },
-  {
-    "name": "pagoda",
-    "displayName": "Pagoda",
-    "authors": [
-      "Thaylar"
-    ],
-    "categories": [
-      "agriculture",
-      "craftsmanship",
-      "decorations",
-      "education",
-      "fundamentals",
-      "infrastructure",
-      "military",
-      "mystic",
-      "walls"
-    ]
-  },
-  {
-    "name": "shire",
-    "displayName": "Shire",
-    "authors": [
-      "Daddy_P1G",
-      "JohnReiher",
-      "and others"
-    ],
-    "categories": [
-      "agriculture",
-      "craftsmanship",
-      "decorations",
-      "education",
-      "fundamentals",
-      "infrastructure",
-      "military",
-      "mystic",
-      "walls"
-    ],
-    "addedAt": "2025-02-19T02:15:00.000Z"
-  },
-  {
-    "name": "shogun",
-    "displayName": "Shogun",
-    "authors": [
-      "Spumantii"
-    ],
-    "categories": [
-      "agriculture",
-      "craftsmanship",
-      "decorations",
-      "education",
-      "fundamentals",
-      "infrastructure",
-      "military",
-      "mystic",
-      "walls"
-    ],
-    "addedAt": "2025-02-03T21:00:00.000Z"
-  },
-  {
-    "name": "truedwarven",
-    "displayName": "Stalactite Caves",
-    "authors": [
-      "Luna"
-    ],
-    "categories": [
-      "agriculture",
-      "craftsmanship",
-      "decorations",
-      "education",
-      "fundamentals",
-      "infrastructure",
-      "military",
-      "mystic",
-      "walls"
-    ]
-  },
-  {
-    "name": "steampunk",
-    "displayName": "Steampunk",
-    "authors": [
-      "m00b13n, MotionlessTrain, Yalokivi"
-    ],
-    "categories": [
-      "agriculture",
-      "craftsmanship",
-      "decorations",
-      "education",
-      "fundamentals",
-      "infrastructure",
-      "military",
-      "mystic",
-      "walls"
-    ],
-    "addedAt": "2025-02-17T18:00:00.000Z"
-  }
-]
+{
+  "styles": [
+    {
+      "name": "ancientathens",
+      "displayName": "Ancient Athens",
+      "authors": [
+        "John Reiher",
+        "Pixblockus",
+        "_Raycoms_",
+        "Thodor12"
+      ],
+      "type": "minecolonies"
+    },
+    {
+      "name": "byzantine",
+      "displayName": "Byzantine_for_1.20",
+      "authors": [
+        "Spumantii"
+      ],
+      "type": "other",
+      "addedAt": "2025-01-27T23:15:31.306Z"
+    },
+    {
+      "name": "caledonia",
+      "displayName": "Caledonia",
+      "authors": [
+        "Thaylar"
+      ],
+      "type": "minecolonies"
+    },
+    {
+      "name": "colonial",
+      "displayName": "Colonial",
+      "authors": [
+        "Raycoms",
+        "John Reiher",
+        "SomeAddons",
+        "Thodor12"
+      ],
+      "type": "minecolonies",
+      "addedAt": "2025-02-19T02:15:00.000Z"
+    },
+    {
+      "name": "darkoak",
+      "displayName": "Dark Oak Treehouse",
+      "authors": [
+        "Annie",
+        "Cugo"
+      ],
+      "type": "minecolonies"
+    },
+    {
+      "name": "medievaloak",
+      "displayName": "Medieval Oak",
+      "authors": [
+        "Carlansor"
+      ],
+      "type": "minecolonies"
+    },
+    {
+      "name": "medievalspruce",
+      "displayName": "Medieval Spruce",
+      "authors": [
+        "Carlansor"
+      ],
+      "type": "minecolonies"
+    },
+    {
+      "name": "original",
+      "displayName": "Minecolonies Original",
+      "authors": [
+        "many"
+      ],
+      "type": "minecolonies",
+      "addedAt": "2025-01-25T00:35:31.306Z"
+    },
+    {
+      "name": "nordic",
+      "displayName": "Nordic Spruce",
+      "authors": [
+        "Luna",
+        "John Reiher"
+      ],
+      "type": "minecolonies"
+    },
+    {
+      "name": "pagoda",
+      "displayName": "Pagoda",
+      "authors": [
+        "Thaylar"
+      ],
+      "type": "minecolonies"
+    },
+    {
+      "name": "shire",
+      "displayName": "Shire",
+      "authors": [
+        "Daddy_P1G",
+        "JohnReiher",
+        "and others"
+      ],
+      "type": "minecolonies",
+      "addedAt": "2025-02-19T02:15:00.000Z"
+    },
+    {
+      "name": "shogun",
+      "displayName": "Shogun",
+      "authors": [
+        "Spumantii"
+      ],
+      "type": "other",
+      "addedAt": "2025-02-03T21:00:00.000Z"
+    },
+    {
+      "name": "truedwarven",
+      "displayName": "Stalactite Caves",
+      "authors": [
+        "Luna"
+      ],
+      "type": "minecolonies"
+    },
+    {
+      "name": "steampunk",
+      "displayName": "Steampunk",
+      "authors": [
+        "m00b13n, MotionlessTrain, Yalokivi"
+      ],
+      "type": "stylecolonies",
+      "addedAt": "2025-02-17T18:00:00.000Z"
+    }
+  ],
+  "categories": [
+    "infrastructure",
+    "military",
+    "mystic",
+    "craftsmanship",
+    "education",
+    "fundamentals",
+    "decorations",
+    "agriculture",
+    "walls"
+  ]
+}

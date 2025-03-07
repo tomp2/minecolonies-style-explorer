@@ -6,7 +6,7 @@ import useWindowWidth from "@/hooks/use-window-width.ts";
 import { useEffect, useState } from "react";
 
 const defaultColumnSize = 350;
-const minColumnSize = 130;
+const minColumnSize = 160;
 const sidebarWidth = 272;
 
 function setCssColumns(value: number) {
@@ -41,7 +41,14 @@ if (initialStoredConfig) {
 }
 setCssColumns(initialColumns);
 
-function useContainerWidth() {
+export function readCssColumns() {
+    const value = getComputedStyle(document.documentElement).getPropertyValue("--image-cols");
+    const number = Number.parseInt(value);
+    if (Number.isNaN(number)) return initialColumns;
+    return number;
+}
+
+export function useContainerWidth() {
     const windowWidth = useWindowWidth();
     const sidebar = useSidebar();
     const isMobile = useIsMobile();

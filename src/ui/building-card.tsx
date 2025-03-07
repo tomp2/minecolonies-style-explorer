@@ -1,11 +1,11 @@
 import { Button } from "@/components/ui/button.tsx";
 import { useDelayedCaptureEvent } from "@/hooks/delayed-capture-event.ts";
 import { useCaptureEventOnce } from "@/hooks/use-capture-event-once.ts";
-import { expandedBuildingAtom, favoritesPathsWriteAtom } from "@/lib/state-atoms.ts";
+import { expandedBuildingAtom, favoritesPathsWriteAtom, selectedThemesAtom } from "@/lib/state-atoms.ts";
 import { BuildingData } from "@/lib/theme-data.ts";
 import { cn } from "@/lib/utils.ts";
 import { decode } from "blurhash";
-import { useAtom, useSetAtom } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { Expand, Heart } from "lucide-react";
 import * as React from "react";
 import { useEffect, useRef, useState } from "react";
@@ -96,7 +96,7 @@ function ImageButton({ building, view, className, ...props }: ImageButtonProps) 
     const imgSrc = ["minecolonies", ...building.path, building.name, `${level}${view}.jpg`].join("/");
 
     return (
-        <div className={cn("inset-0 h-full w-full", className)} {...props}>
+        <div className={cn("building inset-0 h-full w-full", className)} {...props}>
             {blurhash && (
                 <BlurhashCanvas className="absolute rounded-sm" hash={blurhash} width={25} height={25} />
             )}
@@ -232,16 +232,17 @@ function BuildingName({ building }: { building: BuildingData }) {
     const rawNameLower = building.name.toLowerCase();
 
     if (displayNameLower.includes(rawNameLower)) return building.displayName;
-    return (
-        <h2 className="font-semibold">
-            {building.displayName} ({building.name})
-        </h2>
-    );
+    return `${building.displayName} (${building.name})`;
 }
 
 /** A card that displays a building's image, name, path, and size. */
-export function BuildingCard({ building }: { building: BuildingData }) {
-    const pathString = `${building.styleDisplayName}/${building.path.slice(1).join("/")}`;
+export function BuildingCard({ building, isFavorite }: { building: BuildingData; isFavorite?: boolean }) {
+    const selectedStylesCount = useAtomValue(selectedThemesAtom).size;
+
+    let pathString = `${building.path.slice(1).join("/")}`;
+    if (selectedStylesCount !== 1 || isFavorite) {
+        pathString = `${building.styleDisplayName}/${pathString}`;
+    }
     return (
         <div className="group relative flex w-full flex-col overflow-x-clip rounded-lg border bg-card p-2 shadow">
             <BuildingImage building={building} />
@@ -249,15 +250,17 @@ export function BuildingCard({ building }: { building: BuildingData }) {
                 className="absolute right-2 top-2 transition-opacity duration-75 focus:opacity-100 group-hover:opacity-100 md:opacity-0"
                 building={building}
             />
-            <div className="relative flex grow flex-col">
-                <BuildingName building={building} />
+            <div className="relative flex h-20 grow flex-col">
+                <p className="mt-1 leading-none">
+                    <BuildingName building={building} />
+                </p>
                 <p className="text-xs capitalize text-muted-foreground">{pathString}</p>
                 <p className="min-h-6 text-xs text-muted-foreground">
                     {building.json.size === undefined ? (
                         <span>Unknown size</span>
                     ) : (
                         <span>
-                            {building.json.size[0]}x{building.json.size[1]}x{building.json.size[2]}
+                            Base:{building.json.size[0]}x{building.json.size[2]}, H: {building.json.size[1]}
                         </span>
                     )}
                 </p>

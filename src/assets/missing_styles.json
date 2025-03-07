@@ -7,20 +7,6 @@
     ]
   },
   {
-    "name": "Antique",
-    "displayName": "Antique",
-    "authors": [
-      "IchHabeHunger54"
-    ]
-  },
-  {
-    "name": "aquatica",
-    "displayName": "Aquatica",
-    "authors": [
-      "m00b13n"
-    ]
-  },
-  {
     "name": "birch",
     "displayName": "Urban Birch",
     "authors": [
@@ -37,54 +23,10 @@
     ]
   },
   {
-    "name": "corrupted",
-    "displayName": "Corrupted",
-    "authors": [
-      "jug1000"
-    ]
-  },
-  {
-    "name": "Crimson_Keep",
-    "displayName": "Crimson Keep",
-    "authors": [
-      "PrincessWendy, Dylbert93"
-    ]
-  },
-  {
-    "name": "fairytale",
-    "displayName": "FairyTale",
-    "authors": [
-      "Visteria_",
-      "Koala_Kat_"
-    ]
-  },
-  {
     "name": "fortress",
     "displayName": "Fortress",
     "authors": [
       "Aravan"
-    ]
-  },
-  {
-    "name": "frontier",
-    "displayName": "Frontier",
-    "authors": [
-      "m00b13n"
-    ]
-  },
-  {
-    "name": "Functional Fantasy",
-    "displayName": "Functional Fantasy",
-    "authors": [
-      "Anastasia590",
-      "DarkCold"
-    ]
-  },
-  {
-    "name": "High Magic",
-    "displayName": "High Magic",
-    "authors": [
-      "Five Tais, Private Panda"
     ]
   },
   {
@@ -146,18 +88,83 @@
     ]
   },
   {
+    "name": "warped",
+    "displayName": "Warped Netherlands",
+    "authors": [
+      "Cugo"
+    ]
+  },
+  {
+    "name": "Nile",
+    "displayName": "Nile",
+    "authors": [
+      "Spumantii"
+    ]
+  },
+  {
+    "name": "Antique",
+    "displayName": "Antique",
+    "authors": [
+      "IchHabeHunger54"
+    ]
+  },
+  {
+    "name": "aquatica",
+    "displayName": "Aquatica",
+    "authors": [
+      "m00b13n"
+    ]
+  },
+  {
+    "name": "corrupted",
+    "displayName": "Corrupted",
+    "authors": [
+      "jug1000"
+    ]
+  },
+  {
+    "name": "Crimson_Keep",
+    "displayName": "Crimson Keep",
+    "authors": [
+      "PrincessWendy, Dylbert93"
+    ]
+  },
+  {
+    "name": "fairytale",
+    "displayName": "FairyTale",
+    "authors": [
+      "Visteria_",
+      "Koala_Kat_"
+    ]
+  },
+  {
+    "name": "frontier",
+    "displayName": "Frontier",
+    "authors": [
+      "m00b13n"
+    ]
+  },
+  {
+    "name": "Functional Fantasy",
+    "displayName": "Functional Fantasy",
+    "authors": [
+      "Anastasia590",
+      "DarkCold"
+    ]
+  },
+  {
+    "name": "High Magic",
+    "displayName": "High Magic",
+    "authors": [
+      "Five Tais, Private Panda"
+    ]
+  },
+  {
     "name": "underwaterbase",
     "displayName": "Underwater Base",
     "authors": [
       "matlom",
       "McSassa"
-    ]
-  },
-  {
-    "name": "warped",
-    "displayName": "Warped Netherlands",
-    "authors": [
-      "Cugo"
     ]
   }
 ]

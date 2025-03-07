@@ -2,10 +2,11 @@ import { CheckboxButton } from "@/components/checkbox-button.tsx";
 import { SidebarGroupLabel, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar.tsx";
 import { toggleVariants } from "@/components/ui/toggle.tsx";
 import { useDelayedCaptureEvent } from "@/hooks/delayed-capture-event.ts";
-import { selectedCategoriesAtom, selectedThemesAtom } from "@/lib/state-atoms.ts";
+import { selectedCategoriesAtom, selectedThemesAtom, updateTabAtomSelections } from "@/lib/state-atoms.ts";
 import { StyleInfoJson } from "@/lib/theme-data.ts";
 import * as TogglePrimitive from "@radix-ui/react-toggle";
 import type { VariantProps } from "class-variance-authority";
+import { useSetAtom } from "jotai";
 import { useAtom } from "jotai/index";
 import * as React from "react";
 
@@ -25,6 +26,7 @@ function Selectable({ children, ...props }: SelectableProps) {
 }
 
 export function ThemeSelectable({ style }: { style: StyleInfoJson }) {
+    const updateTab = useSetAtom(updateTabAtomSelections);
     const { capture, cancel } = useDelayedCaptureEvent();
     const [selectedStyles, setSelectedStyles] = useAtom(selectedThemesAtom);
     const isSelected = selectedStyles.has(style.name);
@@ -39,6 +41,7 @@ export function ThemeSelectable({ style }: { style: StyleInfoJson }) {
                 capture(10_000, "view_style", { style: styleId });
                 newSelections.add(styleId);
             }
+            updateTab(newSelections);
             return newSelections;
         });
     }

@@ -1,6 +1,4 @@
-import { CheckboxButton } from "@/components/checkbox-button.tsx";
-import { ModeToggleDropdown } from "@/components/mode-toggle.tsx";
-import { Button } from "@/components/ui/button.tsx";
+import { InstantModeToggleButton, ModeToggleDropdown } from "@/components/mode-toggle.tsx";
 import { Separator } from "@/components/ui/separator";
 import {
     Sidebar,
@@ -10,48 +8,24 @@ import {
     SidebarGroupLabel,
     SidebarHeader,
     SidebarMenu,
-    SidebarMenuButton,
     SidebarMenuItem,
     SidebarTrigger,
 } from "@/components/ui/sidebar.tsx";
-import { favoritePaths, showFavoritesAtom } from "@/lib/state-atoms.ts";
 import { categoryNames, styleInfoMap } from "@/lib/theme-data.ts";
+import { FeedbackDialog } from "@/ui/feedback.tsx";
 import { ImageSizeSlider } from "@/ui/image-size-slider.tsx";
 import { SearchBar } from "@/ui/search-bar.tsx";
 import { CategorySelectable, ThemeSelectable } from "@/ui/selectable.tsx";
-import StyleVoting from "@/ui/style-voting.tsx";
-import { useAtom, useAtomValue } from "jotai";
-import { House } from "lucide-react";
-
-function ShowFavorites() {
-    const [showFavorites, toggleShowFavorites] = useAtom(showFavoritesAtom);
-    const favoriteCount = useAtomValue(favoritePaths).length;
-
-    return (
-        <CheckboxButton
-            className=""
-            aria-label="Favorites"
-            pressed={showFavorites}
-            onPressedChange={toggleShowFavorites}
-        >
-            <p className="mb-0.5">Show Favorites</p>
-            <p className="ml-auto text-gray-500">{favoriteCount}</p>
-        </CheckboxButton>
-    );
-}
+import StyleVoting from "@/ui/voting.tsx";
 
 export function FullSidebar() {
     return (
         <Sidebar>
-            <SidebarHeader>
+            <SidebarHeader className="sm:hidden">
                 <SidebarMenu>
-                    <SidebarMenuItem className="flex items-center">
-                        <SidebarMenuButton asChild>
-                            <Button variant="ghost" className="text-md w-full justify-start [&_svg]:size-5">
-                                <House className="mt-1" />
-                                Minecolonies Styles
-                            </Button>
-                        </SidebarMenuButton>
+                    <SidebarMenuItem className="flex items-center justify-between gap-4">
+                        <InstantModeToggleButton className="sm:invisible" />
+                        <FeedbackDialog className="sm:invisible" />
                         <SidebarTrigger />
                     </SidebarMenuItem>
                 </SidebarMenu>
@@ -61,23 +35,42 @@ export function FullSidebar() {
                     <SidebarGroupLabel>Search</SidebarGroupLabel>
                     <SearchBar />
                 </SidebarGroup>
-                <SidebarGroup>
+                <SidebarGroup className="pb-0">
                     <SidebarGroupLabel>Image columns</SidebarGroupLabel>
                     <ImageSizeSlider />
                 </SidebarGroup>
-                <SidebarGroup>
-                    <SidebarGroupLabel className="h-fit">Favorites</SidebarGroupLabel>
-                    <ShowFavorites />
-                </SidebarGroup>
                 <Separator />
                 <SidebarGroup>
-                    <SidebarGroupLabel>Style Selections</SidebarGroupLabel>
+                    <SidebarGroupLabel>Minecolonies</SidebarGroupLabel>
                     <SidebarMenu>
-                        {[...styleInfoMap.values()].map(style => (
-                            <ThemeSelectable style={style} key={style.name} />
-                        ))}
+                        {[...styleInfoMap.values()]
+                            .filter(style => style.type === "minecolonies")
+                            .map(style => (
+                                <ThemeSelectable style={style} key={style.name} />
+                            ))}
                     </SidebarMenu>
                 </SidebarGroup>
+                <SidebarGroup className="py-0">
+                    <SidebarGroupLabel>Stylecolonies</SidebarGroupLabel>
+                    <SidebarMenu>
+                        {[...styleInfoMap.values()]
+                            .filter(style => style.type === "stylecolonies")
+                            .map(style => (
+                                <ThemeSelectable style={style} key={style.name} />
+                            ))}
+                    </SidebarMenu>
+                </SidebarGroup>
+                <SidebarGroup className="pt-0">
+                    <SidebarGroupLabel>Other</SidebarGroupLabel>
+                    <SidebarMenu>
+                        {[...styleInfoMap.values()]
+                            .filter(style => style.type === "other")
+                            .map(style => (
+                                <ThemeSelectable style={style} key={style.name} />
+                            ))}
+                    </SidebarMenu>
+                </SidebarGroup>
+                <Separator />
                 <SidebarGroup>
                     <SidebarGroupLabel>Category Selections</SidebarGroupLabel>
                     <SidebarMenu className="grid grid-cols-2">

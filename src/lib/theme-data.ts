@@ -6,7 +6,7 @@ export type StyleInfoJson = {
     name: string;
     displayName: string;
     authors: string[];
-    categories: string[];
+    type: "minecolonies" | "stylecolonies" | "other";
     addedAt?: string;
 };
 export type MissingStyleInfoJson = Omit<StyleInfoJson, "categories" | "addedAt">;
@@ -124,16 +124,21 @@ function recurseCategories(
     return parent;
 }
 
-const rawBasicStyles = _styles as unknown as StyleInfoJson[];
+const rawBasicStyles = _styles as unknown as {
+    styles: StyleInfoJson[];
+    categories: string[];
+};
 const rawMissingStyles = _missing_styles as unknown as MissingStyleInfoJson[];
 
-export const categoryNames = new Set<string>(rawBasicStyles.flatMap(style => style.categories));
-export const styleInfoMap = new Map<string, StyleInfoJson>(rawBasicStyles.map(style => [style.name, style]));
+export const categoryNames = new Set<string>(rawBasicStyles.categories);
+export const styleInfoMap = new Map<string, StyleInfoJson>(
+    rawBasicStyles.styles.map(style => [style.name, style]),
+);
 export const missingStylesMap = new Map<string, MissingStyleInfoJson>(
     rawMissingStyles.map(style => [style.name, style]),
 );
 
-const themes = new Map<string, Theme>();
+export const styleFiles = new Map<string, Theme>();
 
 const urlPrefix = process.env.NODE_ENV === "production" ? "/minecolonies-style-explorer" : "";
 
@@ -152,13 +157,13 @@ async function downloadStyle(style: string): Promise<Theme> {
         themeObject.blueprints.set(name, building);
     }
     recurseCategories([style], themeJson.categories, themeObject.categories, 5, themeJson.displayName);
-    themes.set(style, themeObject);
+    styleFiles.set(style, themeObject);
     return themeObject;
 }
 
-export async function getStyle(style: string): Promise<Theme> {
-    if (!themes.has(style)) {
+export async function getStyleAsync(style: string): Promise<Theme> {
+    if (!styleFiles.has(style)) {
         await downloadStyle(style);
     }
-    return themes.get(style)!;
+    return styleFiles.get(style)!;
 }

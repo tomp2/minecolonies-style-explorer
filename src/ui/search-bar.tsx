@@ -1,13 +1,19 @@
 import { Input } from "@/components/ui/input.tsx";
 import { Label } from "@/components/ui/label.tsx";
 import { Switch } from "@/components/ui/switch.tsx";
-import { searchSelectedThemesOnlyAtom, searchTermAtom, writeSearchTermAtom } from "@/lib/state-atoms.ts";
+import {
+    searchSelectedThemesOnlyAtom,
+    searchTermAtom,
+    updateTabAtomSearchQuery,
+    writeSearchTermAtom,
+} from "@/lib/state-atoms.ts";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { Search, X } from "lucide-react";
 import { useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 
 export function SearchBar() {
+    const updateTab = useSetAtom(updateTabAtomSearchQuery);
     const [searchSelectedThemesOnly, setSearchSelectedThemesOnly] = useAtom(searchSelectedThemesOnlyAtom);
     const searchTerm = useAtomValue(searchTermAtom);
     const writeSearchTerm = useSetAtom(writeSearchTermAtom);
@@ -34,6 +40,7 @@ export function SearchBar() {
                         const value = e.target.value.slice(0, 30);
                         setInput(value);
                         debounced(value);
+                        updateTab(value);
                     }}
                 />
             </div>

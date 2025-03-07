@@ -1,7 +1,15 @@
-import { BuildingData, Category, categoryNames, getStyle, styleInfoMap, Theme } from "@/lib/theme-data.ts";
+import {
+    BuildingData,
+    Category,
+    categoryNames,
+    getStyleAsync,
+    styleFiles,
+    styleInfoMap,
+    Theme,
+} from "@/lib/theme-data.ts";
 import { buildingMatchesStringSearchTerm } from "@/lib/utils.ts";
 import { atom } from "jotai/index";
-import { atomWithStorage } from "jotai/utils";
+import { atomWithStorage, loadable } from "jotai/utils";
 
 /**
  * The query parameters stored in localStorage.
@@ -15,8 +23,8 @@ export const LOCALSTORAGE_QUERY_PARAMS = {
 };
 
 /**
- * The latest URL search parameters are stored in localStorage.
- * This is used to restore the selections when the page is reloaded if no search parameters are present.
+ * The latest URL search parameters are stored in localStorage. This is used to restore the
+ * selections when the page is reloaded and no relevant search parameters are present.
  */
 let initialUrlSearchParams = new URL(window.location.href).searchParams;
 const hasInitialUrlRelevantParams = [...initialUrlSearchParams.keys()].some(
@@ -25,6 +33,36 @@ const hasInitialUrlRelevantParams = [...initialUrlSearchParams.keys()].some(
 if (initialUrlSearchParams.size === 0 && !hasInitialUrlRelevantParams) {
     initialUrlSearchParams = new URLSearchParams(localStorage.getItem("lastUrlParams") || "");
 }
+
+/**
+ * The currently selected tab. Gets initialized to the "buildings" tab if the URL contains params that
+ * makes it relevant to show the buildings.
+ * */
+export const tabAtom = atom<"home" | "buildings" | "favorites" | string>(
+    hasInitialUrlRelevantParams ? "buildings" : "home",
+);
+export const updateTabAtomSelections = atom(null, (_get, set, selections: Set<string>) => {
+    const tab = _get(tabAtom);
+    const searchTerm = _get(searchTermAtom);
+    if (tab !== "favorites") {
+        if (selections.size > 0 || searchTerm) {
+            set(tabAtom, "buildings");
+        } else {
+            set(tabAtom, "home");
+        }
+    }
+});
+export const updateTabAtomSearchQuery = atom(null, (_get, set, searchTerm: string) => {
+    const tab = _get(tabAtom);
+    const selectedStyles = _get(selectedThemesAtom);
+    if (tab !== "favorites") {
+        if (selectedStyles.size > 0 || searchTerm) {
+            set(tabAtom, "buildings");
+        } else {
+            set(tabAtom, "home");
+        }
+    }
+});
 
 /** The currently expanded building, or null if none are expanded. */
 export const expandedBuildingAtom = atom<BuildingData | null>(null);
@@ -54,11 +92,6 @@ export const writeSearchTermAtom = atom(null, (_get, set, searchTerm: string) =>
     set(searchTermAtom, searchTerm);
 });
 
-/** Whether to show favorite buildings at the top of the page. */
-export const showFavoritesAtom = atomWithStorage<boolean>("showFavorites", true, undefined, {
-    getOnInit: true,
-});
-/** Locally stored paths of favorite buildings. */
 export const favoritePaths = atomWithStorage<string[]>("favorites", [], undefined, { getOnInit: true });
 export const favoritesPathsWriteAtom = atom(
     get => new Set(get(favoritePaths)),
@@ -77,30 +110,14 @@ export const favoritesPathsWriteAtom = atom(
     },
 );
 
-async function loadFavoriteBuilding(path: string) {
+export function parseFavoriteBuildingPath(path: string) {
     const pathParts = path.split(">");
-    const categories = pathParts.slice(1, -1);
-    const styleId = pathParts[0];
-    const buildingId = pathParts.at(-1)!;
-
-    let categoryLevel: Category = await getStyle(styleId);
-    for (const category of categories) {
-        categoryLevel = categoryLevel.categories.get(category)!;
-    }
-    return categoryLevel.blueprints.get(buildingId);
+    return {
+        categories: pathParts.slice(1, -1),
+        styleId: pathParts[0],
+        buildingId: pathParts.at(-1)!,
+    };
 }
-
-/** Atom which reads paths of favorite buildings and returns the actual building objects. */
-export const favoriteBuildingsAtom = atom(async (get): Promise<[BuildingData[], null] | [null, Error]> => {
-    const paths = get(favoritePaths);
-    try {
-        const buildings = await Promise.all(paths.map(element => loadFavoriteBuilding(element)));
-        return [buildings.filter((building): building is BuildingData => building !== undefined), null];
-    } catch (error) {
-        console.error("Failed to load favorite buildings", error);
-        return [null, error as Error];
-    }
-});
 
 /** Defines the separator used in the URL for selections. */
 const selectionUrlSeparator = "-";
@@ -127,15 +144,6 @@ function parseThemesFromUrlParams(urlSearchParams: URLSearchParams) {
 }
 
 /**
- * Encode the selected themes into the URL search parameters.
- * If all themes are selected, returns "all".
- */
-function encodeThemesToUrlParameter(selectedThemes: Set<string>) {
-    if (selectedThemes.size === styleInfoMap.size) return "all";
-    return encodeURIComponent([...selectedThemes].join(selectionUrlSeparator));
-}
-
-/**
  * Parse the selected categories from the URL search parameters.
  */
 function parseCategoriesFromUrlParams(urlSearchParams: URLSearchParams) {
@@ -152,6 +160,19 @@ function parseCategoriesFromUrlParams(urlSearchParams: URLSearchParams) {
         }
     }
     return selectedCategories;
+}
+
+const initialStyles = parseThemesFromUrlParams(initialUrlSearchParams);
+export const selectedThemesAtom = atom<Set<string>>(initialStyles);
+export const selectedCategoriesAtom = atom<Set<string>>(parseCategoriesFromUrlParams(initialUrlSearchParams));
+
+/**
+ * Encode the selected themes into the URL search parameters.
+ * If all themes are selected, returns "all".
+ */
+function encodeThemesToUrlParameter(selectedThemes: Set<string>) {
+    if (selectedThemes.size === styleInfoMap.size) return "all";
+    return encodeURIComponent([...selectedThemes].join(selectionUrlSeparator));
 }
 
 /**
@@ -186,8 +207,27 @@ function encodeSelectionsToUrl(selectedThemes: Set<string>, selectedCategories: 
     return url;
 }
 
-export const selectedThemesAtom = atom<Set<string>>(parseThemesFromUrlParams(initialUrlSearchParams));
-export const selectedCategoriesAtom = atom<Set<string>>(parseCategoriesFromUrlParams(initialUrlSearchParams));
+async function loadFavoriteBuilding(path: string) {
+    const parsed = parseFavoriteBuildingPath(path);
+
+    let categoryLevel: Category = await getStyleAsync(parsed.styleId);
+    for (const category of parsed.categories) {
+        categoryLevel = categoryLevel.categories.get(category)!;
+    }
+    return categoryLevel.blueprints.get(parsed.buildingId);
+}
+
+/** Atom which reads paths of favorite buildings and returns the actual building objects. */
+export const asyncFavoriteBuildingsAtom = atom(async (get): Promise<BuildingData[]> => {
+    const paths = get(favoritePaths);
+    const buildings = await Promise.all(paths.map(element => loadFavoriteBuilding(element)));
+    return buildings.filter((building): building is BuildingData => building !== undefined);
+});
+export const loadableFavoriteBuildingsAtom = loadable(asyncFavoriteBuildingsAtom);
+
+async function delay(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 /**
  * Iterates over all themes and categories to gather all buildings that match the search term
@@ -252,25 +292,38 @@ export const pageContentAtom = atom(
             }
         }
 
-        const stylesToDownload = new Set<string>();
+        const requiredStyles = new Set<string>();
         for (const theme of selectedThemes) {
-            stylesToDownload.add(theme);
+            requiredStyles.add(theme);
         }
         if (searchTerm && !searchSelectedThemesOnly) {
             for (const style of styleInfoMap.keys()) {
-                stylesToDownload.add(style);
+                requiredStyles.add(style);
             }
         }
 
-        let themes: Theme[];
-        try {
-            themes = await Promise.all([...stylesToDownload].map(theme => getStyle(theme)));
-        } catch (error) {
-            console.error("Failed to load themes", error);
-            return [null, error as Error];
+        const foundStyles: Theme[] = [];
+        const stylesToDownload = [];
+        for (const style of requiredStyles) {
+            const styleFile = styleFiles.get(style);
+            if (styleFile === undefined) {
+                stylesToDownload.push(style);
+            } else {
+                foundStyles.push(styleFile);
+            }
+        }
+        if (stylesToDownload.length > 0) {
+            try {
+                const results = await Promise.all([...requiredStyles].map(theme => getStyleAsync(theme)));
+                for (const result of results) {
+                    foundStyles.push(result);
+                }
+            } catch (error) {
+                return [null, error as Error];
+            }
         }
 
-        for (const themeData of themes) {
+        for (const themeData of foundStyles) {
             if (searchTerm) {
                 if (searchSelectedThemesOnly && !selectedThemes.has(themeData.name)) {
                     continue;
@@ -287,8 +340,8 @@ export const pageContentAtom = atom(
                 processBlueprints(category.blueprints.values());
                 processCategories(category.categories.values());
             }
+            await delay(0);
         }
-
         return [{ totalBuildingsFound, sections }, null];
     },
 );
