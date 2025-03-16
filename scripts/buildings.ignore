@@ -1,6 +1,9 @@
 # Medieval Oak
 medievaloak/infrastructure/mineshafts/.+
 medievaloak/education/universitylibrary
+medievaloak/military/altbarrackstower
+medievaloak/military/barrackstower
+medievaloak/education/archery
 
 # Caledonia
 caledonia/infrastructure/mineshafts/.+
@@ -10,6 +13,7 @@ caledonia/walls/.+_base
 # Nordic
 nordic/decorations/supplies/supply.+
 nordic/infrastructure/mineshafts/.+
+nordic/military/barrackstower
 
 # Dark Oak
 darkoak/decorations/supplies/supply.+
@@ -19,6 +23,8 @@ darkoak/infrastructure/mineshafts/.+
 medievalspruce/decorations/supplies/supply.+
 medievalspruce/education/universitylibrary
 medievalspruce/infrastructure/mineshafts/.+
+medievalspruce/military/altbarrackstower
+medievalspruce/military/barrackstower
 
 # Pagoda
 pagoda/decorations/decorative/kongming_(green|orange|red|white|yellow)
@@ -27,6 +33,7 @@ pagoda/infrastructure/mineshafts/.+
 
 # Stalactite Caves
 truedwarven/decorations/supplies/supply.+
+truedwarven/military/barrackstower
 
 # Minecolonies
 original/walls/basic.+
@@ -36,6 +43,8 @@ original/infrastructure/mineshafts/miner.+
 original/infrastructure/mics.+
 original.+markets/(bla|bro|[c-z]).+
 original/decorations/supplies/supply.+
+original/military/barrackstower
+original/craftsmanship/storage/deliverymanalt
 
 # Byzantine
 byzantine/agriculture/horticulture/(cornerdorm|farmroom|flowershop|flowershopMystical|plantroom)
@@ -61,8 +70,7 @@ byzantine/infrastructure/forum/plaza_end/(deliveryman|insulaeguard)
 byzantine/infrastructure/forum/plaza_mid/(deliveryman|insulaeguard)
 byzantine/infrastructure/forum/plaza_single/(deliveryman|insulaeguard)
 byzantine/infrastructure/mineshafts/.+
-# The normal barracks is ignored as "combined" type is added
-byzantine/military/barracks/(academy|alttower|gatetower|gatetower_m|tower|tower_m|archery|keepsmith|barracks)
+byzantine/military/barracks/(academy|alttower|gatetower|gatetower_m|tower|tower_m|archery|keepsmith)
 byzantine/military/siegeworks/(archery|insulaeguard)
 byzantine/military/stables/(deliveryman|insulaeguard|raycoms)
 byzantine/military/tower_big/footing_fill
@@ -71,6 +79,11 @@ byzantine/military/warship/insulaeguard
 byzantine/mystic/(ArenaAcademy|arenaacademy_m|hipstables|hiptoweracademy|nethermine|deliveryman|hiparchery|hipray|raycoms|insulaeguard)
 byzantine/walls/wall_main/(footing_fill|insulaeguard)
 byzantine/walls/wall_small/(footing_fill|insulaeguard)
+byzantine/fundamentals/church/graveyard
+byzantine/mystic/graveyard
+byzantine/craftsmanship/storage/deliveryman
+byzantine/craftsmanship/carpentry/deliveryman
+
 
 # Shogun
 shogun/infrastructure/retainingwall/wall/short/fillbrush
@@ -87,11 +100,102 @@ shogun/decorations/misc/lampstand_c
 shogun/decorations/misc/lampstand_chenoko
 shogun/decorations/supplies/hqcart
 shogun/fundamentals/resources/mediumquarry1
+shogun/agriculture/horticulture/dormi
+shogun/agriculture/horticulture/farmdorm
+shogun/agriculture/horticulture/rickshaw
+shogun/agriculture/horticulture/subapiary
+shogun/agriculture/horticulture/subfarm
+shogun/agriculture/horticulture/subflowers
+shogun/agriculture/husbandry/hamcart
+shogun/agriculture/husbandry/hamguard
+shogun/agriculture/husbandry/husdorm
+shogun/agriculture/husbandry/pigs
+shogun/agriculture/husbandry/sheep
+shogun/agriculture/husbandry/submorpheus
+shogun/craftsmanship/luxury/enchantdorm
+shogun/craftsmanship/luxury/enchantplant
+shogun/craftsmanship/luxury/subfletcher
+shogun/craftsmanship/luxury/subschool
+shogun/craftsmanship/masonry/masonguard
+shogun/craftsmanship/storage/stuffcart
+shogun/craftsmanship/storage/whousecart
+shogun/decorations/misc/sjinguard
+shogun/decorations/playerhouse/houseguard
+shogun/decorations/supplies/gokenin
+shogun/decorations/wonders/palaceacademy
+shogun/decorations/wonders/palacearchery
+shogun/decorations/wonders/palacebaker
+shogun/decorations/wonders/palacebarracks
+shogun/decorations/wonders/palacebartower
+shogun/decorations/wonders/palacecourier
+shogun/decorations/wonders/palacedoorguard
+shogun/decorations/wonders/palacekukuri
+shogun/decorations/wonders/palaceres
+shogun/education/uniacademy
+shogun/education/uniguard
+shogun/education/unilibrary
+shogun/education/unischool
+shogun/fundamentals/estates/baker
+shogun/fundamentals/estates/dyer
+shogun/fundamentals/estates/glass
+shogun/fundamentals/estates/guest
+shogun/fundamentals/hospital/hospitalguard
+shogun/fundamentals/house/dormi
+shogun/fundamentals/house/dormo
+shogun/fundamentals/house/houseguard
+shogun/fundamentals/machiya/end/dormi
+shogun/fundamentals/machiya/end/dormo
+shogun/fundamentals/machiya/end/dormu
+shogun/fundamentals/machiya/end/stuffcart
+shogun/fundamentals/machiya/main/dormi
+shogun/fundamentals/machiya/main/dormo
+shogun/fundamentals/machiya/main/dormu
+shogun/fundamentals/machiya/mid/cookery
+shogun/fundamentals/machiya/mid/dormi
+shogun/fundamentals/machiya/mid/dormo
+shogun/fundamentals/machiya/mid/dormu
+shogun/fundamentals/machiya/mid/fletcher
+shogun/fundamentals/machiya/mid/mechanic
+shogun/fundamentals/machiya/mid/sifter
+shogun/fundamentals/resources/forestersub
+shogun/fundamentals/resources/minecourier
+shogun/fundamentals/resources/mineguard
+shogun/fundamentals/resources/nethermine
+shogun/fundamentals/tavern/bouncer
+shogun/infrastructure/bridge/avenue/pier/pier_guard
+shogun/infrastructure/fields/farm/rickshaw
+shogun/military/castle/castleacademy
+shogun/military/castle/castlearchery
+shogun/military/castle/castlearchery_m
+shogun/military/castle/castledorm
+shogun/military/castle/castletower
+shogun/military/castle/towerguard
+shogun/military/ship/shipguard
+shogun/mystic/graveguard
+shogun/mystic/koyagraveyard
+shogun/mystic/koyakitchen
+shogun/mystic/smalldorm
+shogun/mystic/subalchemist
+shogun/mystic/subflowers
+shogun/mystic/subhospital
+shogun/mystic/subrickshaw
+shogun/mystic/subtopfloor
+shogun/walls/city_gate/gatepost
+shogun/walls/city_gate/paintower
+shogun/walls/city_walltower/bigtowertop
+shogun/walls/city_walltower/bigtowertopchild
+shogun/walls/city_walltower/towertop
+
 
 # ancientathens
 ancientathens/craftsmanship/storage/harborintegratedcourier
 ancientathens/infrastructure/mineshafts/.+
 ancientathens/decorations/supplies/supply.+
+ancientathens/military/barrackstowerleft
+ancientathens/military/barrackstowerlower
+ancientathens/military/barrackstowerright
+ancientathens/military/barrackstowerupper
+ancientathens/craftsmanship/storage/integratedcourier
 
 # steampunk
 steampunk/agriculture/fields/secguard
@@ -128,10 +232,21 @@ steampunk/infrastructure/mineshafts/minerx3topleft
 steampunk/infrastructure/mineshafts/minerx3topright
 steampunk/infrastructure/mineshafts/minerx4
 steampunk/military/barrackstower
+steampunk/fundamentals/spstonemason
+steampunk/military/spbarchery
+steampunk/military/spbcombat
+steampunk/military/spbcook
+steampunk/education/schoolalt
+steampunk/education/splibrary
+steampunk/education/spschool
+steampunk/craftsmanship/masonry/spstonemason
 
 # colonial
 colonial/decorations/supplies/supply.+
 colonial/infrastructure/mineshafts/.+
+colonial/craftsmanship/storage/courier
+colonial/education/unischool
+colonial/military/barrackstower
 
 # shire
 shire/craftsmanship/storage/warehousealt
@@ -139,3 +254,6 @@ shire/decorations/supplies/supply.+
 shire/infrastructure/mineshafts/miner.+
 shire/infrastructure/mineshafts/.+shaft.+
 shire/military/barrackstower
+shire/fundamentals/tavernrestaurant
+shire/craftsmanship/storage/warehousecourier
+shire/craftsmanship/storage/ccourier
