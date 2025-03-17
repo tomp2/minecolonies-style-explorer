@@ -13,10 +13,15 @@ import {
 } from "@/components/ui/sidebar.tsx";
 import { categoryNames, styleInfoMap } from "@/lib/theme-data.ts";
 import { FeedbackDialog } from "@/ui/feedback.tsx";
-import { ImageSizeSlider } from "@/ui/image-size-slider.tsx";
+import { ImageSizeSlider, sliderColumnsAtom } from "@/ui/image-size-slider.tsx";
 import { SearchBar } from "@/ui/search-bar.tsx";
 import { CategorySelectable, ThemeSelectable } from "@/ui/selectable.tsx";
 import StyleVoting from "@/ui/voting.tsx";
+import { useAtomValue } from "jotai";
+
+function ImageColumnsNumber() {
+    return useAtomValue(sliderColumnsAtom);
+}
 
 export function FullSidebar() {
     return (
@@ -36,7 +41,7 @@ export function FullSidebar() {
                     <SearchBar />
                 </SidebarGroup>
                 <SidebarGroup className="pb-0">
-                    <SidebarGroupLabel>Image columns</SidebarGroupLabel>
+                    <SidebarGroupLabel>Image columns: {ImageColumnsNumber()}</SidebarGroupLabel>
                     <ImageSizeSlider />
                 </SidebarGroup>
                 <Separator />
