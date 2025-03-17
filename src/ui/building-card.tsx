@@ -1,7 +1,12 @@
 import { Button } from "@/components/ui/button.tsx";
 import { useDelayedCaptureEvent } from "@/hooks/delayed-capture-event.ts";
 import { useCaptureEventOnce } from "@/hooks/use-capture-event-once.ts";
-import { expandedBuildingAtom, favoritesPathsWriteAtom, selectedThemesAtom } from "@/lib/state-atoms.ts";
+import {
+    expandedBuildingAtom,
+    favoritesPathsWriteAtom,
+    imageWidthAtom,
+    selectedThemesAtom,
+} from "@/lib/state-atoms.ts";
 import { BuildingData } from "@/lib/theme-data.ts";
 import { cn } from "@/lib/utils.ts";
 import { decode } from "blurhash";
@@ -25,7 +30,7 @@ interface BlurhashCanvasProps extends React.ComponentPropsWithoutRef<"canvas"> {
  * @param props
  * @constructor
  */
-function BlurhashCanvas({ hash, height, width, className, ...props }: BlurhashCanvasProps) {
+export function BlurhashCanvas({ hash, height, width, className, ...props }: BlurhashCanvasProps) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
     useEffect(() => {
@@ -78,6 +83,44 @@ interface ImageButtonProps extends React.ComponentPropsWithoutRef<"div"> {
     view: "front" | "back";
 }
 
+const buildingLargestImageSizeCache = new Map<string, number>();
+
+function formatSource(path: string, level: number | false, view: "front" | "back", resolution: number) {
+    const src = path + `/${level || ""}${view}.jpg`;
+    if (resolution === 700) {
+        return "minecolonies/" + src;
+    }
+    return `minecolonies${resolution}w/` + src;
+}
+
+function getSource(
+    building: BuildingData,
+    level: number | false,
+    view: "front" | "back",
+    elementResolution: number,
+) {
+    const resolutions = [700] as const;
+
+    const path = `${building.path.join("/")}/${building.name}`;
+
+    const cachedLargestImage = buildingLargestImageSizeCache.get(path);
+
+    if (cachedLargestImage && cachedLargestImage >= elementResolution) {
+        return formatSource(path, level, view, cachedLargestImage);
+    }
+
+    for (const imageResolution of resolutions) {
+        if (imageResolution >= elementResolution) {
+            buildingLargestImageSizeCache.set(path, imageResolution);
+            return formatSource(path, level, view, imageResolution);
+        }
+    }
+
+    const maxRes = resolutions.at(-1)!;
+    buildingLargestImageSizeCache.set(path, maxRes);
+    return formatSource(path, level, view, maxRes);
+}
+
 /**
  * A clickable image button that displays a building image with a blurhash overlay
  * for smooth loading.
@@ -87,36 +130,38 @@ interface ImageButtonProps extends React.ComponentPropsWithoutRef<"div"> {
  * @param props
  */
 function ImageButton({ building, view, className, ...props }: ImageButtonProps) {
+    const imageWidth = useAtomValue(imageWidthAtom);
+
     const [error, setError] = useState(false);
     const [isLoaded, setIsLoaded] = useState(false);
 
     const buildingName = building.displayName || building.name;
     const blurhash = building.json.blur[view === "front" ? 0 : 1];
-    const level = building.json.levels || "";
-    const imgSrc = ["minecolonies", ...building.path, building.name, `${level}${view}.jpg`].join("/");
+
+    const pixelDensity = window.devicePixelRatio || 1;
+
+    const src = getSource(building, building.json.levels, view, imageWidth * pixelDensity);
 
     return (
         <div className={cn("building inset-0 h-full w-full", className)} {...props}>
             {blurhash && (
                 <BlurhashCanvas className="absolute rounded-sm" hash={blurhash} width={25} height={25} />
             )}
-            {error ? (
+            {error && (
                 <div className="absolute flex h-full w-full items-center justify-center text-secondary">
                     Error loading {view} image
                 </div>
-            ) : (
-                <img
-                    loading="lazy"
-                    src={imgSrc}
-                    alt={`${buildingName} (${view})`}
-                    className={cn(
-                        "absolute size-full rounded-sm object-cover opacity-0 transition-opacity duration-100",
-                        isLoaded && "opacity-100",
-                    )}
-                    onError={() => setError(true)}
-                    onLoad={() => setIsLoaded(true)}
-                />
             )}
+            <img
+                src={src}
+                alt={`${buildingName} (${view})`}
+                className={cn(
+                    "absolute size-full rounded-sm object-cover opacity-0 transition-opacity duration-100",
+                    isLoaded && "opacity-100",
+                )}
+                onError={() => setError(true)}
+                onLoad={() => setIsLoaded(true)}
+            />
         </div>
     );
 }

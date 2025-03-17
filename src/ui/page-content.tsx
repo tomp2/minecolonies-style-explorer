@@ -1,11 +1,11 @@
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert.tsx";
-import { loadableFavoriteBuildingsAtom, pageContentAtom } from "@/lib/state-atoms.ts";
+import { imageWidthAtom, loadableFavoriteBuildingsAtom, pageContentAtom } from "@/lib/state-atoms.ts";
 import { type BuildingData } from "@/lib/theme-data.ts";
 import { cn } from "@/lib/utils.ts";
 import { BuildingCard } from "@/ui/building-card.tsx";
-import { readCssColumns, useContainerWidth } from "@/ui/image-size-slider.tsx";
+import { readCssColumns, sliderColumnsAtom, useContainerWidth } from "@/ui/image-size-slider.tsx";
 import { useVirtualizer } from "@tanstack/react-virtual";
-import { useAtomValue } from "jotai";
+import { useAtomValue, useSetAtom } from "jotai";
 import { AlertCircle, Link } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
@@ -127,6 +127,7 @@ export function FavoritesSection() {
 }
 
 function BuildingsContainer() {
+    const setImageWidthAtom = useSetAtom(imageWidthAtom);
     const containerWidth = useContainerWidth();
     const parentRef = useRef<HTMLDivElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
@@ -134,11 +135,12 @@ function BuildingsContainer() {
 
     const [content, contentError] = useAtomValue(pageContentAtom);
 
+    const columnCount = useAtomValue(sliderColumnsAtom);
+
     useEffect(() => {
         if (!containerRef.current) return;
 
         const containerWidth = containerRef.current.clientWidth;
-        const columnCount = readCssColumns();
         const cardBorder = 1;
         const containerPadding = 8;
         const cardGap = 8;
@@ -150,11 +152,12 @@ function BuildingsContainer() {
             (columnCount - 1) * cardGap -
             columnCount * cardPadding * 2 -
             columnCount * cardBorder * 2;
-        const imageWidth = widthForImages / columnCount;
-        cardHeight.current = imageWidth + cardPadding * 2 + cardDescriptionHeight + cardBorder * 2;
-    }, [containerWidth]);
+        const calculatedImageWidth = widthForImages / columnCount;
+        cardHeight.current = calculatedImageWidth + cardPadding * 2 + cardDescriptionHeight + cardBorder * 2;
+        setImageWidthAtom(calculatedImageWidth);
+    }, [containerWidth, columnCount]);
 
-    const sections = content ? [...content.sections.values()] : [];
+    const sections = content?.sections ?? [];
     const virtualizer = useVirtualizer({
         count: sections.length,
         getScrollElement: () => parentRef.current,

@@ -64,6 +64,8 @@ export const updateTabAtomSearchQuery = atom(null, (_get, set, searchTerm: strin
     }
 });
 
+export const imageWidthAtom = atom<number>(400);
+
 /** The currently expanded building, or null if none are expanded. */
 export const expandedBuildingAtom = atom<BuildingData | null>(null);
 
@@ -229,6 +231,16 @@ async function delay(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+const sectionSortOrder = [
+    "fundamentals",
+    "education",
+    "mystic",
+    "craftsmanship",
+    "agriculture",
+    "military",
+    "decoration",
+];
+
 /**
  * Iterates over all themes and categories to gather all buildings that match the search term
  * and/or are part of the selected themes and categories.
@@ -242,7 +254,7 @@ export const pageContentAtom = atom(
         | [
               {
                   totalBuildingsFound: number;
-                  sections: Map<string, { blueprints: BuildingData[]; title: string }>;
+                  sections: { blueprints: BuildingData[]; title: string }[];
               },
               null,
           ]
@@ -263,7 +275,7 @@ export const pageContentAtom = atom(
         const sections = new Map<string, Section>();
 
         if (selectedThemes.size === 0 && !searchTerm) {
-            return [{ totalBuildingsFound, sections }, null];
+            return [{ totalBuildingsFound, sections: [] }, null];
         }
 
         const isRegex = !/^[\d\sA-Za-zäåö]*$/.test(searchTerm);
@@ -342,6 +354,16 @@ export const pageContentAtom = atom(
             }
             await delay(0);
         }
-        return [{ totalBuildingsFound, sections }, null];
+
+        const sectionList = [...sections.values()].sort((a, b) => {
+            const aIndex = sectionSortOrder.indexOf(a.title.split(" > ")[0].toLowerCase());
+            const bIndex = sectionSortOrder.indexOf(b.title.split(" > ")[0].toLowerCase());
+            if (aIndex === bIndex) return a.title.localeCompare(b.title);
+            if (aIndex === -1) return 1;
+            if (bIndex === -1) return -1;
+            return aIndex - bIndex;
+        })
+
+        return [{ totalBuildingsFound, sections: sectionList }, null];
     },
 );
