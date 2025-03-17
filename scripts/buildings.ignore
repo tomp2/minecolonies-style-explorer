@@ -122,6 +122,7 @@ shogun/craftsmanship/storage/whousecart
 shogun/decorations/misc/sjinguard
 shogun/decorations/playerhouse/houseguard
 shogun/decorations/supplies/gokenin
+shogun/decorations/wonders/palacewarehouse
 shogun/decorations/wonders/palaceacademy
 shogun/decorations/wonders/palacearchery
 shogun/decorations/wonders/palacebaker
@@ -147,6 +148,7 @@ shogun/fundamentals/machiya/end/dormi
 shogun/fundamentals/machiya/end/dormo
 shogun/fundamentals/machiya/end/dormu
 shogun/fundamentals/machiya/end/stuffcart
+shogun/fundamentals/machiya/end/enchanter
 shogun/fundamentals/machiya/main/dormi
 shogun/fundamentals/machiya/main/dormo
 shogun/fundamentals/machiya/main/dormu
