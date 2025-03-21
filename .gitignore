@@ -26,3 +26,7 @@ dist-ssr
 
 # .png files in the ./public/minecolonies subdirectories
 /public/minecolonies/**/*.png
+blueprints
+*.zip
+*.png
+*.yaml
