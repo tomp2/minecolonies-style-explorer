@@ -6,7 +6,7 @@ import { BuildingCard } from "@/ui/building-card.tsx";
 import { readCssColumns, sliderColumnsAtom, useContainerWidth } from "@/ui/image-size-slider.tsx";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { useAtomValue, useSetAtom } from "jotai";
-import { AlertCircle, Link } from "lucide-react";
+import { AlertCircle } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 function sortBuildings(a: BuildingData, b: BuildingData) {
@@ -15,16 +15,18 @@ function sortBuildings(a: BuildingData, b: BuildingData) {
             return a.path[i].localeCompare(b.path[i]);
         }
     }
-    const aName = a.displayName || a.name.replace("alt", "");
-    const bName = b.displayName || b.name.replace("alt", "");
+    const aName = a.displayName || a.name.replace("alt", "") + "alt";
+    const bName = b.displayName || b.name.replace("alt", "") + "alt";
     return aName.localeCompare(bName);
 }
 
 function BuildingSection({
+    index,
     title,
     buildings,
     className,
 }: {
+    index: string;
     title: string;
     buildings: BuildingData[];
     className?: string;
@@ -32,34 +34,18 @@ function BuildingSection({
     if (buildings.length === 0) {
         return null;
     }
-
-    const sectionId = title.toLowerCase().replace(/[^\d>a-z]/g, "");
-
-    function copyLinkToSection() {
-        const url = new URL(window.location.href);
-        url.hash = sectionId;
-        const urlString = url.toString();
-        window.history.replaceState({}, "", urlString);
-        navigator.clipboard.writeText(urlString);
-    }
-
     return (
         <div className={cn("p-2", className)}>
             <div className="group flex items-center gap-2 pb-4 pl-2">
-                <h2 id={sectionId} className="text-2xl font-extrabold capitalize">
-                    {title}
-                </h2>
-                <button
-                    onClick={copyLinkToSection}
-                    className="-m-2 p-2 opacity-0 transition-opacity group-hover:opacity-100"
-                >
-                    <Link className="size-5 stroke-[3]" />
-                </button>
+                <h2 className="text-2xl font-extrabold capitalize">{title}</h2>
             </div>
 
             <div className="grid grid-cols-[repeat(var(--image-cols),_minmax(0,_1fr))] gap-2">
                 {buildings.sort(sortBuildings).map(building => (
-                    <BuildingCard key={building.path.join(",") + building.name} building={building} />
+                    <BuildingCard
+                        key={building.path.join(",") + building.name + title + index}
+                        building={building}
+                    />
                 ))}
             </div>
         </div>
@@ -213,6 +199,7 @@ function BuildingsContainer() {
                             ref={virtualizer.measureElement}
                         >
                             <BuildingSection
+                                index={virtualRow.key.toString()}
                                 title={sections[virtualRow.index].title}
                                 buildings={sections[virtualRow.index].blueprints}
                                 key={virtualRow.key + sections[virtualRow.index].title}

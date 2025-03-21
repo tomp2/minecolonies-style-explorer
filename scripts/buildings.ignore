@@ -18,6 +18,7 @@ nordic/military/barrackstower
 # Dark Oak
 darkoak/decorations/supplies/supply.+
 darkoak/infrastructure/mineshafts/.+
+darkoak/military/barrackstower
 
 # Medieval Spruce
 medievalspruce/decorations/supplies/supply.+
@@ -30,6 +31,7 @@ medievalspruce/military/barrackstower
 pagoda/decorations/decorative/kongming_(green|orange|red|white|yellow)
 pagoda/decorations/supplies/camp
 pagoda/infrastructure/mineshafts/.+
+pagoda/military/barrackstower
 
 # Stalactite Caves
 truedwarven/decorations/supplies/supply.+
@@ -40,6 +42,8 @@ original/walls/basic.+
 original/decorations/housing/playermansion_invisible
 original/infrastructure/misc.+
 original/infrastructure/mineshafts/miner.+
+original/infrastructure/mineshafts/mediumquarryshaft1
+original/infrastructure/mineshafts/simplequarryshaft1
 original/infrastructure/mics.+
 original.+markets/(bla|bro|[c-z]).+
 original/decorations/supplies/supply.+
@@ -47,7 +51,7 @@ original/military/barrackstower
 original/craftsmanship/storage/deliverymanalt
 
 # Byzantine
-byzantine/agriculture/horticulture/(cornerdorm|farmroom|flowershop|flowershopMystical|plantroom)
+byzantine/agriculture/horticulture/(cornerdorm|farmroom|flowershopMystical|plantroom)
 byzantine/agriculture/husbandry/(boatextra|deliveryman)
 byzantine/craftsmanship/luxury/deliveryman
 byzantine/craftsmanship/masonry/(basement|deliveryman|masonroom|subcrusher)
@@ -59,11 +63,12 @@ byzantine/decorations/wonders/palace(academy|archery|barracks|bartower|cart|comp
 byzantine/education/(basement|insulaeguard|UniversityLibrary|UniversitySchool)
 byzantine/fundamentals/church/(alchemist|alchemist_m|dorm|dorm_m|enchanter|library|school)
 byzantine/fundamentals/hospital/maindorm
+byzantine/fundamentals/hospital/hospitaldorm
 byzantine/fundamentals/insulae_corners/(cornercafe|cornerdorm|cornerschool|insulaeguard|maindorm|tinydorm)
 byzantine/fundamentals/insulae_ends/(enddorm|insulaeguard|maindorm)
 byzantine/fundamentals/insulae_middles/(deliveryman|hotpool|insulaeguard|maindorm|moobpool|tinydorm)
-byzantine/fundamentals/resources/(mediumquarry|mediumquarryshaft1)
-byzantine/fundamentals/resources/(simplequarry|simplequarryshaft1)
+byzantine/fundamentals/resources/mediumquarryshaft1
+byzantine/fundamentals/resources/simplequarryshaft1
 byzantine/fundamentals/town_hall/(insulaeguard|mechanic)
 byzantine/infrastructure/bridge/main/bridgeguard
 byzantine/infrastructure/forum/plaza_end/(deliveryman|insulaeguard)
@@ -93,7 +98,6 @@ shogun/infrastructure/harbor/pier/footingfill
 shogun/infrastructure/bridge/avenue/spruce/footingfill
 shogun/infrastructure/bridge/avenue/pier/footingfill
 shogun/fundamentals/resources/mediumquarryshaft
-shogun/fundamentals/resources/mediumquarry
 shogun/decorations/misc/lampstand_a
 shogun/decorations/misc/lampstand_b
 shogun/decorations/misc/lampstand_c

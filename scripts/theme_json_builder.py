@@ -14,6 +14,81 @@ from nbt.nbt import TAG_Compound
 
 from scripts.sitemap_gen import generate_sitemap
 
+import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+
+block_color_lookup = {
+    'minecraft:air': (0, 0, 0, 0),
+    'minecraft:stone_bricks': (0.5, 0.5, 0.5, 1),
+    'minecraft:gravel': (0.6, 0.6, 0.6, 1),
+    'minecraft:cobblestone': (0.4, 0.4, 0.4, 1),
+    'minecraft:stone_brick_wall': (0.5, 0.5, 0.5, 1),
+    'minecraft:lantern': (1, 0.7, 0.2, 1),
+    'minecraft:polished_andesite': (0.6, 0.6, 0.65, 1),
+    'minecraft:oak_stairs': (0.7, 0.5, 0.2, 1),
+    'minecraft:oak_fence': (0.7, 0.5, 0.2, 1),
+    'minecraft:oak_planks': (0.7, 0.5, 0.2, 1),
+    'minecraft:melon': (0.2, 0.8, 0.2, 1),
+    'minecraft:carved_pumpkin': (1, 0.5, 0, 1),
+    'minecraft:oak_slab': (0.7, 0.5, 0.2, 1),
+    'minecraft:flower_pot': (0.5, 0.3, 0.2, 1),
+    'minecraft:barrel': (0.6, 0.4, 0.2, 1),
+    'minecraft:oak_log': (0.4, 0.25, 0.1, 1),
+    'minecraft:cauldron': (0.2, 0.2, 0.25, 1),
+    'minecraft:glass_pane': (0.9, 0.9, 1, 0.3),
+    'minecraft:hay_block': (0.9, 0.9, 0.1, 1),
+    'minecraft:chain': (0.3, 0.3, 0.35, 1),
+    'minecraft:potted_oak_sapling': (0.1, 0.6, 0.1, 1),
+    'minecraft:crafting_table': (0.6, 0.4, 0.2, 1),
+    'minecraft:oak_leaves': (0.1, 0.7, 0.1, 1),
+    'structurize:blocksolidsubstitution': (0.0, 0.0, 0.0, 1),
+    'structurize:blocksubstitution': (0, 0, 0, 0),
+    'domum_ornamentum:brown_bricks': (0.5, 0.3, 0.2, 1),
+    'minecraft:ladder': (0.6, 0.4, 0.2, 1),
+    'minecraft:polished_granite': (0.6, 0.4, 0.4, 1),
+    'minecraft:stone': (0.5, 0.5, 0.5, 1),
+    'minecolonies:blockhutcitizen': (1, 0, 1, 0.7),
+}
+
+
+def visualize_minecraft_blocks(raw_data, palette):
+    fig = plt.figure(figsize=(10, 8))
+    ax = fig.add_subplot(111, projection='3d')
+
+    y_len, x_len, z_len = raw_data.shape
+
+    # Map block indices to colors
+    colors = {}
+    for idx, block_id in enumerate(palette):
+        colors[idx] = block_color_lookup.get(
+            block_id,
+            (1, 0, 0, 1)  # Default dark grey for unknown blocks
+        )
+        if block_id not in block_color_lookup:
+            print(f"Unknown block: {block_id}")
+
+    for z in range(z_len):
+        for y in range(y_len):
+            for x in range(x_len):
+                block = raw_data[y, x, z]
+                if palette[block] != 'minecraft:air':
+                    ax.bar3d(
+                        x, y, z,
+                        dx=1, dy=1, dz=1,
+                        color=colors[block],
+                        shade=True,
+                        edgecolor="k",
+                        linewidth=0.1,
+                    )
+
+    ax.set_xlabel('X')
+    ax.set_ylabel('Y')
+    ax.set_zlabel('Z')
+
+    plt.show()
+
+
 # --- Configuration ---
 REPO_DIR = Path(__file__).parent.parent
 BLUEPRINTS = REPO_DIR / "blueprints"
@@ -48,7 +123,7 @@ logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 
 # --- Prepared file contents ---
 COMBINED_BUILDINGS = json.loads(COMBINED_BUILDINGS_PATH.read_text())
-STYLE_INFO = {style["name"]: style for style in json.loads(STYLE_INFO_PATH.read_text())}
+STYLE_INFO = {style["name"]: style for style in json.loads(STYLE_INFO_PATH.read_text())["styles"]}
 ignored_pattern = re.compile(
     "|".join([f"^{line.strip()}$" for line in BUILDING_IGNORE.read_text().splitlines() if
               line.strip() and not line.startswith("#")]))
@@ -66,7 +141,7 @@ IGNORED_BLOCKS = {
     "minecraft:fern",
 }
 HUT_BLOCKS = {"field", "plantationfield", "alchemist", "kitchen", "graveyard", "netherworker", "archery", "baker",
-              "barracks", "barrackstower", "beekeeper", "blacksmith", "builder", "chickenherder", "citizen",
+              "barracks", "beekeeper", "blacksmith", "builder", "chickenherder", "citizen",
               "combatacademy", "composter", "concretemixer", "cook", "cowboy", "crusher", "deliveryman", "dyer",
               "enchanter", "farmer", "fisherman", "fletcher", "florist", "glassblower", "guardtower", "hospital",
               "library", "lumberjack", "mechanic", "miner", "plantation", "rabbithutch", "sawmill", "school",
@@ -108,6 +183,18 @@ type CategoriesRoot = TypedDict(
 class BlueprintFile:
     def __init__(self, file_path: Path):
         self.file_path = file_path
+
+    @lru_cache
+    def get_primary_offset(self):
+        data = self.read()
+        optional_data = data.get("optional_data")
+        structurize = optional_data.get("structurize")
+        primary_offset = structurize.get("primary_offset")
+        return {
+            "x": primary_offset.get("x").value,
+            "y": primary_offset.get("y").value,
+            "z": primary_offset.get("z").value
+        }
 
     @lru_cache
     def read(self):
@@ -169,6 +256,8 @@ class BlueprintFile:
         return self.name_and_level["buildingLevel"]
 
     def get_hut_blocks(self):
+        primary_offset = self.get_primary_offset()
+
         hut_blocks = set()
         for block in self.read().get("palette"):
             block_name = block.get("Name").value
@@ -176,7 +265,21 @@ class BlueprintFile:
                 short_name = block_name[len("minecolonies:blockhut"):]
                 if short_name in HUT_BLOCKS:
                     hut_blocks.add(short_name)
-        return hut_blocks
+
+        raw_data = self.get_raw_block_data()
+        hut_y = primary_offset["y"]
+        hut_x = primary_offset["x"]
+        hut_z = primary_offset["z"]
+        primary_hut = raw_data[hut_y, hut_z, hut_x]
+        material_palette = self.read().get("palette")
+        primary_hut_name = material_palette[primary_hut].get("Name").value
+
+        if primary_hut_name.startswith("minecolonies:blockhut"):
+            primary_hut_name = primary_hut_name[len("minecolonies:blockhut"):]
+            hut_blocks.discard(primary_hut_name)
+            return [primary_hut_name, *hut_blocks]
+
+        return list(hut_blocks)
 
     def get_raw_block_data(self):
         """
@@ -189,12 +292,14 @@ class BlueprintFile:
         # Split each 32-bit integer into two 16-bit values
         left_16_bits = (data >> 16) & 0xFFFF
         right_16_bits = data & 0xFFFF
-        # Combine the left and right
-        one_dim_array = np.concatenate((left_16_bits, right_16_bits))
+        # Interleave the left and right 16-bit values
+        one_dim_array = np.zeros(data.size * 2, dtype=np.uint16)
+        one_dim_array[0::2] = left_16_bits
+        one_dim_array[1::2] = right_16_bits
         # If the size of the building is odd, the last 16-bits are assumed to be padding
         if (self.size_x * self.size_y * self.size_z) % 2 != 0:
             one_dim_array = one_dim_array[:-1]
-        return one_dim_array.reshape((self.size_y, self.size_x, self.size_z))
+        return one_dim_array.reshape((self.size_y, self.size_z, self.size_x))
 
     def calculate_building_size(self):
         palette_indices = self.get_raw_block_data()
@@ -361,11 +466,11 @@ def add_combined_buildings(theme_id: str, categories_root: CategoriesRoot):
     for combined_building in COMBINED_BUILDINGS:
         name = combined_building["name"]
         path = combined_building["path"].split("/")
-        (theme_name, *category_path) = path
+        (theme_type, theme_name, *category_path) = path
         if not theme_name == theme_id:
             continue
 
-        theme_source_dir = BLUEPRINTS / theme_name
+        theme_source_dir = BLUEPRINTS / theme_type / theme_name
         if not theme_source_dir.exists():
             logging.warning(f"Theme directory not found: {theme_name}")
             continue
@@ -376,7 +481,7 @@ def add_combined_buildings(theme_id: str, categories_root: CategoriesRoot):
         for blueprint in combined_building["blueprints"]:
             blueprint_path = theme_source_dir.joinpath(*category_path).joinpath(blueprint)
             blueprint = BlueprintFile(blueprint_path)
-            combined_hut_blocks |= blueprint.get_hut_blocks()
+            combined_hut_blocks |= set(blueprint.get_hut_blocks())
             if not combined_level:
                 combined_level = blueprint.level
             elif blueprint.level:

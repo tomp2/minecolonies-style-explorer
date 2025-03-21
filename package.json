@@ -8,7 +8,8 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "check-types": "tsc --pretty --noEmit",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "optimize": "optimize-images -ca -fd -q 90 -mw 700 -mh 700"
   },
   "dependencies": {
     "@radix-ui/react-checkbox": "^1.1.2",
