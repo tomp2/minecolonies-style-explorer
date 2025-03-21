@@ -5,6 +5,22 @@ medievaloak/military/altbarrackstower
 medievaloak/military/barrackstower
 medievaloak/education/archery
 
+# Medieval Dark Oak
+medievaldarkoak/infrastructure/mineshafts/miner.+
+medievaldarkoak/education/universitylibrary
+medievaldarkoak/military/altbarrackstower
+medievaldarkoak/military/barrackstower
+medievaldarkoak/decorations/supplies/supply.+
+
+# Fortress
+fortress/infrastructure/mineshafts/miner.+
+fortress/infrastructure/mineshafts/mediumquarryshaft1
+fortress/infrastructure/mineshafts/simplequarryshaft1
+fortress/military/barrackstower
+fortress/military/altbarrackstower
+fortress/decorations/supplies/supply.+
+fortress/fundamentals/mineguard
+
 # Caledonia
 caledonia/infrastructure/mineshafts/.+
 caledonia/military/barrackstower

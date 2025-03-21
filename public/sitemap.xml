@@ -84,4 +84,16 @@
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
     </url>
+    <url>
+        <loc>https://tomp2.github.io/minecolonies-style-explorer/?theme=fortress</loc>
+        <lastmod>2025-03-21T16:17:18.187389</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://tomp2.github.io/minecolonies-style-explorer/?theme=medievaldarkoak</loc>
+        <lastmod>2025-03-21T16:21:37.253460</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
 </urlset>

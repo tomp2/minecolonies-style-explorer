@@ -50,6 +50,24 @@
       "type": "minecolonies"
     },
     {
+      "name": "fortress",
+      "displayName": "Fortress",
+      "authors": [
+        "Aravan"
+      ],
+      "type": "minecolonies",
+      "addedAt": "2025-03-21T16:00:00.000Z"
+    },
+    {
+      "name": "medievaldarkoak",
+      "displayName": "Medieval Dark Oak",
+      "authors": [
+        "Carlansor"
+      ],
+      "type": "minecolonies",
+      "addedAt": "2025-03-21T16:00:00.000Z"
+    },
+    {
       "name": "medievaloak",
       "displayName": "Medieval Oak",
       "authors": [
@@ -130,14 +148,14 @@
     }
   ],
   "categories": [
-    "education",
-    "agriculture",
     "military",
-    "walls",
-    "decorations",
     "craftsmanship",
+    "mystic",
     "fundamentals",
+    "decorations",
+    "education",
+    "walls",
     "infrastructure",
-    "mystic"
+    "agriculture"
   ]
 }

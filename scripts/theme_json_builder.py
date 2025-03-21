@@ -14,81 +14,6 @@ from nbt.nbt import TAG_Compound
 
 from scripts.sitemap_gen import generate_sitemap
 
-import numpy as np
-import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
-
-block_color_lookup = {
-    'minecraft:air': (0, 0, 0, 0),
-    'minecraft:stone_bricks': (0.5, 0.5, 0.5, 1),
-    'minecraft:gravel': (0.6, 0.6, 0.6, 1),
-    'minecraft:cobblestone': (0.4, 0.4, 0.4, 1),
-    'minecraft:stone_brick_wall': (0.5, 0.5, 0.5, 1),
-    'minecraft:lantern': (1, 0.7, 0.2, 1),
-    'minecraft:polished_andesite': (0.6, 0.6, 0.65, 1),
-    'minecraft:oak_stairs': (0.7, 0.5, 0.2, 1),
-    'minecraft:oak_fence': (0.7, 0.5, 0.2, 1),
-    'minecraft:oak_planks': (0.7, 0.5, 0.2, 1),
-    'minecraft:melon': (0.2, 0.8, 0.2, 1),
-    'minecraft:carved_pumpkin': (1, 0.5, 0, 1),
-    'minecraft:oak_slab': (0.7, 0.5, 0.2, 1),
-    'minecraft:flower_pot': (0.5, 0.3, 0.2, 1),
-    'minecraft:barrel': (0.6, 0.4, 0.2, 1),
-    'minecraft:oak_log': (0.4, 0.25, 0.1, 1),
-    'minecraft:cauldron': (0.2, 0.2, 0.25, 1),
-    'minecraft:glass_pane': (0.9, 0.9, 1, 0.3),
-    'minecraft:hay_block': (0.9, 0.9, 0.1, 1),
-    'minecraft:chain': (0.3, 0.3, 0.35, 1),
-    'minecraft:potted_oak_sapling': (0.1, 0.6, 0.1, 1),
-    'minecraft:crafting_table': (0.6, 0.4, 0.2, 1),
-    'minecraft:oak_leaves': (0.1, 0.7, 0.1, 1),
-    'structurize:blocksolidsubstitution': (0.0, 0.0, 0.0, 1),
-    'structurize:blocksubstitution': (0, 0, 0, 0),
-    'domum_ornamentum:brown_bricks': (0.5, 0.3, 0.2, 1),
-    'minecraft:ladder': (0.6, 0.4, 0.2, 1),
-    'minecraft:polished_granite': (0.6, 0.4, 0.4, 1),
-    'minecraft:stone': (0.5, 0.5, 0.5, 1),
-    'minecolonies:blockhutcitizen': (1, 0, 1, 0.7),
-}
-
-
-def visualize_minecraft_blocks(raw_data, palette):
-    fig = plt.figure(figsize=(10, 8))
-    ax = fig.add_subplot(111, projection='3d')
-
-    y_len, x_len, z_len = raw_data.shape
-
-    # Map block indices to colors
-    colors = {}
-    for idx, block_id in enumerate(palette):
-        colors[idx] = block_color_lookup.get(
-            block_id,
-            (1, 0, 0, 1)  # Default dark grey for unknown blocks
-        )
-        if block_id not in block_color_lookup:
-            print(f"Unknown block: {block_id}")
-
-    for z in range(z_len):
-        for y in range(y_len):
-            for x in range(x_len):
-                block = raw_data[y, x, z]
-                if palette[block] != 'minecraft:air':
-                    ax.bar3d(
-                        x, y, z,
-                        dx=1, dy=1, dz=1,
-                        color=colors[block],
-                        shade=True,
-                        edgecolor="k",
-                        linewidth=0.1,
-                    )
-
-    ax.set_xlabel('X')
-    ax.set_ylabel('Y')
-    ax.set_zlabel('Z')
-
-    plt.show()
-
-
 # --- Configuration ---
 REPO_DIR = Path(__file__).parent.parent
 BLUEPRINTS = REPO_DIR / "blueprints"
@@ -110,6 +35,8 @@ THEME_DIRS = [
     MINECOLONIES / "ancientathens",
     MINECOLONIES / "colonial",
     MINECOLONIES / "shire",
+    MINECOLONIES / "fortress",
+    MINECOLONIES / "medievaldarkoak",
     STYLECOLONIES / "steampunk",
     UNOFFICIAL / "byzantine",
     UNOFFICIAL / "shogun",

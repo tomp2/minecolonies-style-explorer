@@ -23,13 +23,6 @@
     ]
   },
   {
-    "name": "fortress",
-    "displayName": "Fortress",
-    "authors": [
-      "Aravan"
-    ]
-  },
-  {
     "name": "incan",
     "displayName": "Incan",
     "authors": [
@@ -58,13 +51,6 @@
   {
     "name": "medievalbirch",
     "displayName": "Medieval Birch",
-    "authors": [
-      "Carlansor"
-    ]
-  },
-  {
-    "name": "medievaldarkoak",
-    "displayName": "Medieval Dark Oak",
     "authors": [
       "Carlansor"
     ]

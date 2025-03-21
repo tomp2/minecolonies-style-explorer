@@ -10,5 +10,23 @@
     "displayName": "[Combined] University + Library",
     "path": "minecolonies/medievalspruce/education",
     "blueprints": ["university5.blueprint", "library5.blueprint"]
+  },
+  {
+    "name": "universityfull",
+    "displayName": "[Combined] University + Library",
+    "path": "minecolonies/medievaldarkoak/education",
+    "blueprints": ["university5.blueprint", "library5.blueprint"]
+  },
+  {
+    "name": "kelpfarmdual1",
+    "displayName": "kelpfarmdual1",
+    "path": "minecolonies/fortress/decorations/misc",
+    "blueprints": ["kelpfarmdual1.blueprint"]
+  },
+  {
+    "name": "kelpfarmdual2",
+    "displayName": "kelpfarmdual2",
+    "path": "minecolonies/fortress/decorations/misc",
+    "blueprints": ["kelpfarmdual2.blueprint"]
   }
 ]
