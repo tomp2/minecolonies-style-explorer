@@ -278,16 +278,9 @@ export const pageContentAtom = atom(
             return [{ totalBuildingsFound, sections: [] }, null];
         }
 
-        const isRegex = !/^[\d\sA-Za-zäåö]*$/.test(searchTerm);
-        const bakedSearchTerm = isRegex ? new RegExp(searchTerm, "i") : searchTerm;
-        const buildingMatchesSearchTerm =
-            bakedSearchTerm instanceof RegExp
-                ? (building: BuildingData) => bakedSearchTerm.test(building.searchString)
-                : (building: BuildingData) => buildingMatchesStringSearchTerm(searchTerm, building);
-
         function processBlueprints(blueprints: Iterable<BuildingData>) {
             for (const blueprint of blueprints) {
-                if (!buildingMatchesSearchTerm(blueprint)) continue;
+                if (!buildingMatchesStringSearchTerm(searchTerm, blueprint)) continue;
                 const path = blueprint.path.slice(1).join(" > ");
                 if (!sections.has(path)) {
                     sections.set(path, { blueprints: [], title: path });
@@ -362,7 +355,7 @@ export const pageContentAtom = atom(
             if (aIndex === -1) return 1;
             if (bIndex === -1) return -1;
             return aIndex - bIndex;
-        })
+        });
 
         return [{ totalBuildingsFound, sections: sectionList }, null];
     },
