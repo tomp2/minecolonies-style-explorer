@@ -215,7 +215,7 @@ function BuildingsContainer() {
                             <BuildingSection
                                 title={sections[virtualRow.index].title}
                                 buildings={sections[virtualRow.index].blueprints}
-                                key={sections[virtualRow.index].title}
+                                key={virtualRow.key + sections[virtualRow.index].title}
                             />
                         </div>
                     ))}
