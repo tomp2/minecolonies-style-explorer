@@ -21,12 +21,10 @@ function sortBuildings(a: BuildingData, b: BuildingData) {
 }
 
 function BuildingSection({
-    index,
     title,
     buildings,
     className,
 }: {
-    index: string;
     title: string;
     buildings: BuildingData[];
     className?: string;
@@ -34,6 +32,13 @@ function BuildingSection({
     if (buildings.length === 0) {
         return null;
     }
+
+    // Todo: figure out why there even is duplicate buildings!
+    const buildingsMap = new Map<string, BuildingData>();
+    for (const building of buildings.sort(sortBuildings)) {
+        buildingsMap.set(building.path.join(",") + building.name, building);
+    }
+
     return (
         <div className={cn("p-2", className)}>
             <div className="group flex items-center gap-2 pb-4 pl-2">
@@ -41,11 +46,8 @@ function BuildingSection({
             </div>
 
             <div className="grid grid-cols-[repeat(var(--image-cols),_minmax(0,_1fr))] gap-2">
-                {buildings.sort(sortBuildings).map(building => (
-                    <BuildingCard
-                        key={building.path.join(",") + building.name + title + index}
-                        building={building}
-                    />
+                {[...buildingsMap.entries()].map(([key, building]) => (
+                    <BuildingCard key={key} building={building} />
                 ))}
             </div>
         </div>
@@ -177,38 +179,50 @@ function BuildingsContainer() {
 
     const items = virtualizer.getVirtualItems();
     return (
-        <div
-            className="relative h-[calc(100vh-var(--h-navbar))] overflow-y-auto contain-strict"
-            ref={parentRef}
-        >
+        <>
             <div
-                className="relative mb-20 w-full"
-                style={{
-                    height: virtualizer.getTotalSize(),
-                }}
+                className="relative h-[calc(100vh-var(--h-navbar))] overflow-y-auto contain-strict"
+                ref={parentRef}
             >
                 <div
-                    className="absolute left-0 top-0 w-full"
-                    style={{ transform: `translateY(${items[0]?.start ?? 0}px)` }}
-                    ref={containerRef}
+                    className="relative mb-20 w-full"
+                    style={{
+                        height: virtualizer.getTotalSize(),
+                    }}
                 >
-                    {items.map(virtualRow => (
-                        <div
-                            key={virtualRow.key}
-                            data-index={virtualRow.index}
-                            ref={virtualizer.measureElement}
-                        >
-                            <BuildingSection
-                                index={virtualRow.key.toString()}
-                                title={sections[virtualRow.index].title}
-                                buildings={sections[virtualRow.index].blueprints}
-                                key={virtualRow.key + sections[virtualRow.index].title}
-                            />
-                        </div>
-                    ))}
+                    <div
+                        className="absolute left-0 top-0 w-full"
+                        style={{ transform: `translateY(${items[0]?.start ?? 0}px)` }}
+                        ref={containerRef}
+                    >
+                        {items.map(virtualRow => (
+                            <div
+                                key={virtualRow.key}
+                                data-index={virtualRow.index}
+                                ref={virtualizer.measureElement}
+                            >
+                                <BuildingSection
+                                    title={sections[virtualRow.index].title}
+                                    buildings={sections[virtualRow.index].blueprints}
+                                />
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </div>
-        </div>
+        </>
+        // <div>
+        //     {sections.map((section, i) => (
+        //         <div key={i} data-index={i} ref={virtualizer.measureElement}>
+        //             <BuildingSection
+        //                 index={section.title}
+        //                 title={section.title}
+        //                 buildings={section.blueprints}
+        //                 key={section.title}
+        //             />
+        //         </div>
+        //     ))}
+        // </div>
     );
 }
 
