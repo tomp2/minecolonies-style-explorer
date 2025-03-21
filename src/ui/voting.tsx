@@ -1,3 +1,5 @@
+import { Button } from "@/components/ui/button.tsx";
+import { Input } from "@/components/ui/input.tsx";
 import { SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar.tsx";
 import { Toggle } from "@/components/ui/toggle.tsx";
 import { useDelayedCaptureEvent } from "@/hooks/delayed-capture-event.ts";
@@ -5,7 +7,9 @@ import { MissingStyleInfoJson, missingStylesMap } from "@/lib/theme-data.ts";
 import { cn } from "@/lib/utils.ts";
 import { atom, useAtom } from "jotai";
 import { atomWithStorage } from "jotai/utils";
-import { Vote } from "lucide-react";
+import { SendHorizontal, Vote } from "lucide-react";
+import { usePostHog } from "posthog-js/react";
+import { useState } from "react";
 import { toast } from "sonner";
 
 const votesAtom = atom<string[]>([]);
@@ -66,12 +70,58 @@ function Style({ style }: { style: MissingStyleInfoJson }) {
     );
 }
 
+const customVotesAtom = atomWithStorage<string[]>("customVotes", []);
+
+export function CustomVote() {
+    const posthog = usePostHog();
+    const [customVotes, setCustomVotes] = useAtom(customVotesAtom);
+    const [value, setValue] = useState("");
+
+    const customVotesSet = new Set(customVotes);
+
+    function vote() {
+        if (value.length === 0) {
+            return;
+        }
+        if (customVotesSet.has(value)) {
+            toast.error("You have already voted for this style");
+            return;
+        }
+        setCustomVotes([...customVotes, value]);
+
+        posthog.capture("vote_style_custom", { style: value });
+
+        toast.success(`Voted for "${value}"`);
+    }
+
+    return (
+        <SidebarMenuItem className="relative flex">
+            <Input
+                placeholder="Custom vote"
+                className="h-8 shadow-none"
+                value={value}
+                onChange={e => setValue(e.target.value)}
+            ></Input>
+            <Button
+                variant="ghost"
+                size="icon"
+                className="absolute right-0 size-8 h-full w-10 hover:bg-transparent"
+                onClick={vote}
+                disabled={value.length === 0}
+            >
+                <SendHorizontal className="size-5" />
+            </Button>
+        </SidebarMenuItem>
+    );
+}
+
 export default function StyleVoting() {
     return (
         <>
             {[...missingStylesMap.values()].map(style => (
                 <Style style={style} key={style.name} />
             ))}
+            <CustomVote />
         </>
     );
 }
