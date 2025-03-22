@@ -90,15 +90,11 @@ function formatSource(path: string, view: "front" | "back", resolution: number) 
     if (resolution === 700) {
         return "minecolonies/" + src;
     }
-    return `minecolonies${resolution}w/` + src;
+    return `minecolonies${resolution}/` + src;
 }
 
-function getSource(
-    building: BuildingData,
-    view: "front" | "back",
-    elementResolution: number,
-) {
-    const resolutions = [700] as const;
+function getSource(building: BuildingData, view: "front" | "back", elementResolution: number) {
+    const resolutions = [300, 500, 700] as const;
 
     const path = `${building.path.join("/")}/${building.name}`;
 
@@ -107,7 +103,6 @@ function getSource(
     if (cachedLargestImage && cachedLargestImage >= elementResolution) {
         return formatSource(path, view, cachedLargestImage);
     }
-
     for (const imageResolution of resolutions) {
         if (imageResolution >= elementResolution) {
             buildingLargestImageSizeCache.set(path, imageResolution);
@@ -154,6 +149,7 @@ function ImageButton({ building, view, className, ...props }: ImageButtonProps) 
             <img
                 src={src}
                 alt={`${buildingName} (${view})`}
+                loading="lazy"
                 className={cn(
                     "absolute size-full rounded-sm object-cover opacity-0 transition-opacity duration-100",
                     isLoaded && "opacity-100",
