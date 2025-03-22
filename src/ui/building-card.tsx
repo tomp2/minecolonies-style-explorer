@@ -149,7 +149,7 @@ function ImageButton({ building, view, className, ...props }: ImageButtonProps) 
             <img
                 src={src}
                 alt={`${buildingName} (${view})`}
-                loading="lazy"
+                loading={view === "front" ? "eager" : "lazy"}
                 className={cn(
                     "absolute size-full rounded-sm object-cover opacity-0 transition-opacity duration-100",
                     isLoaded && "opacity-100",
