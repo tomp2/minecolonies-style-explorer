@@ -85,8 +85,8 @@ interface ImageButtonProps extends React.ComponentPropsWithoutRef<"div"> {
 
 const buildingLargestImageSizeCache = new Map<string, number>();
 
-function formatSource(path: string, level: number | false, view: "front" | "back", resolution: number) {
-    const src = path + `/${level || ""}${view}.jpg`;
+function formatSource(path: string, view: "front" | "back", resolution: number) {
+    const src = path + `/${view}.jpg`;
     if (resolution === 700) {
         return "minecolonies/" + src;
     }
@@ -95,7 +95,6 @@ function formatSource(path: string, level: number | false, view: "front" | "back
 
 function getSource(
     building: BuildingData,
-    level: number | false,
     view: "front" | "back",
     elementResolution: number,
 ) {
@@ -106,19 +105,19 @@ function getSource(
     const cachedLargestImage = buildingLargestImageSizeCache.get(path);
 
     if (cachedLargestImage && cachedLargestImage >= elementResolution) {
-        return formatSource(path, level, view, cachedLargestImage);
+        return formatSource(path, view, cachedLargestImage);
     }
 
     for (const imageResolution of resolutions) {
         if (imageResolution >= elementResolution) {
             buildingLargestImageSizeCache.set(path, imageResolution);
-            return formatSource(path, level, view, imageResolution);
+            return formatSource(path, view, imageResolution);
         }
     }
 
     const maxRes = resolutions.at(-1)!;
     buildingLargestImageSizeCache.set(path, maxRes);
-    return formatSource(path, level, view, maxRes);
+    return formatSource(path, view, maxRes);
 }
 
 /**
@@ -140,7 +139,7 @@ function ImageButton({ building, view, className, ...props }: ImageButtonProps) 
 
     const pixelDensity = window.devicePixelRatio || 1;
 
-    const src = getSource(building, building.json.levels, view, imageWidth * pixelDensity);
+    const src = getSource(building, view, imageWidth * pixelDensity);
 
     return (
         <div className={cn("building inset-0 h-full w-full", className)} {...props}>

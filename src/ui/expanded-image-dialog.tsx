@@ -30,8 +30,7 @@ function BuildingImage({
     const [error, setError] = useState(false);
     const [isLoaded, setIsLoaded] = useState(false);
 
-    const level = building.json.levels || "";
-    const imgSrc = ["minecolonies", ...building.path, building.name, `${level}${view}.jpg`].join("/");
+    const imgSrc = ["minecolonies", ...building.path, building.name, `${view}.jpg`].join("/");
 
     const blurhash = building.json.blur[0];
 

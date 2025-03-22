@@ -12,9 +12,6 @@ export type StyleInfoJson = {
 export type MissingStyleInfoJson = Omit<StyleInfoJson, "categories" | "addedAt">;
 
 type BuildingDataJson = {
-    // The building level, or false if the building doesn't have levels.
-    // Currently used in the image path.
-    levels: number | false;
     // The minecolonies hut blocks used in the building.
     hutBlocks?: string[];
     // Does the building have an image for the back?

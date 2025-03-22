@@ -4,7 +4,7 @@ import re
 from concurrent.futures.process import ProcessPoolExecutor
 from functools import cached_property, lru_cache
 from pathlib import Path
-from typing import Optional, TypedDict, Literal
+from typing import TypedDict, Literal
 
 import numpy as np
 from PIL import Image
@@ -38,6 +38,8 @@ THEME_DIRS = [
     MINECOLONIES / "fortress",
     MINECOLONIES / "medievaldarkoak",
     STYLECOLONIES / "steampunk",
+    STYLECOLONIES / "High Magic",
+    STYLECOLONIES / "fairytale",
     UNOFFICIAL / "byzantine",
     UNOFFICIAL / "shogun",
 ]
@@ -77,7 +79,6 @@ HUT_BLOCKS = {"field", "plantationfield", "alchemist", "kitchen", "graveyard", "
 
 # --- Types ---
 type BuildingObject = TypedDict("BuildingObject", {
-    "levels": int | Literal[False],
     "size": tuple[int, int, int],
     "back": bool | None,
     "hutBlocks": list[str] | None,
@@ -256,15 +257,14 @@ class BlueprintFile:
 def find_building_image(
         blueprint_path: Path,
         building_name: str,
-        building_level: Optional[int],
         theme_images_dir: Path,
         theme_path: Path
 ) -> TypedDict("BuildingImages", {"front": Path, "frontExists": bool, "back": Path, "backExists": bool}):
     blueprint_rel_path = blueprint_path.relative_to(theme_path)
-    image_dir = theme_images_dir / blueprint_rel_path.parent / building_name
+    image_dir = theme_images_dir / blueprint_rel_path.parent / building_name.strip()
 
-    front = image_dir / (f"{building_level}front.jpg" if building_level else "front.jpg")
-    back = image_dir / (f"{building_level}back.jpg" if building_level else "back.jpg")
+    front = image_dir / "front.jpg"
+    back = image_dir / "back.jpg"
 
     return {
         "front": front,
@@ -309,7 +309,6 @@ def process_building(
     building_images = find_building_image(
         file_path,
         blueprint.name,
-        blueprint.level,
         theme_images_dir,
         theme_path
     )
@@ -319,7 +318,7 @@ def process_building(
             f"Required front image not found: {building_images['front'].relative_to(theme_images_dir.parent)}")
         return
     building_obj: BuildingObject = parent_category_object.setdefault(
-        blueprint.name, {"levels": blueprint.level, "size": blueprint.calculate_building_size()}
+        blueprint.name, {"size": blueprint.calculate_building_size()}
     )
 
     blur_hashes = [encode_image_to_blurhash(building_images["front"])]
@@ -332,14 +331,6 @@ def process_building(
         building_obj["hutBlocks"] = list(hut_blocks)
 
     building_obj["blur"] = blur_hashes
-
-    if building_obj["levels"] is False and blueprint.level is not False:
-        raise ValueError(
-            "Existing building object has levels=False, but a leveled version was found."
-        )
-
-    if building_obj["levels"] is not False and blueprint.level is not False:
-        building_obj["levels"] = max(building_obj["levels"], blueprint.level)
 
 
 def handle_file(
@@ -403,16 +394,11 @@ def add_combined_buildings(theme_id: str, categories_root: CategoriesRoot):
             continue
 
         combined_hut_blocks = set()
-        combined_level = False
         building_size = None
         for blueprint in combined_building["blueprints"]:
             blueprint_path = theme_source_dir.joinpath(*category_path).joinpath(blueprint)
             blueprint = BlueprintFile(blueprint_path)
             combined_hut_blocks |= set(blueprint.get_hut_blocks())
-            if not combined_level:
-                combined_level = blueprint.level
-            elif blueprint.level:
-                combined_level = max(combined_level, blueprint.level)
 
             if not building_size:
                 building_size = blueprint.calculate_building_size()
@@ -424,7 +410,6 @@ def add_combined_buildings(theme_id: str, categories_root: CategoriesRoot):
                     building_size = current_size
 
         building_object = {
-            "levels": combined_level,
             "displayName": combined_building["displayName"],
             "size": building_size
         }
@@ -433,8 +418,8 @@ def add_combined_buildings(theme_id: str, categories_root: CategoriesRoot):
             building_object["hutBlocks"] = list(combined_hut_blocks)
 
         combined_images_dir = IMAGES_ROOT / theme_name / "/".join(category_path) / name
-        front = combined_images_dir / (f"{combined_level}front.jpg" if combined_level else "front.jpg")
-        back = combined_images_dir / (f"{combined_level}back.jpg" if combined_level else "back.jpg")
+        front = combined_images_dir / "front.jpg"
+        back = combined_images_dir / "back.jpg"
 
         frontExists = front.exists()
         backExists = back.exists()
