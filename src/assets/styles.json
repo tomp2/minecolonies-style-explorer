@@ -167,14 +167,14 @@
     }
   ],
   "categories": [
-    "education",
-    "walls",
-    "military",
-    "craftsmanship",
-    "mystic",
-    "decorations",
-    "infrastructure",
     "agriculture",
-    "fundamentals"
+    "craftsmanship",
+    "decorations",
+    "education",
+    "fundamentals",
+    "infrastructure",
+    "military",
+    "mystic",
+    "walls"
   ]
 }

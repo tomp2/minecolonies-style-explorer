@@ -1,18 +1,16 @@
 [
   {
-    "name": "acacia",
-    "displayName": "Urban Savanna",
+    "name": "Antique",
+    "displayName": "Antique",
     "authors": [
-      "John Reiher"
+      "IchHabeHunger54"
     ]
   },
   {
-    "name": "birch",
-    "displayName": "Urban Birch",
+    "name": "aquatica",
+    "displayName": "Aquatica",
     "authors": [
-      "Raycoms",
-      "Aravan",
-      "Cugo"
+      "m00b13n"
     ]
   },
   {
@@ -20,6 +18,46 @@
     "displayName": "Cavern",
     "authors": [
       "LadyShatana"
+    ]
+  },
+  {
+    "name": "corrupted",
+    "displayName": "Corrupted",
+    "authors": [
+      "jug1000"
+    ]
+  },
+  {
+    "name": "Crimson_Keep",
+    "displayName": "Crimson Keep",
+    "authors": [
+      "PrincessWendy, Dylbert93"
+    ]
+  },
+  {
+    "name": "sandstone",
+    "displayName": "Desert Oasis",
+    "authors": [
+      "Raycoms",
+      "John Reiher",
+      "SomeAddons",
+      "AravanFox",
+      "Moobien"
+    ]
+  },
+  {
+    "name": "frontier",
+    "displayName": "Frontier",
+    "authors": [
+      "m00b13n"
+    ]
+  },
+  {
+    "name": "Functional Fantasy",
+    "displayName": "Functional Fantasy",
+    "authors": [
+      "Anastasia590",
+      "DarkCold"
     ]
   },
   {
@@ -56,14 +94,10 @@
     ]
   },
   {
-    "name": "sandstone",
-    "displayName": "Desert Oasis",
+    "name": "Nile",
+    "displayName": "Nile",
     "authors": [
-      "Raycoms",
-      "John Reiher",
-      "SomeAddons",
-      "AravanFox",
-      "Moobien"
+      "Spumantii"
     ]
   },
   {
@@ -74,75 +108,34 @@
     ]
   },
   {
-    "name": "warped",
-    "displayName": "Warped Netherlands",
-    "authors": [
-      "Cugo"
-    ]
-  },
-  {
-    "name": "Nile",
-    "displayName": "Nile",
-    "authors": [
-      "Spumantii"
-    ]
-  },
-  {
-    "name": "Shogun",
-    "displayName": "Shogun",
-    "authors": [
-      "Spumantii"
-    ]
-  },
-  {
-    "name": "Antique",
-    "displayName": "Antique",
-    "authors": [
-      "IchHabeHunger54"
-    ]
-  },
-  {
-    "name": "aquatica",
-    "displayName": "Aquatica",
-    "authors": [
-      "m00b13n"
-    ]
-  },
-  {
-    "name": "corrupted",
-    "displayName": "Corrupted",
-    "authors": [
-      "jug1000"
-    ]
-  },
-  {
-    "name": "Crimson_Keep",
-    "displayName": "Crimson Keep",
-    "authors": [
-      "PrincessWendy, Dylbert93"
-    ]
-  },
-  {
-    "name": "frontier",
-    "displayName": "Frontier",
-    "authors": [
-      "m00b13n"
-    ]
-  },
-  {
-    "name": "Functional Fantasy",
-    "displayName": "Functional Fantasy",
-    "authors": [
-      "Anastasia590",
-      "DarkCold"
-    ]
-  },
-  {
     "name": "underwaterbase",
     "displayName": "Underwater Base",
     "authors": [
       "matlom",
       "McSassa"
+    ]
+  },
+  {
+    "name": "birch",
+    "displayName": "Urban Birch",
+    "authors": [
+      "Raycoms",
+      "Aravan",
+      "Cugo"
+    ]
+  },
+  {
+    "name": "acacia",
+    "displayName": "Urban Savanna",
+    "authors": [
+      "John Reiher"
+    ]
+  },
+  {
+    "name": "warped",
+    "displayName": "Warped Netherlands",
+    "authors": [
+      "Cugo"
     ]
   }
 ]

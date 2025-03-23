@@ -515,12 +515,14 @@ def main():
     styles.sort(key=lambda x: x["displayName"])
     output = {
         "styles": styles,
-        "categories": list(categories)
+        "categories": list(sorted(categories))
     }
     STYLE_INFO_PATH.write_text(json.dumps(output, indent=2))
 
     logging.info("Listing missing styles for voting...")
     found_style_ids = {style["name"] for style in styles}
+    found_style_ids.update({style["displayName"] for style in styles})
+
     missing_styles_ids = []
     for style_type in BLUEPRINTS.iterdir():
         for style_dir in style_type.iterdir():
@@ -542,10 +544,11 @@ def main():
             "displayName": style_meta["name"],
             "authors": style_meta["authors"],
         })
+    missing_styles.sort(key=lambda x: x["displayName"])
     MISSING_STYLE_INFO_PATH.write_text(json.dumps(missing_styles, indent=2))
 
     logging.info("Generating sitemap...")
-    generate_sitemap(found_style_ids)
+    generate_sitemap({style["name"] for style in styles})
 
     logging.info("Done!")
 
