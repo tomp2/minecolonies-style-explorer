@@ -4,6 +4,7 @@ import { type BuildingData } from "@/lib/theme-data.ts";
 import { cn } from "@/lib/utils.ts";
 import { BuildingCard } from "@/ui/building-card.tsx";
 import { readCssColumns, sliderColumnsAtom, useContainerWidth } from "@/ui/image-size-slider.tsx";
+import * as Sentry from "@sentry/react";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { useAtomValue, useSetAtom } from "jotai";
 import { AlertCircle } from "lucide-react";
@@ -164,6 +165,7 @@ function BuildingsContainer() {
     });
 
     if (contentError) {
+        Sentry.captureException(contentError);
         return (
             <Alert variant="destructive" className="mx-auto mt-10 w-fit bg-card shadow-lg">
                 <AlertCircle className="h-4 w-4" />
@@ -211,24 +213,13 @@ function BuildingsContainer() {
                 </div>
             </div>
         </>
-        // <div>
-        //     {sections.map((section, i) => (
-        //         <div key={i} data-index={i} ref={virtualizer.measureElement}>
-        //             <BuildingSection
-        //                 index={section.title}
-        //                 title={section.title}
-        //                 buildings={section.blueprints}
-        //                 key={section.title}
-        //             />
-        //         </div>
-        //     ))}
-        // </div>
     );
 }
 
 export function PageContent() {
     const [content, error] = useAtomValue(pageContentAtom);
     if (error) {
+        Sentry.captureException(error);
         return (
             <div className="flex h-full grow flex-col justify-between">
                 <Alert variant="destructive" className="mx-auto mt-10 w-fit bg-card shadow-lg">

@@ -49,6 +49,7 @@ jobs:
         env:
           VITE_REACT_APP_PUBLIC_POSTHOG_KEY: ${{ vars.REACT_APP_PUBLIC_POSTHOG_KEY }}
           VITE_REACT_APP_PUBLIC_POSTHOG_HOST: ${{ vars.REACT_APP_PUBLIC_POSTHOG_HOST }}
+          SENTRY_AUTH_TOKEN: ${{ vars.SENTRY_AUTH_TOKEN }}
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Upload artifact

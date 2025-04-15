@@ -1,9 +1,13 @@
+import { sentryVitePlugin } from "@sentry/vite-plugin";
 import react from "@vitejs/plugin-react";
 import path from "node:path";
 import { defineConfig } from "vite";
 
 export default defineConfig({
-    plugins: [react()],
+    plugins: [react(), sentryVitePlugin({
+        org: "tomp2",
+        project: "minecolonies-building-explorer"
+    })],
     base: process.env.NODE_ENV === "production" ? "/minecolonies-style-explorer/" : "/",
     build: {
         sourcemap: true,

@@ -30,3 +30,6 @@ blueprints
 *.zip
 *.png
 *.yaml
+
+# Sentry Config File
+.env.sentry-build-plugin

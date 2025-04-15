@@ -1,4 +1,4 @@
-import { CustomErrorBoundary } from "@/components/error-boundary.tsx";
+import ErrorBoundary from "@/components/error-boundary";
 import { Tabs, TabsContent } from "@/components/ui/tabs.tsx";
 import { tabAtom } from "@/lib/state-atoms.ts";
 import { Footer } from "@/ui/footer.tsx";
@@ -24,20 +24,25 @@ export function AppTabs() {
     return (
         <Tabs value={value} onValueChange={setValue} className="flex grow flex-col">
             <Header />
-            <CustomErrorBoundary>
-                <TabsContent value="home" className="grow">
+
+            <TabsContent value="home" className="grow">
+                <ErrorBoundary>
                     <HomeArticle />
-                </TabsContent>
-                <TabsContent value="buildings" className="mt-0 grow">
+                </ErrorBoundary>
+            </TabsContent>
+            <TabsContent value="buildings" className="mt-0 grow">
+                <ErrorBoundary>
                     <Suspense fallback={<Loading />}>
                         <PageContent />
                     </Suspense>
-                </TabsContent>
-                <TabsContent value="favorites" className="grow">
+                </ErrorBoundary>
+            </TabsContent>
+            <TabsContent value="favorites" className="grow">
+                <ErrorBoundary>
                     <FavoritesSection />
-                </TabsContent>
-                {value === "home" && <Footer />}
-            </CustomErrorBoundary>
+                </ErrorBoundary>
+            </TabsContent>
+            {value === "home" && <Footer />}
         </Tabs>
     );
 }

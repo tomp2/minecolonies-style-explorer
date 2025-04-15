@@ -1,26 +1,10 @@
-import posthog from "posthog-js";
-import * as React from "react";
+import * as Sentry from "@sentry/react";
 
-export class CustomErrorBoundary extends React.Component<React.ComponentPropsWithoutRef<"div">> {
-    state: { hasError: boolean };
-
-    constructor(props: { children: React.ReactNode }) {
-        super(props);
-        this.state = { hasError: false };
-    }
-
-    static getDerivedStateFromError() {
-        return { hasError: true };
-    }
-
-    componentDidCatch(error: Error) {
-        posthog.captureException(error);
-    }
-
-    render() {
-        if (this.state.hasError) {
-            return (
-                <div>
+export default function ErrorBoundary({ children, ...props }: React.ComponentPropsWithoutRef<"div">) {
+    return (
+        <Sentry.ErrorBoundary
+            fallback={
+                <div className="flex size-full items-center justify-center" {...props}>
                     <div className="mx-auto flex max-w-screen-sm flex-col items-center justify-center gap-4 p-4">
                         <h1 className="text-2xl font-bold text-red-500">Something went wrong.</h1>
                         <p className="text-sm text-muted-foreground">Please try refreshing the page.</p>
@@ -29,9 +13,9 @@ export class CustomErrorBoundary extends React.Component<React.ComponentPropsWit
                         </p>
                     </div>
                 </div>
-            );
-        }
-
-        return this.props.children;
-    }
+            }
+        >
+            {children}
+        </Sentry.ErrorBoundary>
+    );
 }
