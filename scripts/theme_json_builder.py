@@ -40,6 +40,7 @@ THEME_DIRS = [
     STYLECOLONIES / "steampunk",
     STYLECOLONIES / "highmagic",
     STYLECOLONIES / "fairytale",
+    STYLECOLONIES / "functionalfantasy",
     UNOFFICIAL / "byzantine",
     UNOFFICIAL / "shogun",
 ]

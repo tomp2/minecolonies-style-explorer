@@ -53,14 +53,6 @@
     ]
   },
   {
-    "name": "functionalfantasy",
-    "displayName": "Functional Fantasy",
-    "authors": [
-      "Anastasia590",
-      "DarkCold"
-    ]
-  },
-  {
     "name": "incan",
     "displayName": "Incan",
     "authors": [
@@ -75,6 +67,13 @@
     "authors": [
       "John Reiher",
       "assisted by Raycoms & Pixblockus"
+    ]
+  },
+  {
+    "name": "littleton",
+    "displayName": "Littleton",
+    "authors": [
+      "Thaylar"
     ]
   },
   {
