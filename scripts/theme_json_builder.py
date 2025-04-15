@@ -38,7 +38,7 @@ THEME_DIRS = [
     MINECOLONIES / "fortress",
     MINECOLONIES / "medievaldarkoak",
     STYLECOLONIES / "steampunk",
-    STYLECOLONIES / "High Magic",
+    STYLECOLONIES / "highmagic",
     STYLECOLONIES / "fairytale",
     UNOFFICIAL / "byzantine",
     UNOFFICIAL / "shogun",
@@ -318,7 +318,7 @@ def process_building(
             f"Required front image not found: {building_images['front'].relative_to(theme_images_dir.parent)}")
         return
     building_obj: BuildingObject = parent_category_object.setdefault(
-        blueprint.name, {"size": blueprint.calculate_building_size()}
+        blueprint.name.strip(), {"size": blueprint.calculate_building_size()}
     )
 
     blur_hashes = [encode_image_to_blurhash(building_images["front"])]

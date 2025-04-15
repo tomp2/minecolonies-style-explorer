@@ -16,9 +16,9 @@ medievaldarkoak/decorations/supplies/supply.+
 fairytale/infrastructure/mineshafts/miner.+
 fairytale/military/barrackstower
 
-# High Magic
-High Magic/infrastructure/mineshafts/.+
-High Magic/military/barrackstower
+# highmagic
+highmagic/infrastructure/mineshafts/.+
+highmagic/military/barrackstower
 
 # Fortress
 fortress/infrastructure/mineshafts/miner.+
