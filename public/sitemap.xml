@@ -108,4 +108,16 @@
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
     </url>
-<url><loc>https://tomp2.github.io/minecolonies-style-explorer/?theme=functionalfantasy</loc><lastmod>2025-04-15T22:24:21.224173</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url></urlset>
+    <url>
+        <loc>https://tomp2.github.io/minecolonies-style-explorer/?theme=functionalfantasy</loc>
+        <lastmod>2025-04-15T22:24:21.224173</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://tomp2.github.io/minecolonies-style-explorer/?theme=littleton</loc>
+        <lastmod>2025-04-16T01:48:27.771369</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+</urlset>
