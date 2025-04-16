@@ -33,13 +33,13 @@ export function Header() {
                 <TabsTrigger value="buildings">
                     Buildings
                     <span className="ml-1 min-w-[32px]">
-                        (<TotalCount />)
+                        <span>(</span><TotalCount /><span>)</span>
                     </span>
                 </TabsTrigger>
                 <TabsTrigger value="favorites">
                     Favorites
                     <span className="ml-1">
-                        (<FavoriteCount />)
+                        <span>(</span><FavoriteCount /><span>)</span>
                     </span>
                 </TabsTrigger>
             </TabsList>
