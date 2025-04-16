@@ -16,6 +16,12 @@ createRoot(document.querySelector("#root")!).render(
                     api_host: import.meta.env.VITE_REACT_APP_PUBLIC_POSTHOG_HOST,
                     persistence: localStorage.getItem("persistent-identity") ? "localStorage" : "memory",
                     autocapture: false,
+                    loaded: function (posthog) {
+                        const storageIdentity = localStorage.getItem("persistent-identity");
+                        if (storageIdentity) {
+                            posthog.identify(storageIdentity);
+                        }
+                    },
                 }}
             >
                 <App />

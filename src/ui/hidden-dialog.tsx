@@ -10,23 +10,12 @@ import {
 } from "@/components/ui/dialog.tsx";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useAtom } from "jotai/index";
+import { useAtom } from "jotai";
 import { atomWithStorage } from "jotai/utils";
 import { usePostHog } from "posthog-js/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const persistentIdentityAtom = atomWithStorage<string | null>("persistent-identity", null);
-
-export function useInitialPersistentIdentity() {
-    const posthog = usePostHog();
-    const [storageIdentity] = useAtom(persistentIdentityAtom);
-
-    useEffect(() => {
-        if (storageIdentity) {
-            posthog.identify(storageIdentity);
-        }
-    }, [storageIdentity]);
-}
 
 export function HiddenDialog() {
     const posthog = usePostHog();
@@ -36,14 +25,12 @@ export function HiddenDialog() {
     const urlParams = new URLSearchParams(window.location.search);
     const showDialog = urlParams.get("hidden") !== null;
 
-    useEffect(() => {
-        setEditedIdentity(storageIdentity ?? "");
-        if (storageIdentity) {
-            posthog.identify(storageIdentity);
-        } else {
-            posthog.reset();
+    function saveIdentity() {
+        if (editedIdentity && editedIdentity !== storageIdentity) {
+            setStorageIdentity(editedIdentity);
+            posthog.identify(editedIdentity);
         }
-    }, [storageIdentity]);
+    }
 
     return (
         <Dialog defaultOpen={showDialog}>
@@ -74,7 +61,7 @@ export function HiddenDialog() {
                             Close
                         </Button>
                     </DialogClose>
-                    <Button type="submit" onClick={() => setStorageIdentity(editedIdentity)}>
+                    <Button type="submit" onClick={saveIdentity}>
                         Save changes
                     </Button>
                 </DialogFooter>
