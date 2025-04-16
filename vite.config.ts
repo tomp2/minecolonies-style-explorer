@@ -6,7 +6,8 @@ import { defineConfig } from "vite";
 export default defineConfig({
     plugins: [react(), sentryVitePlugin({
         org: "tomp2",
-        project: "minecolonies-building-explorer"
+        project: "minecolonies-building-explorer",
+        authToken: process.env.SENTRY_AUTH_TOKEN
     })],
     base: process.env.NODE_ENV === "production" ? "/minecolonies-style-explorer/" : "/",
     build: {
