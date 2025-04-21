@@ -7,7 +7,7 @@ import { StyleInfoJson } from "@/lib/theme-data.ts";
 import * as TogglePrimitive from "@radix-ui/react-toggle";
 import type { VariantProps } from "class-variance-authority";
 import { useSetAtom } from "jotai";
-import { useAtom } from "jotai/index";
+import { useAtom } from "jotai";
 import * as React from "react";
 
 export type SelectableProps = React.ComponentPropsWithoutRef<typeof TogglePrimitive.Root> &

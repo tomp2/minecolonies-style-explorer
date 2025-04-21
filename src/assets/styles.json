@@ -3,186 +3,214 @@
     {
       "name": "ancientathens",
       "displayName": "Ancient Athens",
+      "type": "minecolonies",
       "authors": [
         "John Reiher",
         "Pixblockus",
         "_Raycoms_",
         "Thodor12"
       ],
-      "type": "minecolonies"
+      "addedAt": null,
+      "wip": false
     },
     {
       "name": "byzantine",
       "displayName": "Byzantine_for_1.20",
+      "type": "other",
       "authors": [
         "Spumantii"
       ],
-      "type": "other",
-      "addedAt": "2025-01-27T23:15:31.306Z"
+      "addedAt": "2025-01-27T23:15:31.306Z",
+      "wip": false
     },
     {
       "name": "caledonia",
       "displayName": "Caledonia",
+      "type": "minecolonies",
       "authors": [
         "Thaylar"
       ],
-      "type": "minecolonies"
+      "addedAt": null,
+      "wip": false
     },
     {
       "name": "colonial",
       "displayName": "Colonial",
+      "type": "minecolonies",
       "authors": [
         "Raycoms",
         "John Reiher",
         "SomeAddons",
         "Thodor12"
       ],
-      "type": "minecolonies",
-      "addedAt": "2025-02-19T02:15:00.000Z"
+      "addedAt": "2025-02-19T02:15:00.000Z",
+      "wip": false
     },
     {
       "name": "darkoak",
       "displayName": "Dark Oak Treehouse",
+      "type": "minecolonies",
       "authors": [
         "Annie",
         "Cugo"
       ],
-      "type": "minecolonies"
+      "addedAt": null,
+      "wip": false
     },
     {
       "name": "fairytale",
       "displayName": "FairyTale",
+      "type": "stylecolonies",
       "authors": [
         "Visteria_",
         "Koala_Kat_"
       ],
-      "type": "stylecolonies",
-      "addedAt": "2025-03-22T15:00:00.000Z"
+      "addedAt": "2025-03-22T15:00:00.000Z",
+      "wip": false
     },
     {
       "name": "fortress",
       "displayName": "Fortress",
+      "type": "minecolonies",
       "authors": [
         "Aravan"
       ],
-      "type": "minecolonies",
-      "addedAt": "2025-03-21T16:00:00.000Z"
+      "addedAt": "2025-03-21T16:00:00.000Z",
+      "wip": false
     },
     {
       "name": "functionalfantasy",
       "displayName": "Functional Fantasy",
+      "type": "stylecolonies",
       "authors": [
         "Anastasia590",
         "DarkCold"
       ],
-      "type": "stylecolonies",
-      "addedAt": "2025-04-15T22:00:00.000Z"
+      "addedAt": "2025-04-15T22:00:00.000Z",
+      "wip": false
     },
     {
       "name": "highmagic",
       "displayName": "High Magic",
+      "type": "stylecolonies",
       "authors": [
         "Five Tais, Private Panda"
       ],
-      "type": "stylecolonies",
-      "addedAt": "2025-03-22T15:00:00.000Z"
+      "addedAt": "2025-03-22T15:00:00.000Z",
+      "wip": false
     },
     {
       "name": "littleton",
       "displayName": "Littleton",
+      "type": "other",
       "authors": [
         "Thaylar"
       ],
-      "type": "other",
-      "addedAt": "2025-04-15T22:00:00.000Z"
+      "addedAt": "2025-04-15T22:00:00.000Z",
+      "wip": false
     },
     {
       "name": "medievaldarkoak",
       "displayName": "Medieval Dark Oak",
+      "type": "minecolonies",
       "authors": [
         "Carlansor"
       ],
-      "type": "minecolonies",
-      "addedAt": "2025-03-21T16:00:00.000Z"
+      "addedAt": "2025-03-21T16:00:00.000Z",
+      "wip": false
     },
     {
       "name": "medievaloak",
       "displayName": "Medieval Oak",
+      "type": "minecolonies",
       "authors": [
         "Carlansor"
       ],
-      "type": "minecolonies"
+      "addedAt": null,
+      "wip": false
     },
     {
       "name": "medievalspruce",
       "displayName": "Medieval Spruce",
+      "type": "minecolonies",
       "authors": [
         "Carlansor"
       ],
-      "type": "minecolonies"
+      "addedAt": null,
+      "wip": false
     },
     {
       "name": "original",
       "displayName": "Minecolonies Original",
+      "type": "minecolonies",
       "authors": [
         "many"
       ],
-      "type": "minecolonies",
-      "addedAt": "2025-01-25T00:35:31.306Z"
+      "addedAt": "2025-01-25T00:35:31.306Z",
+      "wip": false
     },
     {
       "name": "nordic",
       "displayName": "Nordic Spruce",
+      "type": "minecolonies",
       "authors": [
         "Luna",
         "John Reiher"
       ],
-      "type": "minecolonies"
+      "addedAt": null,
+      "wip": false
     },
     {
       "name": "pagoda",
       "displayName": "Pagoda",
+      "type": "minecolonies",
       "authors": [
         "Thaylar"
       ],
-      "type": "minecolonies"
+      "addedAt": null,
+      "wip": false
     },
     {
       "name": "shire",
       "displayName": "Shire",
+      "type": "minecolonies",
       "authors": [
         "Daddy_P1G",
         "JohnReiher",
         "and others"
       ],
-      "type": "minecolonies",
-      "addedAt": "2025-02-19T02:15:00.000Z"
+      "addedAt": "2025-02-19T02:15:00.000Z",
+      "wip": false
     },
     {
       "name": "shogun",
       "displayName": "Shogun",
+      "type": "other",
       "authors": [
         "Spumantii"
       ],
-      "type": "other",
-      "addedAt": "2025-02-03T21:00:00.000Z"
+      "addedAt": "2025-02-03T21:00:00.000Z",
+      "wip": false
     },
     {
       "name": "truedwarven",
       "displayName": "Stalactite Caves",
+      "type": "minecolonies",
       "authors": [
         "Luna"
       ],
-      "type": "minecolonies"
+      "addedAt": null,
+      "wip": false
     },
     {
       "name": "steampunk",
       "displayName": "Steampunk",
+      "type": "stylecolonies",
       "authors": [
         "m00b13n, MotionlessTrain, Yalokivi"
       ],
-      "type": "stylecolonies",
-      "addedAt": "2025-02-17T18:00:00.000Z"
+      "addedAt": "2025-02-17T18:00:00.000Z",
+      "wip": false
     }
   ],
   "categories": [

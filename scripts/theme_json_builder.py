@@ -1,7 +1,13 @@
+from __future__ import annotations
+
+import hashlib
 import json
 import logging
 import re
+import time
 from concurrent.futures.process import ProcessPoolExecutor
+from dataclasses import dataclass, field, asdict
+from datetime import datetime
 from functools import cached_property, lru_cache
 from pathlib import Path
 from typing import TypedDict, Literal
@@ -49,8 +55,64 @@ COMBINED_BUILDINGS_PATH = REPO_DIR / "scripts/combined_buildings.json"
 BUILDING_IGNORE = REPO_DIR / "scripts/buildings.ignore"
 STYLE_INFO_PATH = REPO_DIR / "src/assets/styles.json"
 MISSING_STYLE_INFO_PATH = REPO_DIR / "src/assets/missing_styles.json"
+CACHE_DIR = REPO_DIR / "scripts/cache"
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
+
+
+# --- Types ---
+
+@dataclass
+class BuildingObject:
+    size: tuple[int, int, int]
+    blur: list[str]
+    back: bool | None = None
+    hutBlocks: list[str] | None = None
+
+
+@dataclass
+class CachedBuildingObject:
+    name: str
+    level: int | Literal[False]
+    size: tuple[int, int, int] | Literal["unknown"] = "unknown"
+    hutBlocks: list[str] | set[str] | Literal["unknown"] = "unknown"
+
+
+@dataclass
+class Category:
+    blueprints: dict[str, BuildingObject] = field(default_factory=dict)
+    categories: dict[str, Category] = field(default_factory=dict)
+
+
+@dataclass
+class StyleJson:
+    displayName: str
+    authors: list[str]
+    blueprints: dict[str, BuildingObject]
+    categories: dict[str, Category]
+
+
+@dataclass
+class StyleInfo:
+    name: str
+    displayName: str
+    type: str
+    authors: list[str]
+    addedAt: str | None = None
+    wip: bool = False
+
+
+@dataclass
+class PackCache:
+    buildings: dict[str, CachedBuildingObject] = field(default_factory=dict)
+    blurHashes: dict[str, str] = field(default_factory=dict)
+
+    @classmethod
+    def from_dict(cls, data: dict) -> PackCache:
+        buildings = {k: CachedBuildingObject(**v) for k, v in data.get("buildings", {}).items()}
+        blur_hashes = data.get("blurHashes", {})
+        return cls(buildings=buildings, blurHashes=blur_hashes)
+
 
 # --- Prepared file contents ---
 COMBINED_BUILDINGS = json.loads(COMBINED_BUILDINGS_PATH.read_text())
@@ -58,6 +120,7 @@ STYLE_INFO = {style["name"]: style for style in json.loads(STYLE_INFO_PATH.read_
 ignored_pattern = re.compile(
     "|".join([f"^{line.strip()}$" for line in BUILDING_IGNORE.read_text().splitlines() if
               line.strip() and not line.startswith("#")]))
+CACHE_DIR.mkdir(exist_ok=True)
 
 # --- Constants ---
 IGNORED_BLOCKS = {
@@ -79,44 +142,67 @@ HUT_BLOCKS = {"field", "plantationfield", "alchemist", "kitchen", "graveyard", "
               "shepherd", "sifter", "smeltery", "stonemason", "stonesmeltery", "swineherder", "tavern", "townhall",
               "university", "warehouse", "mysticalsite"}
 
-# --- Types ---
-type BuildingObject = TypedDict("BuildingObject", {
-    "size": tuple[int, int, int],
-    "back": bool | None,
-    "hutBlocks": list[str] | None,
-    "blur": list[str]
-})
-type Category = TypedDict("Category", {
-    "blueprints": dict[str, BuildingObject],
-    "categories": dict[str, Category] | None
-})
-type ThemeJson = TypedDict("ThemeJson", {
-    "displayName": str,
-    "authors": list[str],
-    "blueprints": dict[str, BuildingObject],
-    "categories": dict[str, Category],
-})
-type Theme = TypedDict("Theme", {
-    "name": str,
-    "type": str,
-    "json": ThemeJson
-})
-type CategoriesRoot = TypedDict(
-    "CategoriesRoot",
-    {
-        "blueprints": dict[str, BuildingObject],
-        "categories": dict[str, Category]
-    }
-)
+
+def get_file_hash(path: Path) -> str:
+    hasher = hashlib.sha256()
+    with path.open("rb") as f:
+        while chunk := f.read(8192):
+            hasher.update(chunk)
+    return hasher.hexdigest()
+
+
+def format_json(obj: any) -> any:
+    if isinstance(obj, dict):
+        return {key: format_json(value) for key, value in sorted(obj.items()) if value is not None}
+    elif isinstance(obj, (list, set)):
+        return sorted(format_json(item) for item in obj if item is not None)
+    else:
+        return obj
+
+
+class BuildingImage(Path):
+    def sha256(self):
+        return get_file_hash(self)
+
+    def blurhash(self) -> str:
+        with Image.open(self) as image:
+            image.thumbnail((100, 100))
+            hash_result = encode(image, x_components=4, y_components=4)
+        return hash_result
 
 
 class BlueprintFile:
-    def __init__(self, file_path: Path):
+    def __init__(self, file_path: Path, style: Style):
         self.file_path = file_path
+        self._style = style
+        self.file_hash = get_file_hash(file_path)
 
-    @lru_cache
-    def get_primary_offset(self):
-        data = self.read()
+        if cached_data := self._style.cache_buildings.get(self.file_hash):
+            self.cached_data = cached_data
+        else:
+            cached_data = CachedBuildingObject(name=self._name, level=self._level)
+            self.cached_data = self._style.cache_buildings.setdefault(self.file_hash, cached_data)
+
+        self.name = self.cached_data.name
+        self.level = self.cached_data.level
+
+    def get_hut_blocks(self):
+        if self.cached_data.hutBlocks != "unknown":
+            return self.cached_data.hutBlocks
+
+        hut_blocks = self._get_hut_blocks()
+        self.cached_data.hutBlocks = hut_blocks if hut_blocks else None
+        return hut_blocks
+
+    def get_size(self):
+        if self.cached_data.size != "unknown":
+            return self.cached_data.size
+
+        self.cached_data.size = self._calculate_building_size()
+        return self.cached_data
+
+    def _get_primary_offset(self):
+        data = self._read()
         optional_data = data.get("optional_data")
         structurize = optional_data.get("structurize")
         primary_offset = structurize.get("primary_offset")
@@ -127,25 +213,25 @@ class BlueprintFile:
         }
 
     @lru_cache
-    def read(self):
+    def _read(self):
         with self.file_path.open("rb") as f:
             return nbt.NBTFile(fileobj=f)
 
     @cached_property
-    def size_x(self):
-        return self.read().get("size_x").value
+    def _size_x(self):
+        return self._read().get("size_x").value
 
     @cached_property
-    def size_y(self):
-        return self.read().get("size_y").value
+    def _size_y(self):
+        return self._read().get("size_y").value
 
     @cached_property
-    def size_z(self):
-        return self.read().get("size_z").value
+    def _size_z(self):
+        return self._read().get("size_z").value
 
-    def get_is_minecolonies_building(self):
+    def _get_is_minecolonies_building(self):
         tile_entity: TAG_Compound
-        for tile_entity in self.read().get("tile_entities"):
+        for tile_entity in self._read().get("tile_entities"):
             if block_id := tile_entity.get("id"):
                 block_id_str: str = block_id.value
                 if block_id_str == "minecolonies:colony_flag":
@@ -161,15 +247,15 @@ class BlueprintFile:
         return False
 
     @cached_property
-    def name_and_level(self) -> TypedDict("BuildingName",
-                                          {"buildingName": str, "buildingLevel": int | Literal[False]}):
+    def _name_and_level(self) -> TypedDict("BuildingName",
+                                           {"buildingName": str, "buildingLevel": int | Literal[False]}):
         # If the building is a leveling building, the last number on the name indicates the level.
         # Otherwise, the building doesn't have levels, and number suffixes are to be included in the name.
         match = re.match(r"^(.+?)(\d*?)\.blueprint$", self.file_path.name)
         if not match:
             raise ValueError(f"File name doesn't match the pattern: {self.file_path.name}")
 
-        if self.get_is_minecolonies_building():
+        if self._get_is_minecolonies_building():
             if len(match.groups()) == 1:
                 return {"buildingName": match[0], "buildingLevel": False}
             else:
@@ -177,31 +263,31 @@ class BlueprintFile:
 
         return {"buildingName": self.file_path.stem, "buildingLevel": False}
 
-    @cached_property
-    def name(self):
-        return self.name_and_level["buildingName"]
+    @property
+    def _name(self):
+        return self._name_and_level["buildingName"]
 
-    @cached_property
-    def level(self):
-        return self.name_and_level["buildingLevel"]
+    @property
+    def _level(self):
+        return self._name_and_level["buildingLevel"]
 
-    def get_hut_blocks(self):
-        primary_offset = self.get_primary_offset()
+    def _get_hut_blocks(self):
+        primary_offset = self._get_primary_offset()
 
         hut_blocks = set()
-        for block in self.read().get("palette"):
+        for block in self._read().get("palette"):
             block_name = block.get("Name").value
             if block_name.startswith("minecolonies:blockhut"):
                 short_name = block_name[len("minecolonies:blockhut"):]
                 if short_name in HUT_BLOCKS:
                     hut_blocks.add(short_name)
 
-        raw_data = self.get_raw_block_data()
+        raw_data = self._get_raw_block_data()
         hut_y = primary_offset["y"]
         hut_x = primary_offset["x"]
         hut_z = primary_offset["z"]
         primary_hut = raw_data[hut_y, hut_z, hut_x]
-        material_palette = self.read().get("palette")
+        material_palette = self._read().get("palette")
         primary_hut_name = material_palette[primary_hut].get("Name").value
 
         if primary_hut_name.startswith("minecolonies:blockhut"):
@@ -211,13 +297,13 @@ class BlueprintFile:
 
         return list(hut_blocks)
 
-    def get_raw_block_data(self):
+    def _get_raw_block_data(self):
         """
         The Structurize-mod stored the blocks in a 1-dimensional array of 32-bit integers.
         The 32-bit integer is split into two 16-bit values, where the left and right 16 bits represent
         two different blocks (probably to save space?)
         """
-        raw_block_data = self.read().get("blocks")
+        raw_block_data = self._read().get("blocks")
         data = np.array(raw_block_data, dtype=np.uint32)
         # Split each 32-bit integer into two 16-bit values
         left_16_bits = (data >> 16) & 0xFFFF
@@ -227,14 +313,14 @@ class BlueprintFile:
         one_dim_array[0::2] = left_16_bits
         one_dim_array[1::2] = right_16_bits
         # If the size of the building is odd, the last 16-bits are assumed to be padding
-        if (self.size_x * self.size_y * self.size_z) % 2 != 0:
+        if (self._size_x * self._size_y * self._size_z) % 2 != 0:
             one_dim_array = one_dim_array[:-1]
-        return one_dim_array.reshape((self.size_y, self.size_z, self.size_x))
+        return one_dim_array.reshape((self._size_y, self._size_z, self._size_x))
 
-    def calculate_building_size(self):
-        palette_indices = self.get_raw_block_data()
+    def _calculate_building_size(self):
+        palette_indices = self._get_raw_block_data()
 
-        material_palette = self.read().get("palette")
+        material_palette = self._read().get("palette")
         solidity_palette = np.array([entry.get("Name").value not in IGNORED_BLOCKS for entry in material_palette],
                                     dtype=bool)
 
@@ -245,35 +331,15 @@ class BlueprintFile:
         z_slices_solidity = palette_indices_solidity.any(axis=(0, 1))
 
         bottom_y = np.argmax(y_slices_solidity)
-        top_y = self.size_y - 1 - np.argmax(y_slices_solidity[::-1])
+        top_y = self._size_y - 1 - np.argmax(y_slices_solidity[::-1])
 
         left_x = np.argmax(x_slices_solidity)
-        right_x = self.size_x - 1 - np.argmax(x_slices_solidity[::-1])
+        right_x = self._size_x - 1 - np.argmax(x_slices_solidity[::-1])
 
         front_z = np.argmax(z_slices_solidity)
-        back_z = self.size_z - 1 - np.argmax(z_slices_solidity[::-1])
+        back_z = self._size_z - 1 - np.argmax(z_slices_solidity[::-1])
 
         return int(right_x - left_x + 1), int(top_y - bottom_y + 1), int(back_z - front_z + 1)
-
-
-def find_building_image(
-        blueprint_path: Path,
-        building_name: str,
-        theme_images_dir: Path,
-        theme_path: Path
-) -> TypedDict("BuildingImages", {"front": Path, "frontExists": bool, "back": Path, "backExists": bool}):
-    blueprint_rel_path = blueprint_path.relative_to(theme_path)
-    image_dir = theme_images_dir / blueprint_rel_path.parent / building_name.strip()
-
-    front = image_dir / "front.jpg"
-    back = image_dir / "back.jpg"
-
-    return {
-        "front": front,
-        "frontExists": front.exists(),
-        "back": back,
-        "backExists": back.exists()
-    }
 
 
 def encode_image_to_blurhash(image_path: Path) -> str:
@@ -283,89 +349,7 @@ def encode_image_to_blurhash(image_path: Path) -> str:
     return hash_result
 
 
-def process_building(
-        file_path: Path,
-        parent_category_object: dict[str, BuildingObject],
-        theme_images_dir: Path,
-        theme_path: Path
-):
-    blueprint = BlueprintFile(file_path)
-
-    try:
-        blueprint.read()
-    except Exception as e:
-        logging.warning(f"Failed to read blueprint file: {file_path}: {e}")
-        return
-
-    blueprint_dir = blueprint.file_path.relative_to(theme_path.parent).parent.as_posix()
-    blueprint_path = f"{blueprint_dir}/{blueprint.name}"
-
-    if ignored_pattern.match(blueprint_path):
-        return
-
-    higher_level_name = f"{blueprint.name}{blueprint.level + 1}.blueprint"
-    higher_level_path = file_path.parent / higher_level_name
-    if higher_level_path.exists():
-        return
-
-    building_images = find_building_image(
-        file_path,
-        blueprint.name,
-        theme_images_dir,
-        theme_path
-    )
-
-    if not building_images["frontExists"]:
-        logging.warning(
-            f"Required front image not found: {building_images['front'].relative_to(theme_images_dir.parent)}")
-        return
-    building_obj: BuildingObject = parent_category_object.setdefault(
-        blueprint.name.strip(), {"size": blueprint.calculate_building_size()}
-    )
-
-    blur_hashes = [encode_image_to_blurhash(building_images["front"])]
-
-    if building_images["backExists"]:
-        building_obj["back"] = True
-        blur_hashes.append(encode_image_to_blurhash(building_images["back"]))
-
-    if hut_blocks := blueprint.get_hut_blocks():
-        building_obj["hutBlocks"] = list(hut_blocks)
-
-    building_obj["blur"] = blur_hashes
-
-
-def handle_file(
-        file_path: Path,
-        parent_category_object: Category,
-        theme_images_dir: Path,
-        theme_path: Path
-):
-    if file_path.suffix != ".blueprint":
-        return
-    process_building(file_path, parent_category_object, theme_images_dir, theme_path)
-
-
-def handle_building_categories(
-        category_path: Path,
-        parent_object: dict[str, Category],
-        theme_images_dir: Path,
-        theme_path: Path
-):
-    building_group_name = category_path.name
-    if building_group_name not in parent_object:
-        parent_object[building_group_name] = {"blueprints": {}, "categories": {}}
-
-    building_group = parent_object[building_group_name]
-
-    for item in category_path.iterdir():
-        if item.is_file():
-            handle_file(item, building_group["blueprints"], theme_images_dir, theme_path)
-        else:
-            handle_building_categories(item, building_group["categories"], theme_images_dir, theme_path)
-
-
-def add_combined_buildings(theme_id: str, categories_root: CategoriesRoot):
+def add_combined_buildings(theme_id: str, categories_root: Category):
     """
     Reads the combined buildings which look like this:
     [
@@ -400,13 +384,13 @@ def add_combined_buildings(theme_id: str, categories_root: CategoriesRoot):
         for blueprint in combined_building["blueprints"]:
             blueprint_path = theme_source_dir.joinpath(*category_path).joinpath(blueprint)
             blueprint = BlueprintFile(blueprint_path)
-            combined_hut_blocks |= set(blueprint.get_hut_blocks())
+            combined_hut_blocks |= set(blueprint._get_hut_blocks())
 
             if not building_size:
-                building_size = blueprint.calculate_building_size()
+                building_size = blueprint._calculate_building_size()
             else:
                 prev_volume = building_size[0] * building_size[1] * building_size[2]
-                current_size = blueprint.calculate_building_size()
+                current_size = blueprint._calculate_building_size()
                 current_volume = current_size[0] * current_size[1] * current_size[2]
                 if current_volume > prev_volume:
                     building_size = current_size
@@ -446,84 +430,233 @@ def add_combined_buildings(theme_id: str, categories_root: CategoriesRoot):
         current_category["blueprints"][name] = building_object
 
 
-def process_theme(theme_path: Path) -> Theme:
-    theme_type = theme_path.relative_to(BLUEPRINTS).parent.as_posix()
-    theme_name = theme_path.name
-    pack_meta_file = theme_path / "pack.json"
-    pack_meta = json.loads(pack_meta_file.read_text())
-    logging.info(f"Processing theme: {theme_name}")
+class Style:
+    def __init__(self, path: Path):
+        self.path = path
+        self.dir_name = path.name
+        self.img_dir = IMAGES_ROOT / self.dir_name
+        self.pack_meta_path = path / "pack.json"
 
-    theme_images_dir = IMAGES_ROOT / theme_path.name
-    categories_root: CategoriesRoot = {
-        "blueprints": {},
-        "categories": {}
-    }
+        if not self.path.exists():
+            raise FileNotFoundError(f"Path does not exist: {self.path}")
+        if not self.pack_meta_path.exists():
+            raise FileNotFoundError(f"Pack meta file does not exist: {self.pack_meta_path}")
+        if not self.img_dir.exists():
+            raise FileNotFoundError(f"Image directory does not exist: {self.img_dir}")
 
-    for item in theme_path.iterdir():
-        if item.name in ["pack.json", f"{theme_path.name}.png"]:
-            continue
+        self.root: Category = Category()
+        self.pack_meta = json.loads(self.pack_meta_path.read_text())
+        self.style_type = path.relative_to(BLUEPRINTS).parent.as_posix()
+        self.style_info = StyleInfo(
+            displayName=self.pack_meta["name"],
+            authors=self.pack_meta["authors"],
+            name=self.dir_name,
+            type=self.style_type
+        )
+        self.style_json = StyleJson(
+            displayName=self.pack_meta["name"],
+            authors=self.pack_meta["authors"],
+            blueprints=self.root.blueprints,
+            categories=self.root.categories
+        )
 
-        if item.is_file():
-            handle_file(item, categories_root["blueprints"], theme_images_dir, theme_path)
-        else:
-            handle_building_categories(item, categories_root["categories"], theme_images_dir, theme_path)
+        self._cache_file_path = CACHE_DIR / f"{self.dir_name}.json"
+        self._cache = PackCache()
+        if self._cache_file_path.exists():
+            self._cache = PackCache.from_dict(json.loads(self._cache_file_path.read_text()))
 
-    theme_json: Theme = {
-        "name": theme_path.name,
-        "type": theme_type,
-        "json": {
-            "displayName": pack_meta["name"],
-            "authors": pack_meta["authors"],
-            "blueprints": categories_root["blueprints"],
-            "categories": categories_root["categories"],
-        }
-    }
-    add_combined_buildings(theme_name, categories_root)
+    @property
+    def cache_buildings(self):
+        return self._cache.buildings
 
-    return theme_json
+    @property
+    def cache_blur_hashes(self):
+        return self._cache.blurHashes
+
+    def _blur_images(self, images: list[BuildingImage]) -> list[str]:
+        blurhashes = []
+        for image in images:
+            if not image.exists():
+                continue
+            sha = image.sha256()
+            if sha in self.cache_blur_hashes:
+                blurhash = self.cache_blur_hashes[sha]
+            else:
+                blurhash = image.blurhash()
+                logging.info(f"Cache miss for {image.relative_to(self.img_dir.parent)}")
+
+            blurhashes.append(blurhash)
+            self.cache_blur_hashes[sha] = blurhash
+
+        return blurhashes
+
+    # def find_building_image(self, blueprint_path: Path, building_name: str) -> tuple[BuildingImage, BuildingImage]:
+    #     blueprint_rel_path = blueprint_path.relative_to(self.path)
+    #     image_dir = self.img_dir / blueprint_rel_path.parent / building_name.strip()
+    #     front = BuildingImage(image_dir / "front.jpg")
+    #     back = BuildingImage(image_dir / "back.jpg")
+    #     return front, back
+
+    def find_building_images(self, image_dir: Path) -> tuple[BuildingImage, BuildingImage]:
+        front = BuildingImage(image_dir / "front.jpg")
+        back = BuildingImage(image_dir / "back.jpg")
+        return front, back
+
+    def process_building(self, path: Path, parent: Category):
+        if path.suffix != ".blueprint":
+            return
+
+        blueprint = BlueprintFile(path, self)
+
+        # Skip ignored blueprints
+        blueprint_path = f"{path.relative_to(self.path.parent).parent.as_posix()}/{blueprint.name}"
+        if ignored_pattern.match(blueprint_path):
+            return
+        # Skip if a higher level blueprint exists
+        higher_level_path = path.parent / f"{blueprint.name}{blueprint.level + 1}.blueprint"
+        if higher_level_path.exists():
+            return
+
+        relative_path = path.relative_to(self.path).parent
+        image_dir = self.img_dir / relative_path / blueprint.name.strip()
+        [front, back] = self.find_building_images(image_dir)
+        if not front.exists():
+            logging.warning(f"[MISSING FRONT]: {front.relative_to(self.img_dir.parent)}")
+            return
+
+        parent.blueprints[blueprint.name.strip()] = BuildingObject(
+            size=blueprint.get_size(),
+            blur=self._blur_images([front, back]),
+            back=back.exists(),
+            hutBlocks=blueprint.get_hut_blocks()
+        )
+
+    def process_directory(self, dir_path: Path, parent: Category):
+        category = parent.categories.setdefault(dir_path.name, Category())
+        for dir_item in dir_path.iterdir():
+            if dir_item.is_file():
+                self.process_building(dir_item, category)
+            else:
+                self.process_directory(dir_item, category)
+
+    def add_custom_building(self, combined_building):
+        name = combined_building["name"]
+        path = combined_building["path"].split("/")
+        (theme_type, theme_name, *category_path) = path
+        if not theme_name == self.dir_name or theme_type != self.style_type:
+            return
+
+        theme_source_dir = BLUEPRINTS / theme_type / theme_name
+        if not theme_source_dir.exists():
+            logging.warning(f"Theme directory not found: {theme_name}")
+            return
+
+        combined_hut_blocks = set()
+        building_size: tuple[int, int, int] | None = None
+        for blueprint in combined_building["blueprints"]:
+            blueprint_path = theme_source_dir.joinpath(*category_path, blueprint)
+            blueprint = BlueprintFile(blueprint_path, self)
+            combined_hut_blocks |= set(blueprint.get_hut_blocks() or set())
+            if not building_size:
+                building_size = blueprint.get_size()
+            else:
+                size = blueprint.get_size()
+                prev_area = building_size[0] * building_size[2]
+                current_volume = size[0] * size[2]
+                if current_volume > prev_area:
+                    building_size = size
+
+        if not building_size:
+            raise ValueError(f"Building size not found for combined building {path}/{name}")
+
+        image_dir = self.img_dir.joinpath(*category_path, name)
+        [front, back] = self.find_building_images(image_dir)
+        if not front.exists():
+            logging.warning(f"[MISSING FRONT]: {front.relative_to(self.img_dir.parent)}")
+            return
+
+        current_category = self.root
+        for category in category_path:
+            if category not in current_category.categories:
+                logging.warning(
+                    f"Category directory {category} for combined building {category_path}/{name} "
+                    f"doesn't exist in the style object so far."
+                )
+                return
+            current_category = current_category.categories[category]
+
+        current_category.blueprints[name] = BuildingObject(
+            size=building_size,
+            blur=self._blur_images([front, back]),
+            back=back.exists(),
+            hutBlocks=combined_hut_blocks
+        )
+
+    def run(self) -> Style:
+        for dir_item in self.path.iterdir():
+            if dir_item.is_file():
+                self.process_building(dir_item, self.root)
+            else:
+                self.process_directory(dir_item, self.root)
+
+        for combined_building in COMBINED_BUILDINGS:
+            self.add_custom_building(combined_building)
+
+        return self
+
+    def get_root_categories(self) -> set[str]:
+        return set(self.root.categories.keys())
+
+    def write_cache(self):
+        self._cache_file_path.write_text(json.dumps(asdict(self._cache)))
+
+    def write_style_json(self):
+        style_dict = format_json(asdict(self.style_json))
+        self.img_dir.joinpath("style.json").write_text(json.dumps(style_dict))
+
+
+def style_runner(style: Style) -> Style:
+    logging.info(f"Processing theme: {style.dir_name}")
+    style.run()
+    style.write_cache()
+    style.write_style_json()
+    return style
 
 
 def main():
+    styles = [Style(theme_path) for theme_path in THEME_DIRS]
+
     logging.info("Processing themes...")
+    start = time.perf_counter()
     with ProcessPoolExecutor() as executor:
-        theme_results = list(executor.map(process_theme, THEME_DIRS))
+        style_results = list(executor.map(style_runner, styles))
+    # style_results = [style_runner(style) for style in styles]
+    end = time.perf_counter()
+    logging.info(f"Processed {len(style_results)} themes in {end - start:.2f} seconds")
 
-    logging.info("Saving themes...")
-    for theme in theme_results:
-        logging.info(f"Saving theme: {theme['name']}")
-        IMAGES_ROOT.joinpath(theme["name"], "style.json").write_text(json.dumps(theme["json"]))
-
-    logging.info("Saving style info...")
-    styles = []
+    logging.info("Saving style infos...")
     categories = set()
-    for style in theme_results:
-        style_dir = IMAGES_ROOT / style["name"]
-        if not style_dir.exists():
-            logging.info(f"[WARN] Style directory not found: {style_dir}")
-            continue
+    style_infos = []
+    for style in style_results:
+        categories.update(style.get_root_categories())
+        prev_record = STYLE_INFO.get(style.dir_name)
+        if prev_record and "addedAt" in prev_record and prev_record["addedAt"]:
+            style.style_info.addedAt = prev_record["addedAt"]
+        elif not prev_record:
+            style.style_info.addedAt = datetime.now().strftime("%Y-%m-%d")
 
-        new_record = {
-            "name": style["name"],
-            "displayName": style["json"]["displayName"],
-            "authors": style["json"]["authors"],
-            "type": style["type"],
-        }
-        categories.update(style["json"]["categories"].keys())
-        prev_record = STYLE_INFO.get(style["name"])
-        if prev_record and "addedAt" in prev_record:
-            new_record["addedAt"] = prev_record["addedAt"]
-        styles.append(new_record)
+        style_infos.append(style.style_info)
 
-    styles.sort(key=lambda x: x["displayName"])
+    style_infos.sort(key=lambda x: x.displayName)
     output = {
-        "styles": styles,
-        "categories": list(sorted(categories))
+        "styles": [asdict(style_info) for style_info in style_infos],
+        "categories": sorted(categories)
     }
     STYLE_INFO_PATH.write_text(json.dumps(output, indent=2))
 
     logging.info("Listing missing styles for voting...")
-    found_style_ids = {style["name"] for style in styles}
-    found_style_ids.update({style["displayName"] for style in styles})
+    found_style_ids = {style.dir_name for style in styles}
+    found_style_ids.update({style.style_info.displayName for style in styles})
 
     missing_styles_ids = []
     for style_type in BLUEPRINTS.iterdir():
@@ -535,7 +668,7 @@ def main():
     for missing_style in missing_styles_ids:
         style_meta_path = BLUEPRINTS.joinpath(*missing_style, "pack.json")
         if not style_meta_path.exists():
-            logging.warning(f"Style meta file not found: {style_meta_path}")
+            logging.warning(f"Style meta file not found for 'missing' style: {style_meta_path}")
             continue
 
         [_, style_name] = missing_style
@@ -550,7 +683,7 @@ def main():
     MISSING_STYLE_INFO_PATH.write_text(json.dumps(missing_styles, indent=2))
 
     logging.info("Generating sitemap...")
-    generate_sitemap({style["name"] for style in styles})
+    generate_sitemap({style.dir_name for style in styles})
 
     logging.info("Done!")
 
