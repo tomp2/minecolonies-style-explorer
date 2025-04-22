@@ -3,7 +3,7 @@ import { Slider } from "@/components/ui/slider.tsx";
 import { useDelayedCaptureEvent } from "@/hooks/delayed-capture-event.ts";
 import { useIsMobile } from "@/hooks/use-mobile.tsx";
 import useWindowWidth from "@/hooks/use-window-width.ts";
-import { atom, useAtom } from "jotai/index";
+import { atom, useAtom } from "jotai";
 import { useEffect, useState } from "react";
 
 const defaultColumnSize = 350;
@@ -76,7 +76,7 @@ export function ImageSizeSlider() {
         writeConfig(columns, containerWidth);
         setStoredColumns(columns);
         setStoredContainerWidth(containerWidth);
-        capture(10_000, "image_cols_changed_v2", {
+        capture(6_000, "image_cols_changed_v2", {
             columns,
             containerWidth,
             imgSize: Math.floor(containerWidth / columns),

@@ -5,7 +5,7 @@ import { Footer } from "@/ui/footer.tsx";
 import { Header } from "@/ui/header.tsx";
 import { HomeArticle } from "@/ui/home-article.tsx";
 import { FavoritesSection, PageContent } from "@/ui/page-content.tsx";
-import { useAtom } from "jotai/index";
+import { useAtom } from "jotai";
 import { Loader } from "lucide-react";
 import { Suspense } from "react";
 

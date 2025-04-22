@@ -11,8 +11,10 @@ import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { Search, X } from "lucide-react";
 import { useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
+import { useDelayedCaptureEvent } from "@/hooks/delayed-capture-event.ts";
 
 export function SearchBar() {
+    const { capture } = useDelayedCaptureEvent();
     const updateTab = useSetAtom(updateTabAtomSearchQuery);
     const [searchSelectedThemesOnly, setSearchSelectedThemesOnly] = useAtom(searchSelectedThemesOnlyAtom);
     const searchTerm = useAtomValue(searchTermAtom);
@@ -41,6 +43,7 @@ export function SearchBar() {
                         setInput(value);
                         debounced(value);
                         updateTab(value);
+                        capture(1500, "search_building", { search_term: value });
                     }}
                 />
             </div>

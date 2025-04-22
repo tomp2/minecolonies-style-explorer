@@ -38,7 +38,7 @@ function Style({ style }: { style: MissingStyleInfoJson }) {
             }
             if (!votesSent.includes(style.name)) {
                 if (isSelected) {
-                    capturePromise(20_000, "vote_style", { style: style.name }).then(() => {
+                    capturePromise(4_000, "vote_style", { style: style.name }).then(() => {
                         setVotesSent([...votesSent, style.name]);
                     });
                 } else {

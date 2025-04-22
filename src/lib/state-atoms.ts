@@ -5,10 +5,10 @@ import {
     getStyleAsync,
     styleFiles,
     styleInfoMap,
-    Theme,
+    Theme
 } from "@/lib/theme-data.ts";
 import { buildingMatchesStringSearchTerm } from "@/lib/utils.ts";
-import { atom } from "jotai/index";
+import { atom } from "jotai";
 import { atomWithStorage, loadable } from "jotai/utils";
 
 /**
