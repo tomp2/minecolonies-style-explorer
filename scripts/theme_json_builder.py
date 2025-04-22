@@ -18,7 +18,7 @@ from blurhash import encode
 from nbt import nbt
 from nbt.nbt import TAG_Compound
 
-from scripts.sitemap_gen import generate_sitemap
+from sitemap_gen import generate_sitemap
 
 # --- Configuration ---
 REPO_DIR = Path(__file__).parent.parent
@@ -43,6 +43,7 @@ THEME_DIRS = [
     MINECOLONIES / "shire",
     MINECOLONIES / "fortress",
     MINECOLONIES / "medievaldarkoak",
+    MINECOLONIES / "cavern",
     STYLECOLONIES / "steampunk",
     STYLECOLONIES / "highmagic",
     STYLECOLONIES / "fairytale",

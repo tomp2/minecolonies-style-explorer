@@ -48,6 +48,7 @@ export function ThemeSelectable({ style }: { style: StyleInfoJson }) {
 
     const addedAt = style.addedAt ? new Date(style.addedAt) : undefined;
     const isNew = addedAt && addedAt > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000); // 7 days
+    const wip = style.wip;
     return (
         <Selectable
             aria-label={style.displayName}
@@ -59,9 +60,14 @@ export function ThemeSelectable({ style }: { style: StyleInfoJson }) {
                 {style.displayName}
                 <p className="text-muted-foreground">({style.authors.join(", ")})</p>
             </div>
-            {isNew && (
+            {!wip && isNew && (
                 <p className="-mb-0.5 -mr-2 ml-auto rounded-full bg-green-200 px-1.5 pb-0.5 text-xs font-semibold opacity-80 dark:bg-green-700">
                     New
+                </p>
+            )}
+            {wip && (
+                <p className="-mb-0.5 -mr-2 ml-auto rounded-full bg-orange-200 px-1.5 pb-0.5 text-xs font-semibold opacity-80 dark:bg-green-700">
+                    WIP
                 </p>
             )}
         </Selectable>

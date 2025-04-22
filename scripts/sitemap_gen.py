@@ -3,12 +3,14 @@ from datetime import datetime
 from pathlib import Path
 from typing import Iterable
 
+REPO_DIR = Path(__file__).parent.parent
+SITEMAP = REPO_DIR / "public/sitemap.xml"
 
 def generate_sitemap(style_ids: Iterable[str]):
     namespace = {'ns': 'http://www.sitemaps.org/schemas/sitemap/0.9'}
     ET.register_namespace('', namespace['ns'])
 
-    tree = ET.parse('../public/sitemap.xml')
+    tree = ET.parse(SITEMAP)
     root = tree.getroot()
 
     existing_urls = {url.find('ns:loc', namespace).text for url in root.findall('ns:url', namespace)}
@@ -31,11 +33,11 @@ def generate_sitemap(style_ids: Iterable[str]):
             priority_element.text = '0.8'
             root.append(url_element)
 
-    tree.write('../public/sitemap.xml', encoding='UTF-8', xml_declaration=True)
+    tree.write(SITEMAP, encoding='UTF-8', xml_declaration=True)
 
 
 def main():
-    STYLES_DIR = Path('../public/minecolonies')
+    STYLES_DIR = REPO_DIR / 'public/minecolonies'
     style_ids = []
     for style_dir in STYLES_DIR.iterdir():
         if not style_dir.is_dir():

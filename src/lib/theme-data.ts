@@ -8,6 +8,7 @@ export type StyleInfoJson = {
     authors: string[];
     type: "minecolonies" | "stylecolonies" | "other";
     addedAt?: string;
+    wip?: boolean;
 };
 export type MissingStyleInfoJson = Omit<StyleInfoJson, "categories" | "addedAt">;
 
