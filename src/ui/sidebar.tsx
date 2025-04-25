@@ -1,4 +1,5 @@
 import { InstantModeToggleButton, ModeToggleDropdown } from "@/components/mode-toggle.tsx";
+import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import {
     Sidebar,
@@ -17,13 +18,16 @@ import { ImageSizeSlider, sliderColumnsAtom } from "@/ui/image-size-slider.tsx";
 import { SearchBar } from "@/ui/search-bar.tsx";
 import { CategorySelectable, ThemeSelectable } from "@/ui/selectable.tsx";
 import StyleVoting from "@/ui/voting.tsx";
-import { useAtomValue } from "jotai";
+import { useAtomValue, useSetAtom } from "jotai";
+import { selectedThemesAtom } from "@/lib/state-atoms.ts";
+import { X } from "lucide-react";
 
 function ImageColumnsNumber() {
     return useAtomValue(sliderColumnsAtom);
 }
 
 export function FullSidebar() {
+    const setSelectedStyles = useSetAtom(selectedThemesAtom);
     return (
         <Sidebar>
             <SidebarHeader className="sm:hidden">
@@ -45,7 +49,17 @@ export function FullSidebar() {
                     <ImageSizeSlider />
                 </SidebarGroup>
                 <Separator />
-                <SidebarGroup>
+                <SidebarGroup className="py-0">
+                        <Button
+                            variant="outline"
+                            className="w-full h-7 bg-transparent"
+                            onClick={() => setSelectedStyles(new Set())}
+                        >
+                            <X className="size-4" />
+                            Clear all selections
+                        </Button>
+                </SidebarGroup>
+                <SidebarGroup className="pt-0">
                     <SidebarGroupLabel>Minecolonies</SidebarGroupLabel>
                     <SidebarMenu>
                         {[...styleInfoMap.values()]
