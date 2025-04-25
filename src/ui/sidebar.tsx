@@ -36,11 +36,11 @@ export function FullSidebar() {
                 </SidebarMenu>
             </SidebarHeader>
             <SidebarContent>
-                <SidebarGroup>
+                <SidebarGroup className="pb-0">
                     <SidebarGroupLabel>Search</SidebarGroupLabel>
                     <SearchBar />
                 </SidebarGroup>
-                <SidebarGroup className="pb-0">
+                <SidebarGroup className="pb-2 pt-0">
                     <SidebarGroupLabel>Image columns: {ImageColumnsNumber()}</SidebarGroupLabel>
                     <ImageSizeSlider />
                 </SidebarGroup>

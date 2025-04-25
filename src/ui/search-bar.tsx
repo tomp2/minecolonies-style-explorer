@@ -12,6 +12,7 @@ import { Search, X } from "lucide-react";
 import { useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 import { useDelayedCaptureEvent } from "@/hooks/delayed-capture-event.ts";
+import { SidebarGroupLabel } from "@/components/ui/sidebar.tsx";
 
 export function SearchBar() {
     const { capture } = useDelayedCaptureEvent();
@@ -22,7 +23,7 @@ export function SearchBar() {
     const [input, setInput] = useState(searchTerm);
     const debounced = useDebouncedCallback(value => writeSearchTerm(value), 300);
     return (
-        <div className="px-2">
+        <div className="flex w-full flex-col px-2">
             <div className="relative">
                 <Search className="absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 transform text-muted-foreground" />
                 <X
@@ -47,13 +48,16 @@ export function SearchBar() {
                     }}
                 />
             </div>
-            <div className="mt-2 flex items-center space-x-2">
+
+            <SidebarGroupLabel className="-ml-2">Search from:</SidebarGroupLabel>
+            <div className="flex h-9 items-center space-x-2 rounded-md border px-2 shadow-sm">
+                <Label className="pb-0.5">Selections only</Label>
                 <Switch
-                    checked={searchSelectedThemesOnly}
-                    onCheckedChange={setSearchSelectedThemesOnly}
+                    checked={!searchSelectedThemesOnly}
+                    onCheckedChange={(checked: boolean) => setSearchSelectedThemesOnly(!checked)}
                     id="search-selected-themes-only"
                 />
-                <Label htmlFor="search-selected-themes-only">Search only from selected styles</Label>
+                <Label className="pb-0.5">All styles</Label>
             </div>
         </div>
     );
