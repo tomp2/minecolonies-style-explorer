@@ -8,6 +8,7 @@ import {
     Theme
 } from "@/lib/theme-data.ts";
 import { buildingMatchesStringSearchTerm } from "@/lib/utils.ts";
+import { getTab, setTab } from "@/ui/app-tabs";
 import { atom } from "jotai";
 import { atomWithStorage, loadable } from "jotai/utils";
 
@@ -27,39 +28,32 @@ export const LOCALSTORAGE_QUERY_PARAMS = {
  * selections when the page is reloaded and no relevant search parameters are present.
  */
 let initialUrlSearchParams = new URL(window.location.href).searchParams;
-const hasInitialUrlRelevantParams = [...initialUrlSearchParams.keys()].some(
+export const hasInitialUrlRelevantParams = [...initialUrlSearchParams.keys()].some(
     key => key in LOCALSTORAGE_QUERY_PARAMS,
 );
 if (initialUrlSearchParams.size === 0 && !hasInitialUrlRelevantParams) {
     initialUrlSearchParams = new URLSearchParams(localStorage.getItem("lastUrlParams") || "");
 }
 
-/**
- * The currently selected tab. Gets initialized to the "buildings" tab if the URL contains params that
- * makes it relevant to show the buildings.
- * */
-export const tabAtom = atom<"home" | "buildings" | "favorites" | string>(
-    hasInitialUrlRelevantParams ? "buildings" : "home",
-);
-export const updateTabAtomSelections = atom(null, (_get, set, selections: Set<string>) => {
-    const tab = _get(tabAtom);
+export const updateTabAtomSelections = atom(null, (_get, _set, selections: Set<string>) => {
+    const tab = getTab();
     const searchTerm = _get(searchTermAtom);
     if (tab !== "favorites") {
         if (selections.size > 0 || searchTerm) {
-            set(tabAtom, "buildings");
+            setTab("buildings");
         } else {
-            set(tabAtom, "home");
+            setTab("home");
         }
     }
 });
-export const updateTabAtomSearchQuery = atom(null, (_get, set, searchTerm: string) => {
-    const tab = _get(tabAtom);
+export const updateTabAtomSearchQuery = atom(null, (_get, _set, searchTerm: string) => {
+    const tab = getTab();
     const selectedStyles = _get(selectedThemesAtom);
     if (tab !== "favorites") {
         if (selectedStyles.size > 0 || searchTerm) {
-            set(tabAtom, "buildings");
+            setTab("buildings");
         } else {
-            set(tabAtom, "home");
+            setTab("home");
         }
     }
 });
@@ -260,6 +254,7 @@ export const pageContentAtom = atom(
           ]
         | [null, Error]
     > => {
+        const start = performance.now();
         const selectedThemes = get(selectedThemesAtom);
         const selectedCategories = get(selectedCategoriesAtom);
 
@@ -357,6 +352,10 @@ export const pageContentAtom = atom(
             return aIndex - bIndex;
         });
 
+        const end = performance.now();
+        console.log(
+            `Found ${totalBuildingsFound} buildings in ${end - start}ms. ${sectionList.length} sections.`,
+        );
         return [{ totalBuildingsFound, sections: sectionList }, null];
     },
 );
