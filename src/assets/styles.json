@@ -14,6 +14,16 @@
       "wip": false
     },
     {
+      "name": "antique",
+      "displayName": "Antique",
+      "type": "stylecolonies",
+      "authors": [
+        "IchHabeHunger54"
+      ],
+      "addedAt": "2025-05-28",
+      "wip": false
+    },
+    {
       "name": "byzantine",
       "displayName": "Byzantine_for_1.20",
       "type": "other",
@@ -41,7 +51,7 @@
         "LadyShatana"
       ],
       "addedAt": "2025-04-22",
-      "wip": true
+      "wip": false
     },
     {
       "name": "colonial",

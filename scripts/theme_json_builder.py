@@ -44,6 +44,7 @@ THEME_DIRS = [
     MINECOLONIES / "fortress",
     MINECOLONIES / "medievaldarkoak",
     MINECOLONIES / "cavern",
+    STYLECOLONIES / "antique",
     STYLECOLONIES / "steampunk",
     STYLECOLONIES / "highmagic",
     STYLECOLONIES / "fairytale",
