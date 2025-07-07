@@ -49,6 +49,7 @@ THEME_DIRS = [
     STYLECOLONIES / "highmagic",
     STYLECOLONIES / "fairytale",
     STYLECOLONIES / "functionalfantasy",
+    STYLECOLONIES / "aquatica",
     UNOFFICIAL / "littleton",
     UNOFFICIAL / "byzantine",
     UNOFFICIAL / "shogun",

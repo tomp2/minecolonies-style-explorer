@@ -132,4 +132,10 @@
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
     </url>
+    <url>
+        <loc>https://tomp2.github.io/minecolonies-style-explorer/?theme=aquatica</loc>
+        <lastmod>2025-07-07T18:18:03.856607</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
 </urlset>

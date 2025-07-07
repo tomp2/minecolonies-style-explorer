@@ -24,6 +24,16 @@
       "wip": false
     },
     {
+      "name": "aquatica",
+      "displayName": "Aquatica",
+      "type": "stylecolonies",
+      "authors": [
+        "m00b13n"
+      ],
+      "addedAt": "2025-07-07",
+      "wip": false
+    },
+    {
       "name": "byzantine",
       "displayName": "Byzantine_for_1.20",
       "type": "other",
