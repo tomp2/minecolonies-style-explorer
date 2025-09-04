@@ -7,8 +7,8 @@
       "authors": [
         "John Reiher",
         "Pixblockus",
-        "_Raycoms_",
-        "Thodor12"
+        "Thodor12",
+        "_Raycoms_"
       ],
       "addedAt": null,
       "wip": false
@@ -68,8 +68,8 @@
       "displayName": "Colonial",
       "type": "minecolonies",
       "authors": [
-        "Raycoms",
         "John Reiher",
+        "Raycoms",
         "SomeAddons",
         "Thodor12"
       ],
@@ -92,8 +92,8 @@
       "displayName": "FairyTale",
       "type": "stylecolonies",
       "authors": [
-        "Visteria_",
-        "Koala_Kat_"
+        "Koala_Kat_",
+        "Visteria_"
       ],
       "addedAt": "2025-03-22T15:00:00.000Z",
       "wip": false
@@ -184,8 +184,8 @@
       "displayName": "Nordic Spruce",
       "type": "minecolonies",
       "authors": [
-        "Luna",
-        "John Reiher"
+        "John Reiher",
+        "Luna"
       ],
       "addedAt": null,
       "wip": false

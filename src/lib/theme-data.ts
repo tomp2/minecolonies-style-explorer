@@ -22,7 +22,11 @@ type BuildingDataJson = {
     // Optional display name for the building that overrides everything else.
     displayName?: string;
     // Optional size for the building (width, height, depth).
-    size?: [number, number, number];
+    size?: {
+        x: number;
+        y: number;
+        z: number;
+    };
 };
 
 export type CategoryJson = {

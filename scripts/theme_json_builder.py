@@ -10,8 +10,7 @@ from dataclasses import dataclass, field, asdict
 from datetime import datetime
 from functools import cached_property, lru_cache
 from pathlib import Path
-from typing import TypedDict, Literal
-
+from typing import Literal, Any
 import numpy as np
 from PIL import Image
 from blurhash import encode
@@ -64,10 +63,16 @@ logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 
 
 # --- Types ---
+@dataclass
+class BuildingSize:
+    x: int
+    y: int
+    z: int
+
 
 @dataclass
 class BuildingObject:
-    size: tuple[int, int, int]
+    size: BuildingSize
     blur: list[str]
     back: bool | None = None
     hutBlocks: list[str] | None = None
@@ -77,8 +82,15 @@ class BuildingObject:
 class CachedBuildingObject:
     name: str
     level: int | Literal[False]
-    size: tuple[int, int, int] | Literal["unknown"] = "unknown"
-    hutBlocks: list[str] | set[str] | Literal["unknown"] = "unknown"
+    size: BuildingSize | Literal["unknown"] = "unknown"
+    hutBlocks: list[str] | Literal["unknown"] = "unknown"
+
+    @classmethod
+    def from_dict(cls, data: dict) -> CachedBuildingObject:
+        size = data["size"]
+        if data["size"] != "unknown":
+            data = {**data, "size": BuildingSize(**size)}
+        return cls(**data)
 
 
 @dataclass
@@ -112,7 +124,7 @@ class PackCache:
 
     @classmethod
     def from_dict(cls, data: dict) -> PackCache:
-        buildings = {k: CachedBuildingObject(**v) for k, v in data.get("buildings", {}).items()}
+        buildings = {k: CachedBuildingObject.from_dict(v) for k, v in data.get("buildings", {}).items()}
         blur_hashes = data.get("blurHashes", {})
         return cls(buildings=buildings, blurHashes=blur_hashes)
 
@@ -154,10 +166,10 @@ def get_file_hash(path: Path) -> str:
     return hasher.hexdigest()
 
 
-def format_json(obj: any) -> any:
+def format_json(obj: Any) -> Any:
     if isinstance(obj, dict):
         return {key: format_json(value) for key, value in sorted(obj.items()) if value is not None}
-    elif isinstance(obj, (list, set)):
+    elif isinstance(obj, (list, set)) and all(isinstance(i, dict) for i in obj):
         return sorted(format_json(item) for item in obj if item is not None)
     else:
         return obj
@@ -183,26 +195,28 @@ class BlueprintFile:
         if cached_data := self._style.cache_buildings.get(self.file_hash):
             self.cached_data = cached_data
         else:
-            cached_data = CachedBuildingObject(name=self._name, level=self._level)
+            name, level = self._name_and_level
+            cached_data = CachedBuildingObject(name=name, level=level)
             self.cached_data = self._style.cache_buildings.setdefault(self.file_hash, cached_data)
 
         self.name = self.cached_data.name
         self.level = self.cached_data.level
 
-    def get_hut_blocks(self):
+    def get_hut_blocks(self) -> list[str] | None:
         if self.cached_data.hutBlocks != "unknown":
             return self.cached_data.hutBlocks
 
         hut_blocks = self._get_hut_blocks()
-        self.cached_data.hutBlocks = hut_blocks if hut_blocks else None
+        self.cached_data.hutBlocks = hut_blocks if hut_blocks else "unknown"
         return hut_blocks
 
     def get_size(self):
         if self.cached_data.size != "unknown":
             return self.cached_data.size
 
-        self.cached_data.size = self._calculate_building_size()
-        return self.cached_data
+        calculated_size = BuildingSize(x=self._size_x, y=self._size_y, z=self._size_z)
+        self.cached_data.size = calculated_size
+        return calculated_size
 
     def _get_primary_offset(self):
         data = self._read()
@@ -250,45 +264,34 @@ class BlueprintFile:
         return False
 
     @cached_property
-    def _name_and_level(self) -> TypedDict("BuildingName", {"buildingName": str, "buildingLevel": int | Literal[False]}):
+    def _name_and_level(self) -> tuple[str, int | Literal[False]]:
         # If the building is a leveling building, the last number on the name indicates the level.
-        # Otherwise, the building doesn't have levels, and number suffixes are to be included in the name.
+        # Otherwise, the building doesn't have levels, and a number of suffixes are to be included in the name.
         match = re.match(r"^(.+?)(\d*?)\.blueprint$", self.file_path.name)
         if not match:
             raise ValueError(f"File name doesn't match the pattern: {self.file_path.name}")
 
         if self._get_is_minecolonies_building():
             if len(match.groups()) == 1:
-                return {"buildingName": match[0], "buildingLevel": False}
+                return match[0], False
             else:
-                return {"buildingName": match[1], "buildingLevel": int(match[2]) if match[2] else False}
+                return match[1], int(match[2]) if match[2] else False
 
-        return {"buildingName": self.file_path.stem, "buildingLevel": False}
+        return self.file_path.stem, False
 
-    @property
-    def _name(self):
-        return self._name_and_level["buildingName"]
-
-    @property
-    def _level(self):
-        return self._name_and_level["buildingLevel"]
-
-    def _get_hut_blocks(self):
+    def _get_hut_blocks(self) -> list[str] | None:
         primary_offset = self._get_primary_offset()
 
         hut_blocks = set()
         for block in self._read().get("palette"):
-            block_name = block.get("Name").value
+            block_name: str = block.get("Name").value
             if block_name.startswith("minecolonies:blockhut"):
                 short_name = block_name[len("minecolonies:blockhut"):]
                 if short_name in HUT_BLOCKS:
                     hut_blocks.add(short_name)
 
         raw_data = self._get_raw_block_data()
-        hut_y = primary_offset["y"]
-        hut_x = primary_offset["x"]
-        hut_z = primary_offset["z"]
-        primary_hut = raw_data[hut_y, hut_z, hut_x]
+        primary_hut = raw_data[primary_offset["y"], primary_offset["z"], primary_offset["x"]]
         material_palette = self._read().get("palette")
         primary_hut_name = material_palette[primary_hut].get("Name").value
 
@@ -319,33 +322,6 @@ class BlueprintFile:
             one_dim_array = one_dim_array[:-1]
         return one_dim_array.reshape((self._size_y, self._size_z, self._size_x))
 
-    def _calculate_building_size(self):
-        # palette_indices = self._get_raw_block_data()
-        #
-        # material_palette = self._read().get("palette")
-        # solidity_palette = np.array([entry.get("Name").value not in IGNORED_BLOCKS for entry in material_palette],
-        #                             dtype=bool)
-        #
-        # palette_indices_solidity = solidity_palette[palette_indices]
-        #
-        # y_slices_solidity = palette_indices_solidity.any(axis=(1, 2))
-        # x_slices_solidity = palette_indices_solidity.any(axis=(0, 2))
-        # z_slices_solidity = palette_indices_solidity.any(axis=(0, 1))
-        #
-        # bottom_y = np.argmax(y_slices_solidity)
-        # top_y = self._size_y - 1 - np.argmax(y_slices_solidity[::-1])
-        #
-        # left_x = np.argmax(x_slices_solidity)
-        # right_x = self._size_x - 1 - np.argmax(x_slices_solidity[::-1])
-        #
-        # front_z = np.argmax(z_slices_solidity)
-        # back_z = self._size_z - 1 - np.argmax(z_slices_solidity[::-1])
-        #
-        # return int(right_x - left_x + 1), int(top_y - bottom_y + 1), int(back_z - front_z + 1)
-
-        return self._size_x, self._size_y, self._size_z
-
-
 
 def encode_image_to_blurhash(image_path: Path) -> str:
     with Image.open(image_path) as image:
@@ -354,85 +330,10 @@ def encode_image_to_blurhash(image_path: Path) -> str:
     return hash_result
 
 
-def add_combined_buildings(theme_id: str, categories_root: Category):
-    """
-    Reads the combined buildings which look like this:
-    [
-      {
-        "name": "barracksfull",
-        "displayName": "Barracks + Towers",
-        "path": "nordic/military",
-        "blueprints": [
-          "barracks5.blueprint",
-          "barrackstower5.blueprint"
-        ]
-      }
-    ]
-    These entries must be added to the themes.json file.
-    The "path" must be used to find the actual blueprint files +
-    add the new building object to the correct category in the resulting JSON.
-    """
-    for combined_building in COMBINED_BUILDINGS:
-        name = combined_building["name"]
-        path = combined_building["path"].split("/")
-        (theme_type, theme_name, *category_path) = path
-        if not theme_name == theme_id:
-            continue
-
-        theme_source_dir = BLUEPRINTS / theme_type / theme_name
-        if not theme_source_dir.exists():
-            logging.warning(f"Theme directory not found: {theme_name}")
-            continue
-
-        combined_hut_blocks = set()
-        building_size = None
-        for blueprint in combined_building["blueprints"]:
-            blueprint_path = theme_source_dir.joinpath(*category_path).joinpath(blueprint)
-            blueprint = BlueprintFile(blueprint_path)
-            combined_hut_blocks |= set(blueprint._get_hut_blocks())
-
-            if not building_size:
-                building_size = blueprint._calculate_building_size()
-            else:
-                prev_volume = building_size[0] * building_size[1] * building_size[2]
-                current_size = blueprint._calculate_building_size()
-                current_volume = current_size[0] * current_size[1] * current_size[2]
-                if current_volume > prev_volume:
-                    building_size = current_size
-
-        building_object = {
-            "displayName": combined_building["displayName"],
-            "size": building_size
-        }
-
-        if combined_hut_blocks:
-            building_object["hutBlocks"] = list(combined_hut_blocks)
-
-        combined_images_dir = IMAGES_ROOT / theme_name / "/".join(category_path) / name
-        front = combined_images_dir / "front.jpg"
-        back = combined_images_dir / "back.jpg"
-
-        frontExists = front.exists()
-        backExists = back.exists()
-
-        if not frontExists:
-            logging.warning(f"Required front image not found: {front.relative_to(IMAGES_ROOT)}")
-            continue
-
-        blur_hashes = [encode_image_to_blurhash(front)]
-
-        if backExists:
-            building_object["back"] = True
-            blur_hashes.append(encode_image_to_blurhash(back))
-
-        building_object["blur"] = blur_hashes
-
-        # Drill down in the themes object to find the correct category for adding the new building
-        current_category = categories_root
-        for category in category_path:
-            current_category = current_category["categories"][category]
-
-        current_category["blueprints"][name] = building_object
+def find_building_images(image_dir: Path) -> tuple[BuildingImage, BuildingImage]:
+    front = BuildingImage(image_dir / "front.jpg")
+    back = BuildingImage(image_dir / "back.jpg")
+    return front, back
 
 
 class Style:
@@ -454,7 +355,7 @@ class Style:
         self.style_type = path.relative_to(BLUEPRINTS).parent.as_posix()
         self.style_info = StyleInfo(
             displayName=self.pack_meta["name"],
-            authors=self.pack_meta["authors"],
+            authors=sorted(self.pack_meta["authors"]),
             name=self.dir_name,
             type=self.style_type
         )
@@ -488,7 +389,7 @@ class Style:
                 blurhash = self.cache_blur_hashes[sha]
             else:
                 blurhash = image.blurhash()
-                logging.info(f"Cache miss for {image.relative_to(self.img_dir.parent)}")
+                # logging.info(f"Cache miss for {image.relative_to(self.img_dir.parent)}")
 
             blurhashes.append(blurhash)
             self.cache_blur_hashes[sha] = blurhash
@@ -501,11 +402,6 @@ class Style:
     #     front = BuildingImage(image_dir / "front.jpg")
     #     back = BuildingImage(image_dir / "back.jpg")
     #     return front, back
-
-    def find_building_images(self, image_dir: Path) -> tuple[BuildingImage, BuildingImage]:
-        front = BuildingImage(image_dir / "front.jpg")
-        back = BuildingImage(image_dir / "back.jpg")
-        return front, back
 
     def process_building(self, path: Path, parent: Category):
         if path.suffix != ".blueprint":
@@ -524,7 +420,7 @@ class Style:
 
         relative_path = path.relative_to(self.path).parent
         image_dir = self.img_dir / relative_path / blueprint.name.strip()
-        [front, back] = self.find_building_images(image_dir)
+        [front, back] = find_building_images(image_dir)
         if not front.exists():
             logging.warning(f"[MISSING FRONT]: {front.relative_to(self.img_dir.parent)}")
             return
@@ -556,8 +452,8 @@ class Style:
             logging.warning(f"Theme directory not found: {theme_name}")
             return
 
-        combined_hut_blocks = set()
-        building_size: tuple[int, int, int] | None = None
+        combined_hut_blocks: set[str] = set()
+        building_size: BuildingSize | None = None
         for blueprint in combined_building["blueprints"]:
             blueprint_path = theme_source_dir.joinpath(*category_path, blueprint)
             blueprint = BlueprintFile(blueprint_path, self)
@@ -566,8 +462,8 @@ class Style:
                 building_size = blueprint.get_size()
             else:
                 size = blueprint.get_size()
-                prev_area = building_size[0] * building_size[2]
-                current_volume = size[0] * size[2]
+                prev_area = building_size.x * building_size.z
+                current_volume = size.x * size.z
                 if current_volume > prev_area:
                     building_size = size
 
@@ -575,7 +471,7 @@ class Style:
             raise ValueError(f"Building size not found for combined building {path}/{name}")
 
         image_dir = self.img_dir.joinpath(*category_path, name)
-        [front, back] = self.find_building_images(image_dir)
+        [front, back] = find_building_images(image_dir)
         if not front.exists():
             logging.warning(f"[MISSING FRONT]: {front.relative_to(self.img_dir.parent)}")
             return
@@ -594,7 +490,7 @@ class Style:
             size=building_size,
             blur=self._blur_images([front, back]),
             back=back.exists(),
-            hutBlocks=combined_hut_blocks
+            hutBlocks=list(combined_hut_blocks)
         )
 
     def run(self) -> Style:

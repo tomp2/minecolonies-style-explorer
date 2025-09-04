@@ -304,7 +304,7 @@ export function BuildingCard({ building, isFavorite }: { building: BuildingData;
                         <span>Unknown size</span>
                     ) : (
                         <span>
-                            Base:{building.json.size[0]}x{building.json.size[2]}, H: {building.json.size[1]}
+                            Base:{building.json.size.x}x{building.json.size.z}, H: {building.json.size.y}
                         </span>
                     )}
                 </p>
