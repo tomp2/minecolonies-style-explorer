@@ -250,8 +250,7 @@ class BlueprintFile:
         return False
 
     @cached_property
-    def _name_and_level(self) -> TypedDict("BuildingName",
-                                           {"buildingName": str, "buildingLevel": int | Literal[False]}):
+    def _name_and_level(self) -> TypedDict("BuildingName", {"buildingName": str, "buildingLevel": int | Literal[False]}):
         # If the building is a leveling building, the last number on the name indicates the level.
         # Otherwise, the building doesn't have levels, and number suffixes are to be included in the name.
         match = re.match(r"^(.+?)(\d*?)\.blueprint$", self.file_path.name)
@@ -321,28 +320,31 @@ class BlueprintFile:
         return one_dim_array.reshape((self._size_y, self._size_z, self._size_x))
 
     def _calculate_building_size(self):
-        palette_indices = self._get_raw_block_data()
+        # palette_indices = self._get_raw_block_data()
+        #
+        # material_palette = self._read().get("palette")
+        # solidity_palette = np.array([entry.get("Name").value not in IGNORED_BLOCKS for entry in material_palette],
+        #                             dtype=bool)
+        #
+        # palette_indices_solidity = solidity_palette[palette_indices]
+        #
+        # y_slices_solidity = palette_indices_solidity.any(axis=(1, 2))
+        # x_slices_solidity = palette_indices_solidity.any(axis=(0, 2))
+        # z_slices_solidity = palette_indices_solidity.any(axis=(0, 1))
+        #
+        # bottom_y = np.argmax(y_slices_solidity)
+        # top_y = self._size_y - 1 - np.argmax(y_slices_solidity[::-1])
+        #
+        # left_x = np.argmax(x_slices_solidity)
+        # right_x = self._size_x - 1 - np.argmax(x_slices_solidity[::-1])
+        #
+        # front_z = np.argmax(z_slices_solidity)
+        # back_z = self._size_z - 1 - np.argmax(z_slices_solidity[::-1])
+        #
+        # return int(right_x - left_x + 1), int(top_y - bottom_y + 1), int(back_z - front_z + 1)
 
-        material_palette = self._read().get("palette")
-        solidity_palette = np.array([entry.get("Name").value not in IGNORED_BLOCKS for entry in material_palette],
-                                    dtype=bool)
+        return self._size_x, self._size_y, self._size_z
 
-        palette_indices_solidity = solidity_palette[palette_indices]
-
-        y_slices_solidity = palette_indices_solidity.any(axis=(1, 2))
-        x_slices_solidity = palette_indices_solidity.any(axis=(0, 2))
-        z_slices_solidity = palette_indices_solidity.any(axis=(0, 1))
-
-        bottom_y = np.argmax(y_slices_solidity)
-        top_y = self._size_y - 1 - np.argmax(y_slices_solidity[::-1])
-
-        left_x = np.argmax(x_slices_solidity)
-        right_x = self._size_x - 1 - np.argmax(x_slices_solidity[::-1])
-
-        front_z = np.argmax(z_slices_solidity)
-        back_z = self._size_z - 1 - np.argmax(z_slices_solidity[::-1])
-
-        return int(right_x - left_x + 1), int(top_y - bottom_y + 1), int(back_z - front_z + 1)
 
 
 def encode_image_to_blurhash(image_path: Path) -> str:
