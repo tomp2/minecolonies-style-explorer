@@ -14,17 +14,6 @@
     ]
   },
   {
-    "name": "sandstone",
-    "displayName": "Desert Oasis",
-    "authors": [
-      "Raycoms",
-      "John Reiher",
-      "SomeAddons",
-      "AravanFox",
-      "Moobien"
-    ]
-  },
-  {
     "name": "frontier",
     "displayName": "Frontier",
     "authors": [
@@ -69,13 +58,6 @@
     "displayName": "Nile",
     "authors": [
       "Spumantii"
-    ]
-  },
-  {
-    "name": "spacewars",
-    "displayName": "Space Wars",
-    "authors": [
-      "JohnReiher & Raycoms"
     ]
   },
   {

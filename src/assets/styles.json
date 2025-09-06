@@ -88,6 +88,20 @@
       "wip": false
     },
     {
+      "name": "sandstone",
+      "displayName": "Desert Oasis",
+      "type": "minecolonies",
+      "authors": [
+        "AravanFox",
+        "John Reiher",
+        "Moobien",
+        "Raycoms",
+        "SomeAddons"
+      ],
+      "addedAt": "2025-09-06",
+      "wip": false
+    },
+    {
       "name": "fairytale",
       "displayName": "FairyTale",
       "type": "stylecolonies",
@@ -220,6 +234,16 @@
         "Spumantii"
       ],
       "addedAt": "2025-02-03T21:00:00.000Z",
+      "wip": false
+    },
+    {
+      "name": "spacewars",
+      "displayName": "Space Wars",
+      "type": "minecolonies",
+      "authors": [
+        "JohnReiher & Raycoms"
+      ],
+      "addedAt": "2025-09-06",
       "wip": false
     },
     {

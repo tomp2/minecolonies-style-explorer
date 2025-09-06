@@ -43,6 +43,8 @@ THEME_DIRS = [
     MINECOLONIES / "fortress",
     MINECOLONIES / "medievaldarkoak",
     MINECOLONIES / "cavern",
+    MINECOLONIES / "spacewars",
+    MINECOLONIES / "sandstone",
     STYLECOLONIES / "antique",
     STYLECOLONIES / "steampunk",
     STYLECOLONIES / "highmagic",
@@ -395,13 +397,6 @@ class Style:
             self.cache_blur_hashes[sha] = blurhash
 
         return blurhashes
-
-    # def find_building_image(self, blueprint_path: Path, building_name: str) -> tuple[BuildingImage, BuildingImage]:
-    #     blueprint_rel_path = blueprint_path.relative_to(self.path)
-    #     image_dir = self.img_dir / blueprint_rel_path.parent / building_name.strip()
-    #     front = BuildingImage(image_dir / "front.jpg")
-    #     back = BuildingImage(image_dir / "back.jpg")
-    #     return front, back
 
     def process_building(self, path: Path, parent: Category):
         if path.suffix != ".blueprint":
