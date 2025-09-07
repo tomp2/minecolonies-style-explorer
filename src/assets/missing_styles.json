@@ -21,6 +21,13 @@
     ]
   },
   {
+    "name": "Hive",
+    "displayName": "Hive",
+    "authors": [
+      "AravanFox, LadyShatana, Jinotad"
+    ]
+  },
+  {
     "name": "incan",
     "displayName": "Incan",
     "authors": [
@@ -57,7 +64,18 @@
     "name": "Nile",
     "displayName": "Nile",
     "authors": [
-      "Spumantii"
+      "Spumantii, Figure4"
+    ]
+  },
+  {
+    "name": "Tropical",
+    "displayName": "Tropical",
+    "authors": [
+      "Thaylar",
+      "John Reiher",
+      "Pixblockus",
+      "_Raycoms_",
+      "Thodor12"
     ]
   },
   {

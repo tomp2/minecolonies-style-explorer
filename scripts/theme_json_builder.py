@@ -28,33 +28,40 @@ MINECOLONIES = BLUEPRINTS / "minecolonies"
 STYLECOLONIES = BLUEPRINTS / "stylecolonies"
 UNOFFICIAL = BLUEPRINTS / "other"
 
-THEME_DIRS = [
-    MINECOLONIES / "medievaloak",
-    MINECOLONIES / "caledonia",
-    MINECOLONIES / "nordic",
-    MINECOLONIES / "darkoak",
-    MINECOLONIES / "medievalspruce",
-    MINECOLONIES / "pagoda",
-    MINECOLONIES / "truedwarven",
-    MINECOLONIES / "original",
-    MINECOLONIES / "ancientathens",
-    MINECOLONIES / "colonial",
-    MINECOLONIES / "shire",
-    MINECOLONIES / "fortress",
-    MINECOLONIES / "medievaldarkoak",
-    MINECOLONIES / "cavern",
-    MINECOLONIES / "spacewars",
-    MINECOLONIES / "sandstone",
-    STYLECOLONIES / "antique",
-    STYLECOLONIES / "steampunk",
-    STYLECOLONIES / "highmagic",
-    STYLECOLONIES / "fairytale",
-    STYLECOLONIES / "functionalfantasy",
-    STYLECOLONIES / "aquatica",
-    UNOFFICIAL / "littleton",
-    UNOFFICIAL / "byzantine",
-    UNOFFICIAL / "shogun",
-]
+STYLES = {
+    "minecolonies": [
+        "medievaloak",
+        "caledonia",
+        "nordic",
+        "darkoak",
+        "medievalspruce",
+        "pagoda",
+        "truedwarven",
+        "original",
+        "ancientathens",
+        "colonial",
+        "shire",
+        "fortress",
+        "medievaldarkoak",
+        "cavern",
+        "spacewars",
+        "sandstone",
+    ],
+    "stylecolonies": [
+        "Antique",
+        "aquatica",
+        "fairytale",
+        "Functional Fantasy",
+        "High Magic",
+        "steampunk",
+    ],
+    "other": [
+        "littleton",
+        "Byzantine_for_1.20",
+        "Shogun",
+    ],
+}
+
 COMBINED_BUILDINGS_PATH = REPO_DIR / "scripts/combined_buildings.json"
 BUILDING_IGNORE = REPO_DIR / "scripts/buildings.ignore"
 STYLE_INFO_PATH = REPO_DIR / "src/assets/styles.json"
@@ -300,7 +307,7 @@ class BlueprintFile:
         if primary_hut_name.startswith("minecolonies:blockhut"):
             primary_hut_name = primary_hut_name[len("minecolonies:blockhut"):]
             hut_blocks.discard(primary_hut_name)
-            return [primary_hut_name, *hut_blocks]
+            return [primary_hut_name, *sorted(hut_blocks)]
 
         return list(hut_blocks)
 
@@ -339,26 +346,33 @@ def find_building_images(image_dir: Path) -> tuple[BuildingImage, BuildingImage]
 
 
 class Style:
-    def __init__(self, path: Path):
-        self.path = path
-        self.dir_name = path.name
-        self.img_dir = IMAGES_ROOT / self.dir_name
-        self.pack_meta_path = path / "pack.json"
+    def __init__(self, blueprints_dir: Path, style_type: str):
+        self.blueprints_dir = blueprints_dir
 
-        if not self.path.exists():
-            raise FileNotFoundError(f"Path does not exist: {self.path}")
+        if "Byzantine_for_1.20" in blueprints_dir.name:
+            self.images_dir_name = "byzantine"
+        else:
+            self.images_dir_name = re.sub(r'[^a-z0-9]', '', blueprints_dir.name.lower())
+
+        self.images_dir = IMAGES_ROOT / self.images_dir_name
+        self.style_type = style_type
+
+        self.blueprints_dir_name = blueprints_dir.name
+        self.pack_meta_path = blueprints_dir / "pack.json"
+
+        if not self.blueprints_dir.exists():
+            raise FileNotFoundError(f"Path does not exist: {self.blueprints_dir}")
         if not self.pack_meta_path.exists():
             raise FileNotFoundError(f"Pack meta file does not exist: {self.pack_meta_path}")
-        if not self.img_dir.exists():
-            raise FileNotFoundError(f"Image directory does not exist: {self.img_dir}")
+        if not self.images_dir.exists():
+            raise FileNotFoundError(f"Image directory does not exist: {self.images_dir}")
 
         self.root: Category = Category()
         self.pack_meta = json.loads(self.pack_meta_path.read_text())
-        self.style_type = path.relative_to(BLUEPRINTS).parent.as_posix()
         self.style_info = StyleInfo(
             displayName=self.pack_meta["name"],
             authors=sorted(self.pack_meta["authors"]),
-            name=self.dir_name,
+            name=self.images_dir_name,
             type=self.style_type
         )
         self.style_json = StyleJson(
@@ -368,10 +382,12 @@ class Style:
             categories=self.root.categories
         )
 
-        self._cache_file_path = CACHE_DIR / f"{self.dir_name}.json"
+        self._cache_file_path = CACHE_DIR / f"{self.images_dir_name}.json"
         self._cache = PackCache()
         if self._cache_file_path.exists():
             self._cache = PackCache.from_dict(json.loads(self._cache_file_path.read_text()))
+
+        self.missing = []
 
     @property
     def cache_buildings(self):
@@ -405,7 +421,7 @@ class Style:
         blueprint = BlueprintFile(path, self)
 
         # Skip ignored blueprints
-        blueprint_path = f"{path.relative_to(self.path.parent).parent.as_posix()}/{blueprint.name}"
+        blueprint_path = f"{path.relative_to(self.blueprints_dir.parent).parent.as_posix()}/{blueprint.name}"
         if ignored_pattern.match(blueprint_path):
             return
         # Skip if a higher level blueprint exists
@@ -413,11 +429,11 @@ class Style:
         if higher_level_path.exists():
             return
 
-        relative_path = path.relative_to(self.path).parent
-        image_dir = self.img_dir / relative_path / blueprint.name.strip()
+        relative_path = path.relative_to(self.blueprints_dir).parent
+        image_dir = self.images_dir / relative_path / blueprint.name.strip()
         [front, back] = find_building_images(image_dir)
         if not front.exists():
-            logging.warning(f"[MISSING FRONT]: {front.relative_to(self.img_dir.parent)}")
+            self.missing.append(front.relative_to(self.images_dir.parent).parent)
             return
 
         parent.blueprints[blueprint.name.strip()] = BuildingObject(
@@ -439,7 +455,7 @@ class Style:
         name = combined_building["name"]
         path = combined_building["path"].split("/")
         (theme_type, theme_name, *category_path) = path
-        if not theme_name == self.dir_name or theme_type != self.style_type:
+        if not theme_name == self.images_dir_name or theme_type != self.style_type:
             return
 
         theme_source_dir = BLUEPRINTS / theme_type / theme_name
@@ -447,12 +463,16 @@ class Style:
             logging.warning(f"Theme directory not found: {theme_name}")
             return
 
-        combined_hut_blocks: set[str] = set()
+        combined_hut_blocks: list[str] = []
         building_size: BuildingSize | None = None
         for blueprint in combined_building["blueprints"]:
             blueprint_path = theme_source_dir.joinpath(*category_path, blueprint)
             blueprint = BlueprintFile(blueprint_path, self)
-            combined_hut_blocks |= set(blueprint.get_hut_blocks() or set())
+            blueprint_huts = blueprint.get_hut_blocks()
+            for hut in blueprint_huts or []:
+                if hut not in combined_hut_blocks:
+                    combined_hut_blocks.append(hut)
+
             if not building_size:
                 building_size = blueprint.get_size()
             else:
@@ -465,10 +485,10 @@ class Style:
         if not building_size:
             raise ValueError(f"Building size not found for combined building {path}/{name}")
 
-        image_dir = self.img_dir.joinpath(*category_path, name)
+        image_dir = self.images_dir.joinpath(*category_path, name)
         [front, back] = find_building_images(image_dir)
         if not front.exists():
-            logging.warning(f"[MISSING FRONT]: {front.relative_to(self.img_dir.parent)}")
+            logging.warning(f"[MISSING FRONT]: {front.relative_to(self.images_dir.parent)}")
             return
 
         current_category = self.root
@@ -485,11 +505,11 @@ class Style:
             size=building_size,
             blur=self._blur_images([front, back]),
             back=back.exists(),
-            hutBlocks=list(combined_hut_blocks)
+            hutBlocks=combined_hut_blocks
         )
 
     def run(self) -> Style:
-        for dir_item in self.path.iterdir():
+        for dir_item in self.blueprints_dir.iterdir():
             if dir_item.is_file():
                 self.process_building(dir_item, self.root)
             else:
@@ -508,11 +528,11 @@ class Style:
 
     def write_style_json(self):
         style_dict = format_json(asdict(self.style_json))
-        self.img_dir.joinpath("style.json").write_text(json.dumps(style_dict))
+        self.images_dir.joinpath("style.json").write_text(json.dumps(style_dict))
 
 
 def style_runner(style: Style) -> Style:
-    logging.info(f"Processing theme: {style.dir_name}")
+    logging.info(f"Processing theme: {style.blueprints_dir_name}")
     style.run()
     style.write_cache()
     style.write_style_json()
@@ -520,22 +540,36 @@ def style_runner(style: Style) -> Style:
 
 
 def main():
-    styles = [Style(theme_path) for theme_path in THEME_DIRS]
+    # Gather all styles
+    styles = []
+    for style_type, type_styles in STYLES.items():
+        for dir_name in type_styles:
+            styles.append(Style(BLUEPRINTS / style_type / dir_name, style_type))
 
+    # Process and write all style JSON files
     logging.info("Processing themes...")
     start = time.perf_counter()
     with ProcessPoolExecutor() as executor:
         style_results = list(executor.map(style_runner, styles))
-    # style_results = [style_runner(style) for style in styles]
+        # style_results = [style_runner(style) for style in styles]
     end = time.perf_counter()
     logging.info(f"Processed {len(style_results)} themes in {end - start:.2f} seconds")
 
+    # Report missing images
+    for style in sorted(style_results, key=lambda x: x.blueprints_dir_name):
+        if not style.missing:
+            continue
+        print(f"\nMissing images for style '{style.blueprints_dir_name}': {len(style.missing)}")
+        for missing in sorted(style.missing):
+            print(f"{missing.as_posix()}")
+
+    # List all styles and categories to a static JSON file
     logging.info("Saving style infos...")
     categories = set()
     style_infos = []
     for style in style_results:
         categories.update(style.get_root_categories())
-        prev_record = STYLE_INFO.get(style.dir_name)
+        prev_record = STYLE_INFO.get(style.images_dir_name)
         if prev_record and "addedAt" in prev_record and prev_record["addedAt"]:
             style.style_info.addedAt = prev_record["addedAt"]
         elif not prev_record:
@@ -550,8 +584,9 @@ def main():
     }
     STYLE_INFO_PATH.write_text(json.dumps(output, indent=2))
 
+    # List missing styles to static JSON file
     logging.info("Listing missing styles for voting...")
-    found_style_ids = {style.dir_name for style in styles}
+    found_style_ids = {style.blueprints_dir_name for style in styles}
     found_style_ids.update({style.style_info.displayName for style in styles})
 
     missing_styles_ids = []
@@ -567,19 +602,20 @@ def main():
             logging.warning(f"Style meta file not found for 'missing' style: {style_meta_path}")
             continue
 
-        [_, style_name] = missing_style
+        [_, style_img_dir_name] = missing_style
 
         style_meta = json.loads(style_meta_path.read_text())
         missing_styles.append({
-            "name": style_name,
+            "name": style_img_dir_name,
             "displayName": style_meta["name"],
             "authors": style_meta["authors"],
         })
     missing_styles.sort(key=lambda x: x["displayName"])
     MISSING_STYLE_INFO_PATH.write_text(json.dumps(missing_styles, indent=2))
 
+    # Generate sitemap
     logging.info("Generating sitemap...")
-    generate_sitemap({style.dir_name for style in styles})
+    generate_sitemap({style.images_dir_name for style in styles})
 
     logging.info("Done!")
 
