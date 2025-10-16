@@ -59,6 +59,7 @@ STYLES = {
         "littleton",
         "Byzantine_for_1.20",
         "Shogun",
+        "Nile"
     ],
 }
 

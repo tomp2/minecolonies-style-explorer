@@ -194,6 +194,16 @@
       "wip": false
     },
     {
+      "name": "nile",
+      "displayName": "Nile",
+      "type": "other",
+      "authors": [
+        "Spumantii, Figure4"
+      ],
+      "addedAt": "2025-09-07",
+      "wip": true
+    },
+    {
       "name": "nordic",
       "displayName": "Nordic Spruce",
       "type": "minecolonies",
