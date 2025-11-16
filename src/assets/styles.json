@@ -77,6 +77,16 @@
       "wip": false
     },
     {
+      "name": "crimsonkeep",
+      "displayName": "Crimson Keep",
+      "type": "stylecolonies",
+      "authors": [
+        "PrincessWendy, Dylbert93"
+      ],
+      "addedAt": "2025-11-16",
+      "wip": false
+    },
+    {
       "name": "darkoak",
       "displayName": "Dark Oak Treehouse",
       "type": "minecolonies",
@@ -123,6 +133,16 @@
       "wip": false
     },
     {
+      "name": "frontier",
+      "displayName": "Frontier",
+      "type": "stylecolonies",
+      "authors": [
+        "m00b13n"
+      ],
+      "addedAt": "2025-11-16",
+      "wip": false
+    },
+    {
       "name": "functionalfantasy",
       "displayName": "Functional Fantasy",
       "type": "stylecolonies",
@@ -141,6 +161,16 @@
         "Five Tais, Private Panda"
       ],
       "addedAt": "2025-03-22T15:00:00.000Z",
+      "wip": false
+    },
+    {
+      "name": "hive",
+      "displayName": "Hive",
+      "type": "stylecolonies",
+      "authors": [
+        "AravanFox, LadyShatana, Jinotad"
+      ],
+      "addedAt": "2025-11-16",
       "wip": false
     },
     {

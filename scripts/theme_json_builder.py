@@ -54,6 +54,9 @@ STYLES = {
         "Functional Fantasy",
         "High Magic",
         "steampunk",
+        "frontier",
+        "Crimson_Keep",
+        "Hive"
     ],
     "other": [
         "littleton",

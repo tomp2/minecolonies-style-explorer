@@ -28,7 +28,7 @@ def generate_sitemap(style_ids: Iterable[str]):
             lastmod_element = ET.SubElement(url_element, f'{{{namespace["ns"]}}}lastmod')
             lastmod_element.text = current_date
             changefreq_element = ET.SubElement(url_element, f'{{{namespace["ns"]}}}changefreq')
-            changefreq_element.text = 'daily'
+            changefreq_element.text = 'monthly'
             priority_element = ET.SubElement(url_element, f'{{{namespace["ns"]}}}priority')
             priority_element.text = '0.8'
             root.append(url_element)

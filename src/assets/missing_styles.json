@@ -7,27 +7,6 @@
     ]
   },
   {
-    "name": "Crimson_Keep",
-    "displayName": "Crimson Keep",
-    "authors": [
-      "PrincessWendy, Dylbert93"
-    ]
-  },
-  {
-    "name": "frontier",
-    "displayName": "Frontier",
-    "authors": [
-      "m00b13n"
-    ]
-  },
-  {
-    "name": "Hive",
-    "displayName": "Hive",
-    "authors": [
-      "AravanFox, LadyShatana, Jinotad"
-    ]
-  },
-  {
     "name": "incan",
     "displayName": "Incan",
     "authors": [
@@ -58,6 +37,13 @@
     "displayName": "Medieval Birch",
     "authors": [
       "Carlansor"
+    ]
+  },
+  {
+    "name": "sandyton",
+    "displayName": "Sandyton",
+    "authors": [
+      "Thaylar"
     ]
   },
   {

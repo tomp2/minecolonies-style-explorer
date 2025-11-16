@@ -19,8 +19,8 @@ import { SearchBar } from "@/ui/search-bar.tsx";
 import { CategorySelectable, ThemeSelectable } from "@/ui/selectable.tsx";
 import StyleVoting from "@/ui/voting.tsx";
 import { useAtomValue, useSetAtom } from "jotai";
-import { selectedThemesAtom } from "@/lib/state-atoms.ts";
-import { X } from "lucide-react";
+import { selectedThemesAtom, updateTabAtomSelections } from "@/lib/state-atoms.ts";
+import { CheckCheck, X } from "lucide-react";
 
 function ImageColumnsNumber() {
     return useAtomValue(sliderColumnsAtom);
@@ -28,6 +28,7 @@ function ImageColumnsNumber() {
 
 export function FullSidebar() {
     const setSelectedStyles = useSetAtom(selectedThemesAtom);
+    const updateTab = useSetAtom(updateTabAtomSelections);
     return (
         <Sidebar>
             <SidebarHeader className="sm:hidden">
@@ -49,15 +50,27 @@ export function FullSidebar() {
                     <ImageSizeSlider />
                 </SidebarGroup>
                 <Separator />
-                <SidebarGroup className="py-0">
-                        <Button
-                            variant="outline"
-                            className="w-full h-7 bg-transparent"
-                            onClick={() => setSelectedStyles(new Set())}
-                        >
-                            <X className="size-4" />
-                            Clear all selections
-                        </Button>
+                <SidebarGroup className="space-y-2 py-0">
+                    <Button
+                        variant="outline"
+                        className="h-7 w-full bg-transparent"
+                        onClick={() => setSelectedStyles(new Set())}
+                    >
+                        <X className="size-4" />
+                        Clear all selections
+                    </Button>
+                    <Button
+                        variant="outline"
+                        className="h-7 w-full bg-transparent"
+                        onClick={() => {
+                            const next = new Set<string>(styleInfoMap.keys());
+                            setSelectedStyles(next);
+                            updateTab(next);
+                        }}
+                    >
+                        <CheckCheck className="size-4" />
+                        Select all styles
+                    </Button>
                 </SidebarGroup>
                 <SidebarGroup className="pt-0">
                     <SidebarGroupLabel>Minecolonies</SidebarGroupLabel>
