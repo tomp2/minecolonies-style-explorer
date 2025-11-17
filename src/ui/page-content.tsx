@@ -46,7 +46,7 @@ function BuildingSection({
                 <h2 className="text-2xl font-extrabold capitalize">{title}</h2>
             </div>
 
-            <div className="grid grid-cols-[repeat(var(--image-cols),_minmax(0,_1fr))] gap-2">
+            <div className="grid grid-cols-[repeat(var(--image-cols),minmax(0,1fr))] gap-2">
                 {[...buildingsMap.entries()].map(([key, building]) => (
                     <BuildingCard key={key} building={building} />
                 ))}
@@ -68,7 +68,7 @@ export function FavoritesSection() {
 
     if (value.state === "hasError") {
         return (
-            <Alert className="mx-auto mt-10 w-fit shadow-sm">
+            <Alert className="mx-auto mt-10 w-fit shadow-xs">
                 <AlertCircle className="h-4 w-4" />
                 <AlertTitle>Error</AlertTitle>
                 <AlertDescription>
@@ -82,7 +82,7 @@ export function FavoritesSection() {
 
     if (value.state === "loading" && buildings.length === 0) {
         return (
-            <Alert className="mx-auto mt-10 w-fit shadow-sm">
+            <Alert className="mx-auto mt-10 w-fit shadow-xs">
                 <AlertCircle className="h-4 w-4" />
                 <AlertTitle>Loading favorites</AlertTitle>
                 <AlertDescription>Loading buildings from favorites...</AlertDescription>
@@ -92,7 +92,7 @@ export function FavoritesSection() {
 
     if (buildings.length === 0) {
         return (
-            <Alert className="mx-auto mt-10 w-fit shadow-sm">
+            <Alert className="mx-auto mt-10 w-fit shadow-xs">
                 <AlertCircle className="h-4 w-4" />
                 <AlertTitle>No favorites</AlertTitle>
                 <AlertDescription>
@@ -103,7 +103,7 @@ export function FavoritesSection() {
     }
 
     return (
-        <div className="mb-20 grid grid-cols-[repeat(var(--image-cols),_minmax(0,_1fr))] gap-2 p-2">
+        <div className="mb-20 grid grid-cols-[repeat(var(--image-cols),minmax(0,1fr))] gap-2 p-2">
             {buildings.sort(sortBuildings).map(building => (
                 <BuildingCard
                     key={building.path.join(",") + building.name}

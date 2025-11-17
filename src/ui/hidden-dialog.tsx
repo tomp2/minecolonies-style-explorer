@@ -34,7 +34,7 @@ export function HiddenDialog() {
 
     return (
         <Dialog defaultOpen={showDialog}>
-            <DialogContent className="max-h-[70vh] max-w-screen-sm overflow-y-auto">
+            <DialogContent className="max-h-[70vh] max-w-2xl overflow-y-auto">
                 <DialogHeader>
                     <DialogTitle>Hidden Dialog</DialogTitle>
                     <DialogDescription>

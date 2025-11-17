@@ -10,7 +10,7 @@ export function PrivacyDialog() {
                 <ScrollText className="size-5" />
                 Privacy
             </DialogTrigger>
-            <DialogContent className="max-w-screen-lg">
+            <DialogContent className="max-w-5xl">
                 <article className="max-h-[70vh] max-w-none overflow-y-auto">
                     <h1 className="text-3xl font-extrabold">Privacy Policy</h1>
                     <p className="mt-4">

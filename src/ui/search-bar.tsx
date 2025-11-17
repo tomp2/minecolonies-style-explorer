@@ -50,7 +50,7 @@ export function SearchBar() {
             </div>
 
             <SidebarGroupLabel className="-ml-2">Search from:</SidebarGroupLabel>
-            <div className="flex h-9 items-center space-x-2 rounded-md border px-2 shadow-sm">
+            <div className="flex h-9 items-center space-x-2 rounded-md border px-2 shadow-xs">
                 <Label className="pb-0.5">Selections only</Label>
                 <Switch
                     checked={!searchSelectedThemesOnly}

@@ -62,7 +62,7 @@ function Style({ style }: { style: MissingStyleInfoJson }) {
                 >
                     <div className="flex flex-wrap gap-x-1.5 leading-none">{style.displayName}</div>
                     <div className="flex items-center justify-center">
-                        <Vote className="size-5 text-gray-400 group-data-[state=on]:text-green-700 dark:text-gray-700 group-data-[state=on]:dark:text-green-600" />
+                        <Vote className="size-5 text-gray-400 group-data-[state=on]:text-green-700 dark:text-gray-700 dark:group-data-[state=on]:text-green-600" />
                     </div>
                 </Toggle>
             </SidebarMenuButton>

@@ -288,7 +288,7 @@ export function BuildingCard({ building, isFavorite }: { building: BuildingData;
         pathString = `${building.styleDisplayName}/${pathString}`;
     }
     return (
-        <div className="group relative flex w-full flex-col overflow-x-clip rounded-lg border bg-card p-2 shadow">
+        <div className="group relative flex w-full flex-col overflow-x-clip rounded-lg border bg-card p-2 shadow-sm">
             <BuildingImage building={building} />
             <ExpandButton
                 className="absolute right-2 top-2 transition-opacity duration-75 focus:opacity-100 group-hover:opacity-100 md:opacity-0"

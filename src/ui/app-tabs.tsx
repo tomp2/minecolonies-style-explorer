@@ -38,9 +38,9 @@ function FavoriteCount() {
 
 export function TabSelector({ tabsRef }: { tabsRef: React.RefObject<HTMLDivElement> }) {
     return (
-        <div className="inline-flex h-[2.375rem] items-center justify-center rounded-lg border bg-muted p-1 text-muted-foreground">
+        <div className="inline-flex h-9.5 items-center justify-center rounded-lg border bg-muted p-1 text-muted-foreground">
             <div
-                className="inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 group-data-[tab=home]:bg-background group-data-[tab=home]:text-foreground group-data-[tab=home]:shadow"
+                className="inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1 text-sm font-medium ring-offset-background transition-all focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 group-data-[tab=home]:bg-background group-data-[tab=home]:text-foreground group-data-[tab=home]:shadow-sm"
                 onClick={() => {
                     if (tabsRef.current) {
                         tabsRef.current.dataset.tab = "home";
@@ -50,7 +50,7 @@ export function TabSelector({ tabsRef }: { tabsRef: React.RefObject<HTMLDivEleme
                 Home
             </div>
             <div
-                className="inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 group-data-[tab=buildings]:bg-background group-data-[tab=buildings]:text-foreground group-data-[tab=buildings]:shadow"
+                className="inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1 text-sm font-medium ring-offset-background transition-all focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 group-data-[tab=buildings]:bg-background group-data-[tab=buildings]:text-foreground group-data-[tab=buildings]:shadow-sm"
                 onClick={() => {
                     if (tabsRef.current) {
                         tabsRef.current.dataset.tab = "buildings";
@@ -65,7 +65,7 @@ export function TabSelector({ tabsRef }: { tabsRef: React.RefObject<HTMLDivEleme
                 </span>
             </div>
             <div
-                className="inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 group-data-[tab=favorites]:bg-background group-data-[tab=favorites]:text-foreground group-data-[tab=favorites]:shadow"
+                className="inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1 text-sm font-medium ring-offset-background transition-all focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 group-data-[tab=favorites]:bg-background group-data-[tab=favorites]:text-foreground group-data-[tab=favorites]:shadow-sm"
                 onClick={() => {
                     if (tabsRef.current) {
                         tabsRef.current.dataset.tab = "favorites";
@@ -113,7 +113,7 @@ export function AppTabs() {
             className="group flex grow flex-col"
             data-tab={hasInitialUrlRelevantParams ? "buildings" : "home"}
         >
-            <nav className="sticky top-0 z-10 flex h-[--h-navbar] w-full items-center gap-4 overflow-x-clip border-b bg-card px-4">
+            <nav className="sticky top-0 z-10 flex h-(--h-navbar) w-full items-center gap-4 overflow-x-clip border-b bg-card px-4">
                 <SidebarTrigger />
                 <TabSelector tabsRef={tabsRef} />
                 <FeedbackDialog className="invisible ml-auto sm:visible" />

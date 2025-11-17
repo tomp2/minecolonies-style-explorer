@@ -5,7 +5,7 @@ export function Footer({ className }: { className?: string }) {
     return (
         <div
             className={cn(
-                "flex h-[--h-footer] shrink-0 grow-0 justify-end gap-5 border-t bg-card/50 px-4",
+                "flex h-(--h-footer) shrink-0 grow-0 justify-end gap-5 border-t bg-card/50 px-4",
                 className,
             )}
         >
