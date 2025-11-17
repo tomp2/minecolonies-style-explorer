@@ -58,7 +58,7 @@ export function ThemeSelectable({ style }: { style: StyleInfoJson }) {
         >
             <div className="mb-0.5 flex flex-wrap gap-x-1.5 leading-none">
                 {style.displayName}
-                <p className="text-muted-foreground">({style.authors.join(", ")})</p>
+                <p className="text-muted-foreground text-xs">({style.authors.join(", ")})</p>
             </div>
             {!wip && isNew && (
                 <p className="-mb-0.5 -mr-2 ml-auto rounded-full bg-green-200 px-1.5 pb-0.5 text-xs font-semibold opacity-80 dark:bg-green-700">

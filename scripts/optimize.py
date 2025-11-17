@@ -57,8 +57,8 @@ def main():
 
             print(f"Optimizing style `{safe_name}` for size {size}...")
             options = batch_resize_in_place(dest_dir, size)
-            for _ in range(5):
-                print(f"  Pass 1...", end='')
+            for i in range(5):
+                print(f"  Pass {i}...", end='')
                 results = optimize_as_batch(options)
                 print(f"Total files: {results.found_files}, "
                       f"Optimized: {results.optimized_files}, "

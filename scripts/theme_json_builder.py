@@ -49,6 +49,7 @@ STYLES = {
         "sandstone",
         "birch",
         "jungle",
+        "incan",
     ],
     "stylecolonies": [
         "Antique",
