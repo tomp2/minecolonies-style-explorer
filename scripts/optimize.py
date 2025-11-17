@@ -46,9 +46,9 @@ def main():
             safe_name = re.sub(r'[^a-z0-9]', '', original_style.name.lower())
             dest_dir = PUBLIC_DIR / size_name / safe_name
             if dest_dir.exists():
-                print(f"Style `{size_name}` for size {size} already exists, skipping...")
                 continue
 
+            print(f"Copying style `{safe_name}` to size {size}...")
             shutil.copytree(
                 original_style,
                 dest_dir,
@@ -58,8 +58,13 @@ def main():
             print(f"Optimizing style `{safe_name}` for size {size}...")
             options = batch_resize_in_place(dest_dir, size)
             for _ in range(5):
+                print(f"  Pass 1...", end='')
                 results = optimize_as_batch(options)
+                print(f"Total files: {results.found_files}, "
+                      f"Optimized: {results.optimized_files}, "
+                      f"Bytes saved: {results.total_bytes_saved}")
                 if results.total_bytes_saved == 0:
+                    print(f"  No more optimizations possible, moving to next size.")
                     break
 
 

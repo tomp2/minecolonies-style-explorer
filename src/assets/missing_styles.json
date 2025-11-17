@@ -16,14 +16,6 @@
     ]
   },
   {
-    "name": "jungle",
-    "displayName": "Jungle Treehouse",
-    "authors": [
-      "John Reiher",
-      "assisted by Raycoms & Pixblockus"
-    ]
-  },
-  {
     "name": "lostcity",
     "displayName": "Lost Mesa City",
     "authors": [
@@ -45,15 +37,6 @@
     "authors": [
       "matlom",
       "McSassa"
-    ]
-  },
-  {
-    "name": "birch",
-    "displayName": "Urban Birch",
-    "authors": [
-      "Raycoms",
-      "Aravan",
-      "Cugo"
     ]
   },
   {

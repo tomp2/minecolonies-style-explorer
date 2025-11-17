@@ -47,6 +47,8 @@ STYLES = {
         "cavern",
         "spacewars",
         "sandstone",
+        "birch",
+        "jungle",
     ],
     "stylecolonies": [
         "Antique",
