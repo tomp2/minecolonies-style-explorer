@@ -184,6 +184,16 @@
       "wip": false
     },
     {
+      "name": "medievalbirch",
+      "displayName": "Medieval Birch",
+      "type": "minecolonies",
+      "authors": [
+        "Carlansor"
+      ],
+      "addedAt": "2025-11-17",
+      "wip": false
+    },
+    {
       "name": "medievaldarkoak",
       "displayName": "Medieval Dark Oak",
       "type": "minecolonies",

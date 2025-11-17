@@ -35,6 +35,7 @@ STYLES = {
         "nordic",
         "darkoak",
         "medievalspruce",
+        "medievalbirch",
         "pagoda",
         "truedwarven",
         "original",
