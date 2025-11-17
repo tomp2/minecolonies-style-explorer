@@ -56,7 +56,8 @@ STYLES = {
         "steampunk",
         "frontier",
         "Crimson_Keep",
-        "Hive"
+        "Hive",
+        "Tropical"
     ],
     "other": [
         "littleton",

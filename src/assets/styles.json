@@ -305,6 +305,20 @@
       ],
       "addedAt": "2025-02-17T18:00:00.000Z",
       "wip": false
+    },
+    {
+      "name": "tropical",
+      "displayName": "Tropical",
+      "type": "stylecolonies",
+      "authors": [
+        "John Reiher",
+        "Pixblockus",
+        "Thaylar",
+        "Thodor12",
+        "_Raycoms_"
+      ],
+      "addedAt": "2025-11-17",
+      "wip": false
     }
   ],
   "categories": [

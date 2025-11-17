@@ -174,4 +174,10 @@
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
+    <url>
+        <loc>https://tomp2.github.io/minecolonies-style-explorer/?theme=tropical</loc>
+        <lastmod>2025-11-17T02:30:06.520513</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
 </urlset>
