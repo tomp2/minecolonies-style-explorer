@@ -21,6 +21,7 @@ import StyleVoting from "@/ui/voting.tsx";
 import { useAtomValue, useSetAtom } from "jotai";
 import { selectedThemesAtom, updateTabAtomSelections } from "@/lib/state-atoms.ts";
 import { CheckCheck, X } from "lucide-react";
+import { setTitleAndDescriptionFrom } from "@/lib/page-meta.ts";
 
 function ImageColumnsNumber() {
     return useAtomValue(sliderColumnsAtom);
@@ -45,7 +46,7 @@ export function FullSidebar() {
                     <SidebarGroupLabel>Search</SidebarGroupLabel>
                     <SearchBar />
                 </SidebarGroup>
-                <SidebarGroup className="pb-2 pt-0">
+                <SidebarGroup className="pt-0 pb-2">
                     <SidebarGroupLabel>Image columns: {ImageColumnsNumber()}</SidebarGroupLabel>
                     <ImageSizeSlider />
                 </SidebarGroup>
@@ -54,7 +55,11 @@ export function FullSidebar() {
                     <Button
                         variant="outline"
                         className="h-7 w-full bg-transparent"
-                        onClick={() => setSelectedStyles(new Set())}
+                        onClick={() => {
+                            const styles = new Set<string>();
+                            setSelectedStyles(styles);
+                            setTitleAndDescriptionFrom([...styles]);
+                        }}
                     >
                         <X className="size-4" />
                         Clear all selections
@@ -63,9 +68,10 @@ export function FullSidebar() {
                         variant="outline"
                         className="h-7 w-full bg-transparent"
                         onClick={() => {
-                            const next = new Set<string>(styleInfoMap.keys());
-                            setSelectedStyles(next);
-                            updateTab(next);
+                            const styles = new Set<string>(styleInfoMap.keys());
+                            setSelectedStyles(styles);
+                            updateTab(styles);
+                            setTitleAndDescriptionFrom([...styles]);
                         }}
                     >
                         <CheckCheck className="size-4" />

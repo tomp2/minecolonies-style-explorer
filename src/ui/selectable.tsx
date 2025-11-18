@@ -6,9 +6,9 @@ import { selectedCategoriesAtom, selectedThemesAtom, updateTabAtomSelections } f
 import { StyleInfoJson } from "@/lib/theme-data.ts";
 import * as TogglePrimitive from "@radix-ui/react-toggle";
 import type { VariantProps } from "class-variance-authority";
-import { useSetAtom } from "jotai";
-import { useAtom } from "jotai";
+import { useAtom, useSetAtom } from "jotai";
 import * as React from "react";
+import { setTitleAndDescriptionFrom } from "@/lib/page-meta.ts";
 
 export type SelectableProps = React.ComponentPropsWithoutRef<typeof TogglePrimitive.Root> &
     VariantProps<typeof toggleVariants> & {};
@@ -42,6 +42,7 @@ export function ThemeSelectable({ style }: { style: StyleInfoJson }) {
                 newSelections.add(styleId);
             }
             updateTab(newSelections);
+            setTitleAndDescriptionFrom([...newSelections]);
             return newSelections;
         });
     }
@@ -61,12 +62,12 @@ export function ThemeSelectable({ style }: { style: StyleInfoJson }) {
                 <p className="text-muted-foreground text-xs">({style.authors.join(", ")})</p>
             </div>
             {!wip && isNew && (
-                <p className="-mb-0.5 -mr-2 ml-auto rounded-full bg-green-200 px-1.5 pb-0.5 text-xs font-semibold opacity-80 dark:bg-green-700">
+                <p className="-mr-2 -mb-0.5 ml-auto rounded-full bg-green-200 px-1.5 pb-0.5 text-xs font-semibold opacity-80 dark:bg-green-700">
                     New
                 </p>
             )}
             {wip && (
-                <p className="-mb-0.5 -mr-2 ml-auto rounded-full bg-orange-200 px-1.5 pb-0.5 text-xs font-semibold opacity-80 dark:bg-green-700">
+                <p className="-mr-2 -mb-0.5 ml-auto rounded-full bg-orange-200 px-1.5 pb-0.5 text-xs font-semibold opacity-80 dark:bg-orange-700">
                     WIP
                 </p>
             )}

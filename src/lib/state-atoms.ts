@@ -11,6 +11,7 @@ import { buildingMatchesStringSearchTerm } from "@/lib/utils.ts";
 import { getTab, setTab } from "@/ui/app-tabs";
 import { atom } from "jotai";
 import { atomWithStorage, loadable } from "jotai/utils";
+import { setTitleAndDescriptionFrom } from "@/lib/page-meta.ts";
 
 /**
  * The query parameters stored in localStorage.
@@ -159,6 +160,7 @@ function parseCategoriesFromUrlParams(urlSearchParams: URLSearchParams) {
 }
 
 const initialStyles = parseThemesFromUrlParams(initialUrlSearchParams);
+setTitleAndDescriptionFrom([...initialStyles]);
 export const selectedThemesAtom = atom<Set<string>>(initialStyles);
 export const selectedCategoriesAtom = atom<Set<string>>(parseCategoriesFromUrlParams(initialUrlSearchParams));
 
