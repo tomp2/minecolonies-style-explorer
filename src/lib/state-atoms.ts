@@ -123,7 +123,7 @@ const selectionUrlSeparator = "-";
  * Parse the selected themes from the URL search parameters.
  * Param can either be "all" or a list of theme names separated by the selectionUrlSeparator.
  */
-function parseThemesFromUrlParams(urlSearchParams: URLSearchParams) {
+export function parseThemesFromUrlParams(urlSearchParams: URLSearchParams) {
     const selectedThemes = new Set<string>();
     const themeParams = urlSearchParams.get(LOCALSTORAGE_QUERY_PARAMS.theme);
     if (themeParams === "all") {
@@ -143,7 +143,7 @@ function parseThemesFromUrlParams(urlSearchParams: URLSearchParams) {
 /**
  * Parse the selected categories from the URL search parameters.
  */
-function parseCategoriesFromUrlParams(urlSearchParams: URLSearchParams) {
+export function parseCategoriesFromUrlParams(urlSearchParams: URLSearchParams) {
     const categoryParams = urlSearchParams.get(LOCALSTORAGE_QUERY_PARAMS.category);
     const selectedCategories = new Set<string>();
     if (categoryParams) {
