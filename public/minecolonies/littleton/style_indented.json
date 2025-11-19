@@ -1,0 +1,1660 @@
+{
+  "authors": [
+    "Thaylar"
+  ],
+  "blueprints": {},
+  "categories": {
+    "agriculture": {
+      "blueprints": {},
+      "categories": {
+        "horticulture": {
+          "blueprints": {
+            "composter": {
+              "back": true,
+              "blur": [
+                "U39809oyq3R+JBof%0aeq2k9VNba?EawIqbJ",
+                "U497|2aMuDx?P5a#wNoJuWofM+S1,ubXaxn,"
+              ],
+              "hutBlocks": [
+                "composter"
+              ],
+              "size": {
+                "x": 11,
+                "y": 30,
+                "z": 11
+              }
+            },
+            "farm": {
+              "back": true,
+              "blur": [
+                "U39*C:njG}tP63WY-Un#G~kCv:Sw}?oaIWje",
+                "U39tl6RnLl%F6|bI-Tn$P^xYnBJT}rS1Iqs;"
+              ],
+              "hutBlocks": [
+                "farmer"
+              ],
+              "size": {
+                "x": 11,
+                "y": 30,
+                "z": 11
+              }
+            },
+            "florist": {
+              "back": true,
+              "blur": [
+                "U39kD*WGYpx-E_n%%1f+LRobVMWY}]XRIWnO",
+                "U39ap8o}uVR#F;jr$*s;Ypo0H|g3^8bcM|Ri"
+              ],
+              "hutBlocks": [
+                "florist"
+              ],
+              "size": {
+                "x": 11,
+                "y": 30,
+                "z": 11
+              }
+            },
+            "plantation": {
+              "back": true,
+              "blur": [
+                "U6AwhJs;AntiFYWBw|s:1YjXwhM|}soyI=Rk",
+                "U4AKZ+?FAl9ZJ|WAxIt831EMwP-.^9t7M_Mx"
+              ],
+              "hutBlocks": [
+                "plantation"
+              ],
+              "size": {
+                "x": 22,
+                "y": 31,
+                "z": 22
+              }
+            }
+          },
+          "categories": {}
+        },
+        "husbandry": {
+          "blueprints": {
+            "beekeeper": {
+              "back": true,
+              "blur": [
+                "U39*F]sWLTTDK$bHxCsULnf*Q[oe]kW-I[S5",
+                "U39tuRf9YXtLK#a#wcsoHKocMRS5]nbrNdaO"
+              ],
+              "hutBlocks": [
+                "beekeeper"
+              ],
+              "size": {
+                "x": 11,
+                "y": 30,
+                "z": 11
+              }
+            },
+            "chickenherder": {
+              "back": true,
+              "blur": [
+                "U39Hp^R8P|%^B$Rk+~%0.4t6IXM}+$oeO,RR",
+                "U4986Kxtq8IWG9ox,HVv-,WCIXoyv-V^S_o^"
+              ],
+              "hutBlocks": [
+                "chickenherder"
+              ],
+              "size": {
+                "x": 11,
+                "y": 30,
+                "z": 11
+              }
+            },
+            "cowboy": {
+              "back": true,
+              "blur": [
+                "U49Hm.t6hYNGGAox,@RR%cayIXof+}V]OTtO",
+                "U39Hm.VvQ0%^C0Rk+}%J%coxIXM}+#t5OnM}"
+              ],
+              "hutBlocks": [
+                "cowboy"
+              ],
+              "size": {
+                "x": 11,
+                "y": 30,
+                "z": 11
+              }
+            },
+            "fisherman": {
+              "back": true,
+              "blur": [
+                "U49HalXlU5obKKt3wgRlltnhZ:WY={NLNHs,",
+                "U48q.nrq*4g2orRpkFs+h7XRigbGtBt0R$WG"
+              ],
+              "hutBlocks": [
+                "fisherman"
+              ],
+              "size": {
+                "x": 11,
+                "y": 30,
+                "z": 11
+              }
+            },
+            "rabbithutch": {
+              "back": true,
+              "blur": [
+                "U4983ENeYGxoS#oMxYWVd3xYiiSh-kSeN0s:",
+                "U597|0tPyQX4THoenjagd1R,M$s:,rWCWYW."
+              ],
+              "hutBlocks": [
+                "rabbithutch"
+              ],
+              "size": {
+                "x": 11,
+                "y": 30,
+                "z": 11
+              }
+            },
+            "shepherd": {
+              "back": true,
+              "blur": [
+                "U49@qQxtU5I:BQbt$%rvCtWBRBxt}Yi~IqOT",
+                "U49*9yN2LCx.GAah$Qs,H1xqm;R-}FbqI;V_"
+              ],
+              "hutBlocks": [
+                "shepherd"
+              ],
+              "size": {
+                "x": 11,
+                "y": 30,
+                "z": 11
+              }
+            },
+            "swineherder": {
+              "back": true,
+              "blur": [
+                "U4A1F0j0G*XMAqai$%ob8Powv-bb}rXNENjJ",
+                "U49toBxrT.W.GBox#;epP_ahM*W.|_RlI;ox"
+              ],
+              "hutBlocks": [
+                "swineherder"
+              ],
+              "size": {
+                "x": 11,
+                "y": 30,
+                "z": 11
+              }
+            }
+          },
+          "categories": {}
+        }
+      }
+    },
+    "craftsmanship": {
+      "blueprints": {},
+      "categories": {
+        "carpentry": {
+          "blueprints": {
+            "fletcher": {
+              "back": true,
+              "blur": [
+                "U49Q~It4hRWXAZov-Ta6lckUM+Rk=cahR-ae",
+                "U48}YTM+yzy4KhaPsAkQuDocRCXR#TW-kCsX"
+              ],
+              "hutBlocks": [
+                "fletcher"
+              ],
+              "size": {
+                "x": 11,
+                "y": 30,
+                "z": 11
+              }
+            },
+            "sawmill": {
+              "back": true,
+              "blur": [
+                "U39@tYMzG%--I;oL%1ae8hxt#ZI:^%R*IVoy",
+                "U49k1UVuT:xsOUoLxGRkLrtPm@Na={S2NGxZ"
+              ],
+              "hutBlocks": [
+                "sawmill"
+              ],
+              "size": {
+                "x": 11,
+                "y": 30,
+                "z": 11
+              }
+            }
+          },
+          "categories": {}
+        },
+        "luxury": {
+          "blueprints": {
+            "alchemist": {
+              "back": true,
+              "blur": [
+                "U58;;pjZy,o_OlfkxHaeu0fiVuf+-BbENaoM",
+                "U58#W9oMy,t3S_oLxGWUprbFa3fk-BWCNaoM"
+              ],
+              "hutBlocks": [
+                "alchemist"
+              ],
+              "size": {
+                "x": 11,
+                "y": 30,
+                "z": 11
+              }
+            },
+            "baker": {
+              "back": true,
+              "blur": [
+                "U49t_2k95MtQ.6fRIBa{D~ju-Xay9Fj[?bay",
+                "U49t}9k85Mxt.6f7IBfiD~j[-YWB9Fj@?bay"
+              ],
+              "hutBlocks": [
+                "baker"
+              ],
+              "size": {
+                "x": 11,
+                "y": 30,
+                "z": 11
+              }
+            },
+            "concretemixer": {
+              "back": true,
+              "blur": [
+                "U38;|]N1uV-jS}n+xsNHuVxrm]OC--SwIWwg",
+                "U497|1wgyzOTKgX5xGnlyzX6M+kB,@n+RkWB"
+              ],
+              "hutBlocks": [
+                "concretemixer"
+              ],
+              "size": {
+                "x": 11,
+                "y": 30,
+                "z": 11
+              }
+            },
+            "dyer": {
+              "back": true,
+              "blur": [
+                "U39k4bR8Lox?GDoe-SV]LstOd]Nc].NaIrwz",
+                "U49R2Pr_U4XLP8bIwyjYuWf#RCX8#VaxR*nn"
+              ],
+              "hutBlocks": [
+                "dyer"
+              ],
+              "size": {
+                "x": 11,
+                "y": 30,
+                "z": 11
+              }
+            },
+            "glassblower": {
+              "back": true,
+              "blur": [
+                "U49trMRlG$x=B5fl-UjEPxt5rdNa}@f4E2kD",
+                "U49HgyWAYXtRO=W.xFspuVt7RDR%,=oLRmNa"
+              ],
+              "hutBlocks": [
+                "glassblower"
+              ],
+              "size": {
+                "x": 11,
+                "y": 30,
+                "z": 11
+              }
+            },
+            "kitchen": {
+              "back": true,
+              "blur": [
+                "U39kD%RkPv-.Kuoz$SMyYqxXQ]I==4M|NG%2",
+                "U39asFM|L9%eKuoy$lVthRxrVMI;;TNGI.xt"
+              ],
+              "hutBlocks": [
+                "kitchen"
+              ],
+              "size": {
+                "x": 11,
+                "y": 30,
+                "z": 11
+              }
+            }
+          },
+          "categories": {}
+        },
+        "masonry": {
+          "blueprints": {
+            "crusher": {
+              "back": true,
+              "blur": [
+                "U39kG,RkG.%LX#s:xGR%HKt6z[M{-WNsIpxI",
+                "U39@,;V@7mXQI+f+%Nnl8NtR+Pad^-aJD$Si"
+              ],
+              "hutBlocks": [
+                "crusher"
+              ],
+              "size": {
+                "x": 11,
+                "y": 35,
+                "z": 11
+              }
+            },
+            "sifter": {
+              "back": true,
+              "blur": [
+                "U49@wiM~G$x=A.oM%1jYG$xsrfR+}@SdIVog",
+                "U49*9zXQPxxZF?oy$%aLLUsDVeNa}sRkIqtP"
+              ],
+              "hutBlocks": [
+                "sifter"
+              ],
+              "size": {
+                "x": 11,
+                "y": 30,
+                "z": 11
+              }
+            },
+            "stonemason": {
+              "back": true,
+              "blur": [
+                "U49tl3n8LCtNFFWo$*e:LpbtrdS1^Pj[M|oJ",
+                "U49tl3n6G*tiFsaz$%WCHLbu#EWU^PW.IpxF"
+              ],
+              "hutBlocks": [
+                "stonemason"
+              ],
+              "size": {
+                "x": 11,
+                "y": 30,
+                "z": 11
+              }
+            },
+            "stonesmeltery": {
+              "back": true,
+              "blur": [
+                "U49k4gV|p,x.PSs;wfWBy#t5IZNt+|R*V[sD",
+                "U39k7pV[c|%LK~kBwgaOuUt5MmR*;lR%V[xI"
+              ],
+              "hutBlocks": [
+                "stonesmeltery"
+              ],
+              "size": {
+                "x": 11,
+                "y": 30,
+                "z": 11
+              }
+            }
+          },
+          "categories": {}
+        },
+        "metallurgy": {
+          "blueprints": {
+            "blacksmith": {
+              "back": true,
+              "blur": [
+                "U49kAvxtp.SeK0bI$jnic~oKMiR*=|n%RkX8",
+                "U38}kxRj*9%Kxua#o3k9q2tQV3NGxtocW-ai"
+              ],
+              "hutBlocks": [
+                "blacksmith"
+              ],
+              "size": {
+                "x": 11,
+                "y": 30,
+                "z": 11
+              }
+            },
+            "mechanic": {
+              "back": true,
+              "blur": [
+                "U48#ZKS2%=s,THt5soRlyzs.MlS2$%NHRks.",
+                "U48}YRIXyh%JPQs:rvRk*8xsIHNt#XNZWWw|"
+              ],
+              "hutBlocks": [
+                "mechanic"
+              ],
+              "size": {
+                "x": 11,
+                "y": 30,
+                "z": 11
+              }
+            },
+            "smeltery": {
+              "back": true,
+              "blur": [
+                "U49k7oWFU3tKTws:nORjy*t6IYNt;RR*WEs:",
+                "U39*G1afL6%Lg~oca0V{uToyM-Rj+ca$s;jE"
+              ],
+              "hutBlocks": [
+                "smeltery"
+              ],
+              "size": {
+                "x": 11,
+                "y": 30,
+                "z": 11
+              }
+            }
+          },
+          "categories": {}
+        },
+        "storage": {
+          "blueprints": {
+            "deliveryman": {
+              "back": true,
+              "blur": [
+                "U39kAuRRU3%eBzoM-CV@hRt6MmNG}[ScIVxa",
+                "U49Hgwt5ygR*KwoewNV]yzbHIIoe=LR+afoK"
+              ],
+              "hutBlocks": [
+                "deliveryman"
+              ],
+              "size": {
+                "x": 11,
+                "y": 30,
+                "z": 11
+              }
+            },
+            "warehouse": {
+              "back": true,
+              "blur": [
+                "U68q+Xaf*8tQSzj[oLaey8j@R9WVkBayoeof",
+                "U68hQ?WC*9xsbbj[oJWBpVoeVeR*t5a{W.oL"
+              ],
+              "hutBlocks": [
+                "warehouse"
+              ],
+              "size": {
+                "x": 11,
+                "y": 30,
+                "z": 11
+              }
+            }
+          },
+          "categories": {}
+        }
+      }
+    },
+    "decorations": {
+      "blueprints": {},
+      "categories": {
+        "deco": {
+          "blueprints": {
+            "tavern_front": {
+              "back": false,
+              "blur": [
+                "UCBzjrs:9ZWBkqR*jFs:0KWB-pozQ-s:o}Rj"
+              ],
+              "hutBlocks": [],
+              "size": {
+                "x": 4,
+                "y": 5,
+                "z": 11
+              }
+            }
+          },
+          "categories": {}
+        },
+        "decorative": {
+          "blueprints": {
+            "house": {
+              "back": true,
+              "blur": [
+                "UIEV[xRjE1bb?GoLWBWC0extt7ae9ZWVWVt6",
+                "UPE{m^RkE1oe-oj[f7ju0et6%1WC9ta|j[j["
+              ],
+              "hutBlocks": [],
+              "size": {
+                "x": 11,
+                "y": 13,
+                "z": 11
+              }
+            }
+          },
+          "categories": {}
+        },
+        "housing": {
+          "blueprints": {
+            "manor": {
+              "back": true,
+              "blur": [
+                "U298CdbqUK%LuIoLm@R*.IjuH}bEeFWEpEoc",
+                "U298CdoyYntO*DoLQ?R*pRa{Z?f9ilbFpAo3"
+              ],
+              "hutBlocks": [],
+              "size": {
+                "x": 11,
+                "y": 24,
+                "z": 11
+              }
+            }
+          },
+          "categories": {}
+        },
+        "markets": {
+          "blueprints": {
+            "market_plaza_l": {
+              "back": false,
+              "blur": [
+                "U4AA]D$*JioxFrN@t6s:2*axw}W.}t$kM|Rk"
+              ],
+              "hutBlocks": [],
+              "size": {
+                "x": 22,
+                "y": 31,
+                "z": 44
+              }
+            },
+            "market_plaza_t": {
+              "back": false,
+              "blur": [
+                "U4AA]D$kJPoyFrN@t6s:2ka{xHWU}u$kM|R*"
+              ],
+              "hutBlocks": [],
+              "size": {
+                "x": 22,
+                "y": 31,
+                "z": 44
+              }
+            },
+            "market_stall_ld": {
+              "back": false,
+              "blur": [
+                "U7A^syae5PtQTbj[rtWB0_oz-pRjz?WBb]t7"
+              ],
+              "hutBlocks": [],
+              "size": {
+                "x": 11,
+                "y": 31,
+                "z": 11
+              }
+            },
+            "market_stall_ls": {
+              "back": false,
+              "blur": [
+                "U4AT}bf*1YtPKuj@wOWC1Yoe=zRj[_WVJ%oM"
+              ],
+              "hutBlocks": [],
+              "size": {
+                "x": 11,
+                "y": 31,
+                "z": 11
+              }
+            },
+            "market_stall_td": {
+              "back": false,
+              "blur": [
+                "U7A^syWB5PtQTbj[rsWB0_oz-pRjviWCgMt7"
+              ],
+              "hutBlocks": [],
+              "size": {
+                "x": 11,
+                "y": 31,
+                "z": 11
+              }
+            },
+            "market_stall_ts": {
+              "back": false,
+              "blur": [
+                "U4AT}bba1YxtKuj@wOWC1Yoe=zRj[_WVJ%oM"
+              ],
+              "hutBlocks": [],
+              "size": {
+                "x": 11,
+                "y": 31,
+                "z": 11
+              }
+            }
+          },
+          "categories": {}
+        },
+        "supplies": {
+          "blueprints": {
+            "supplycamp": {
+              "back": true,
+              "blur": [
+                "U38}n%x@uWMyPLtPw5M#.NRkIDx[wiRSbXx=",
+                "U38}n$fkuXx?TqRRv.x@%vofM#VuwhxsX4IE"
+              ],
+              "hutBlocks": [],
+              "size": {
+                "x": 11,
+                "y": 19,
+                "z": 11
+              }
+            }
+          },
+          "categories": {}
+        },
+        "trees": {
+          "blueprints": {
+            "tree_a": {
+              "back": false,
+              "blur": [
+                "U28#u,oy.gtPyAfjRRay%djtIDazWEfQtPj@"
+              ],
+              "hutBlocks": [],
+              "size": {
+                "x": 11,
+                "y": 29,
+                "z": 11
+              }
+            },
+            "tree_b": {
+              "back": false,
+              "blur": [
+                "U28#u,oy?=oxtjfjjZaz.OfQDmf7ofayoxj["
+              ],
+              "hutBlocks": [],
+              "size": {
+                "x": 11,
+                "y": 19,
+                "z": 11
+              }
+            },
+            "tree_c": {
+              "back": false,
+              "blur": [
+                "U28=GXoy.NoxtQfQjZfQ.OfjDmf8t6ayfkj["
+              ],
+              "hutBlocks": [],
+              "size": {
+                "x": 11,
+                "y": 19,
+                "z": 11
+              }
+            },
+            "tree_d": {
+              "back": false,
+              "blur": [
+                "U18}#7tP.NtO%xfPRRfR.OfjDSf8jJaytioe"
+              ],
+              "hutBlocks": [],
+              "size": {
+                "x": 11,
+                "y": 19,
+                "z": 11
+              }
+            },
+            "tree_e": {
+              "back": false,
+              "blur": [
+                "U098R:yA%?x??@ayMgj[.OayDSj[Vff6.Noe"
+              ],
+              "hutBlocks": [],
+              "size": {
+                "x": 11,
+                "y": 19,
+                "z": 11
+              }
+            },
+            "tree_f": {
+              "back": false,
+              "blur": [
+                "U38rBBox?=oxkCfQt5az%wj@IDazoyfPkBj["
+              ],
+              "hutBlocks": [],
+              "size": {
+                "x": 11,
+                "y": 19,
+                "z": 11
+              }
+            }
+          },
+          "categories": {}
+        }
+      }
+    },
+    "education": {
+      "blueprints": {
+        "library": {
+          "back": true,
+          "blur": [
+            "U38}hmx@U5MyKvtO#YM#.MWBIFtQv.RSS^xp",
+            "U38=10RRuW%dPMRlrLtP.KofIGWBrLoxteRR"
+          ],
+          "hutBlocks": [
+            "library"
+          ],
+          "size": {
+            "x": 11,
+            "y": 30,
+            "z": 11
+          }
+        },
+        "school": {
+          "back": true,
+          "blur": [
+            "U39kDzM}LT%cG9oe-BRkUNxsVNIq}sNaEMxs",
+            "U39Hj%xpuXbbPQbZw4aMyzWFH~X4+#aNSxt5"
+          ],
+          "hutBlocks": [
+            "school"
+          ],
+          "size": {
+            "x": 11,
+            "y": 30,
+            "z": 11
+          }
+        },
+        "university": {
+          "back": true,
+          "blur": [
+            "U497]{RSuVtiFaoe$*V]%;oxM+S2xZR+nkso",
+            "U58;-mo2uWXNKNfjxFaf%rbFN2kBt5j@n*jb"
+          ],
+          "hutBlocks": [
+            "university"
+          ],
+          "size": {
+            "x": 11,
+            "y": 30,
+            "z": 11
+          }
+        }
+      },
+      "categories": {}
+    },
+    "fundamentals": {
+      "blueprints": {
+        "builder": {
+          "back": true,
+          "blur": [
+            "U4980ARRuCx@KIofxHaKuWxsRCNa-VR*Rjxa",
+            "U48q_ytO%?kBtQj@n%afy#WEQ]ayslj[W;bZ"
+          ],
+          "hutBlocks": [
+            "builder"
+          ],
+          "size": {
+            "x": 11,
+            "y": 30,
+            "z": 11
+          }
+        },
+        "cook": {
+          "back": true,
+          "blur": [
+            "U39*PNM#2Ot#E_n,-WoLBvx?=~M}^QSvE2aO",
+            "U38#fbX3.b%2y9oyV_M|uUo3MmR%r{RRj=xt"
+          ],
+          "hutBlocks": [
+            "cook"
+          ],
+          "size": {
+            "x": 11,
+            "y": 30,
+            "z": 11
+          }
+        },
+        "hospital": {
+          "back": true,
+          "blur": [
+            "U38#T7IEuV%bNwnTxsScyzt6m@W-oMS]oLxH",
+            "U58q$Ro[yzoMOpo^w|V_%;n,N1WBflV]oKjY"
+          ],
+          "hutBlocks": [
+            "hospital"
+          ],
+          "size": {
+            "x": 11,
+            "y": 30,
+            "z": 11
+          }
+        },
+        "lumberjack": {
+          "back": true,
+          "blur": [
+            "U39al}RkYp%LGWf*#:nj*8s-DoNu]:S0NGs=",
+            "U49Hgwj]uWXMPRkCrsae*9j?IFbb#UWUofsq"
+          ],
+          "hutBlocks": [
+            "lumberjack"
+          ],
+          "size": {
+            "x": 11,
+            "y": 30,
+            "z": 11
+          }
+        },
+        "miner": {
+          "back": true,
+          "blur": [
+            "U49R2Or^PdNtE%V^$%solvX5Vgt6^OtOEMR+",
+            "U58;@#oxt^bXTHoxnlV]yzn+RVbH$iRlW-oe"
+          ],
+          "hutBlocks": [
+            "miner"
+          ],
+          "size": {
+            "x": 11,
+            "y": 30,
+            "z": 11
+          }
+        },
+        "residence": {
+          "back": true,
+          "blur": [
+            "U58#T7jZ*6oyS|ofsoRkyhbFRCkCxZWVaxoM",
+            "U48q[toc*6oxkDoMsmRj%=oMQ]S1tPWnW.xa"
+          ],
+          "hutBlocks": [
+            "citizen"
+          ],
+          "size": {
+            "x": 11,
+            "y": 30,
+            "z": 11
+          }
+        },
+        "tavern": {
+          "back": true,
+          "blur": [
+            "U497|2NIYr%IJ%oL$*WCyks:VcNb%0SdNIs:",
+            "U48}YUV[uVx@Kfoew|RkyfoyM,R%xZWCnlsp"
+          ],
+          "hutBlocks": [
+            "tavern"
+          ],
+          "size": {
+            "x": 11,
+            "y": 30,
+            "z": 11
+          }
+        },
+        "townhall": {
+          "back": true,
+          "blur": [
+            "U39Hj+m@P]ciTsaPrdkjtcbXV|s;N1X5x;rw",
+            "U49808oyq3nkTakUr]Vux.jtRVWVRSafxsox"
+          ],
+          "hutBlocks": [
+            "townhall"
+          ],
+          "size": {
+            "x": 11,
+            "y": 30,
+            "z": 11
+          }
+        }
+      },
+      "categories": {}
+    },
+    "infrastructure": {
+      "blueprints": {},
+      "categories": {
+        "fancy_roads": {
+          "blueprints": {
+            "corner": {
+              "back": false,
+              "blur": [
+                "U7A-5]s:A9SdS]fjsWn*1Xax-DofxcbHR%W."
+              ],
+              "hutBlocks": [],
+              "size": {
+                "x": 11,
+                "y": 35,
+                "z": 11
+              }
+            },
+            "corner_down": {
+              "back": false,
+              "blur": [
+                "U5AweC$$5~F0KIX7xHrt2%NJ$,xW=zr[M{Sz"
+              ],
+              "hutBlocks": [],
+              "size": {
+                "x": 11,
+                "y": 35,
+                "z": 11
+              }
+            },
+            "cross": {
+              "back": false,
+              "blur": [
+                "U6Awqis:5hSdKHbGw}nj0^ax%4f+=hbHNFWo"
+              ],
+              "hutBlocks": [],
+              "size": {
+                "x": 11,
+                "y": 35,
+                "z": 11
+              }
+            },
+            "cross_down": {
+              "back": false,
+              "blur": [
+                "U5Adf6x@A8I:KHW.xHr]2QVt$,tQ=#oMIoSw"
+              ],
+              "hutBlocks": [],
+              "size": {
+                "x": 11,
+                "y": 35,
+                "z": 11
+              }
+            },
+            "down_a": {
+              "back": false,
+              "blur": [
+                "U3Am*9cW7-NFK]SJw1sE3]rYnVXl,It8a$rW"
+              ],
+              "hutBlocks": [],
+              "size": {
+                "x": 11,
+                "y": 35,
+                "z": 11
+              }
+            },
+            "down_b": {
+              "back": false,
+              "blur": [
+                "U3A1Uno|BuR$O%W9s=xc7knmnCbE,xt8aLMx"
+              ],
+              "hutBlocks": [],
+              "size": {
+                "x": 11,
+                "y": 35,
+                "z": 11
+              }
+            },
+            "plug": {
+              "back": false,
+              "blur": [
+                "U09RXCkl0v?r?@nji%Sx0^ov}wa6-pNaOk$*"
+              ],
+              "hutBlocks": [],
+              "size": {
+                "x": 3,
+                "y": 35,
+                "z": 11
+              }
+            },
+            "plug_slab": {
+              "back": false,
+              "blur": [
+                "U19kTDoy3K%Jpsr[v-O:3dXO:]rx;BOnKt+N"
+              ],
+              "hutBlocks": [],
+              "size": {
+                "x": 3,
+                "y": 35,
+                "z": 11
+              }
+            },
+            "plug_stair": {
+              "back": false,
+              "blur": [
+                "U19a+dXQ8O-nyUrun7O:8iox:HRU#FO-Tq+4"
+              ],
+              "hutBlocks": [],
+              "size": {
+                "x": 3,
+                "y": 35,
+                "z": 11
+              }
+            },
+            "straight": {
+              "back": false,
+              "blur": [
+                "U6A-5]t65$SdKbjswNoM1XbF$,bY=NX8NZi_"
+              ],
+              "hutBlocks": [],
+              "size": {
+                "x": 11,
+                "y": 35,
+                "z": 11
+              }
+            },
+            "straight_down": {
+              "back": false,
+              "blur": [
+                "U5Awb4o|BfR%O,axwMoN30nPw~bb,0bvSLnN"
+              ],
+              "hutBlocks": [],
+              "size": {
+                "x": 11,
+                "y": 35,
+                "z": 11
+              }
+            },
+            "tee": {
+              "back": false,
+              "blur": [
+                "U6A-92s:5iOUKHbFw}nj1EWo$,oL=#W=NFWU"
+              ],
+              "hutBlocks": [],
+              "size": {
+                "x": 11,
+                "y": 35,
+                "z": 11
+              }
+            },
+            "tee_down": {
+              "back": false,
+              "blur": [
+                "U5Am|l%0A8J7F=X7xHrt2%Rkxcxs=gr@IoS}"
+              ],
+              "hutBlocks": [],
+              "size": {
+                "x": 11,
+                "y": 35,
+                "z": 11
+              }
+            }
+          },
+          "categories": {}
+        },
+        "fields": {
+          "blueprints": {
+            "farm_large": {
+              "back": false,
+              "blur": [
+                "U6Am^Zs:BOX5KbbGwNn+33Wp,Gj[;mf6N[Wo"
+              ],
+              "hutBlocks": [
+                "field"
+              ],
+              "size": {
+                "x": 22,
+                "y": 35,
+                "z": 22
+              }
+            },
+            "farm_small": {
+              "back": false,
+              "blur": [
+                "U5AKWss:BzSxXfj[sEe:3LW.+~oJ,JayOAX7"
+              ],
+              "hutBlocks": [
+                "field"
+              ],
+              "size": {
+                "x": 11,
+                "y": 35,
+                "z": 11
+              }
+            },
+            "tree_farm": {
+              "back": false,
+              "blur": [
+                "U3A1OJs:C0SwTuj[wMjG3*bH+yoe:=WoOBbG"
+              ],
+              "hutBlocks": [],
+              "size": {
+                "x": 11,
+                "y": 35,
+                "z": 11
+              }
+            },
+            "tree_farm_birch": {
+              "back": false,
+              "blur": [
+                "U3A1UYt66{SdTuj[wNjG34bG-Aox;8WoNta|"
+              ],
+              "hutBlocks": [],
+              "size": {
+                "x": 11,
+                "y": 35,
+                "z": 11
+              }
+            },
+            "tree_farm_lrg": {
+              "back": false,
+              "blur": [
+                "U3AA?4xaBLSwGSbawNnj2*Rk$,oy]XfkNFbH"
+              ],
+              "hutBlocks": [],
+              "size": {
+                "x": 22,
+                "y": 35,
+                "z": 22
+              }
+            },
+            "tree_farm_oak": {
+              "back": false,
+              "blur": [
+                "U29@,xxZ7sSwLGoe#WnQ3~j[#noy@~X5JQfk"
+              ],
+              "hutBlocks": [],
+              "size": {
+                "x": 11,
+                "y": 35,
+                "z": 11
+              }
+            },
+            "tree_farm_spruce": {
+              "back": false,
+              "blur": [
+                "U29@%rxZ7@S^LHoe#WnQ4KkB#Aoy@~W:J%j["
+              ],
+              "hutBlocks": [],
+              "size": {
+                "x": 11,
+                "y": 35,
+                "z": 11
+              }
+            }
+          },
+          "categories": {
+            "plantation": {
+              "blueprints": {
+                "cac_sug_bam": {
+                  "back": false,
+                  "blur": [
+                    "U2A1UaofGPtLLZkA#Ynm3Locj_S~@*SfNrni"
+                  ],
+                  "hutBlocks": [
+                    "plantationfield"
+                  ],
+                  "size": {
+                    "x": 11,
+                    "y": 9,
+                    "z": 11
+                  }
+                },
+                "crimson": {
+                  "back": false,
+                  "blur": [
+                    "U4AKThkB3#k9P8j@#VayCLfk+LoL[vWVFsoL"
+                  ],
+                  "hutBlocks": [
+                    "plantationfield"
+                  ],
+                  "size": {
+                    "x": 5,
+                    "y": 9,
+                    "z": 5
+                  }
+                },
+                "sea": {
+                  "back": false,
+                  "blur": [
+                    "U59txiWZTQt1Tcj[w0nlK.s+RtSi#7W-JWay"
+                  ],
+                  "hutBlocks": [
+                    "plantationfield"
+                  ],
+                  "size": {
+                    "x": 11,
+                    "y": 7,
+                    "z": 11
+                  }
+                },
+                "vine_glowb": {
+                  "back": false,
+                  "blur": [
+                    "U19t#bpF8pov=Mo1THj]8VnlztoyG-bHvjae"
+                  ],
+                  "hutBlocks": [
+                    "plantationfield"
+                  ],
+                  "size": {
+                    "x": 11,
+                    "y": 9,
+                    "z": 11
+                  }
+                },
+                "warped": {
+                  "back": false,
+                  "blur": [
+                    "U29*bjkV1XxVLCoK#Ga$EKj?xbX8;oWXJNsA"
+                  ],
+                  "hutBlocks": [
+                    "plantationfield"
+                  ],
+                  "size": {
+                    "x": 5,
+                    "y": 9,
+                    "z": 5
+                  }
+                }
+              },
+              "categories": {}
+            }
+          }
+        },
+        "lamps": {
+          "blueprints": {
+            "arched_double": {
+              "back": false,
+              "blur": [
+                "U19kZVx[0]bp?ZaxIpogOhfPr#bFx.a{akjb"
+              ],
+              "hutBlocks": [],
+              "size": {
+                "x": 3,
+                "y": 10,
+                "z": 5
+              }
+            },
+            "arched_single": {
+              "back": false,
+              "blur": [
+                "U29kZWxt5gX3%La_NGoNS@aynpkBo?ayn.jv"
+              ],
+              "hutBlocks": [],
+              "size": {
+                "x": 1,
+                "y": 11,
+                "z": 5
+              }
+            },
+            "corner": {
+              "back": false,
+              "blur": [
+                "U19a[$tP0vxt?Ha#ELj@b-fki,ay%ca|M~jb"
+              ],
+              "hutBlocks": [],
+              "size": {
+                "x": 2,
+                "y": 10,
+                "z": 2
+              }
+            },
+            "double": {
+              "back": false,
+              "blur": [
+                "U19a[$o[0v%M?GWVIps:S@a#rzk8x:azRooc"
+              ],
+              "hutBlocks": [],
+              "size": {
+                "x": 1,
+                "y": 10,
+                "z": 3
+              }
+            },
+            "quad": {
+              "back": false,
+              "blur": [
+                "U29kZUov5Nxt-payI:oLXefRi+fix:a#Roj?"
+              ],
+              "hutBlocks": [],
+              "size": {
+                "x": 3,
+                "y": 10,
+                "z": 3
+              }
+            },
+            "single": {
+              "back": false,
+              "blur": [
+                "U19RXDtM0vxu-.fkM|j?OQa#r|j=tgjuaifk"
+              ],
+              "hutBlocks": [],
+              "size": {
+                "x": 2,
+                "y": 10,
+                "z": 1
+              }
+            },
+            "small": {
+              "back": false,
+              "blur": [
+                "U29a_:f}54%L%KazM}ocI-j]$,WBo$fPoGkC"
+              ],
+              "hutBlocks": [],
+              "size": {
+                "x": 1,
+                "y": 6,
+                "z": 1
+              }
+            },
+            "triple": {
+              "back": false,
+              "blur": [
+                "U19RXEtP0vtQ-:j[IpaeOjfkrzaxx=j[Roaz"
+              ],
+              "hutBlocks": [],
+              "size": {
+                "x": 2,
+                "y": 10,
+                "z": 3
+              }
+            }
+          },
+          "categories": {}
+        },
+        "mineshafts": {
+          "blueprints": {},
+          "categories": {}
+        },
+        "planning": {
+          "blueprints": {
+            "large": {
+              "back": false,
+              "blur": [
+                "U09RQ_l69^tfHSt6+hi|10#;t}X*_@K0J7rv"
+              ],
+              "hutBlocks": [],
+              "size": {
+                "x": 22,
+                "y": 35,
+                "z": 22
+              }
+            },
+            "small": {
+              "back": false,
+              "blur": [
+                "U4AKWpba34ovGooL#XWC2-oL;lbH{mSLBho1"
+              ],
+              "hutBlocks": [],
+              "size": {
+                "x": 11,
+                "y": 35,
+                "z": 11
+              }
+            }
+          },
+          "categories": {}
+        },
+        "roads": {
+          "blueprints": {
+            "corner": {
+              "back": false,
+              "blur": [
+                "U8A^pms:AASdOTfkspn+1Yay-Coe-CbGNZW."
+              ],
+              "hutBlocks": [],
+              "size": {
+                "x": 11,
+                "y": 35,
+                "z": 11
+              }
+            },
+            "corner_down": {
+              "back": false,
+              "blur": [
+                "U7A,~xtPB4NHOnbGw|r]2+V]$lxZ,IoLNaSw"
+              ],
+              "hutBlocks": [],
+              "size": {
+                "x": 11,
+                "y": 35,
+                "z": 11
+              }
+            },
+            "cross": {
+              "back": false,
+              "blur": [
+                "U8A^pms:AASwOmj[spn+1FfQ-Coe,]bFNZW."
+              ],
+              "hutBlocks": [],
+              "size": {
+                "x": 11,
+                "y": 35,
+                "z": 11
+              }
+            },
+            "cross_down": {
+              "back": false,
+              "blur": [
+                "U7A-2-tPATNHOTbGxGnl2RV]$+xZ-CoLNGX4"
+              ],
+              "hutBlocks": [],
+              "size": {
+                "x": 11,
+                "y": 35,
+                "z": 11
+              }
+            },
+            "down_a": {
+              "back": false,
+              "blur": [
+                "U4AwOvgfCGR%KvScr]r_3xrZrxbu#rs;a#ad"
+              ],
+              "hutBlocks": [],
+              "size": {
+                "x": 11,
+                "y": 35,
+                "z": 11
+              }
+            },
+            "down_b": {
+              "back": false,
+              "blur": [
+                "U4AA,2o|GNR$P1WTsrs=B[njnWkV#@o#V@M_"
+              ],
+              "hutBlocks": [],
+              "size": {
+                "x": 11,
+                "y": 35,
+                "z": 11
+              }
+            },
+            "plug": {
+              "back": false,
+              "blur": [
+                "U29t@.XN1Y%1k:r]rvOT1?kB]qaf,]OAJ~+~"
+              ],
+              "hutBlocks": [],
+              "size": {
+                "x": 3,
+                "y": 35,
+                "z": 11
+              }
+            },
+            "plug_slab": {
+              "back": false,
+              "blur": [
+                "U19kTCTD3K-oyUrun8KJ3es.[2Rk,0KJO+:?"
+              ],
+              "hutBlocks": [],
+              "size": {
+                "x": 3,
+                "y": 35,
+                "z": 11
+              }
+            },
+            "plug_stair": {
+              "back": false,
+              "blur": [
+                "U19a+dO,3x=yyUrta2O-8Ow|:HJ7#qO-b@+5"
+              ],
+              "hutBlocks": [],
+              "size": {
+                "x": 3,
+                "y": 35,
+                "z": 11
+              }
+            },
+            "straight": {
+              "back": false,
+              "blur": [
+                "U8A^meoyAUW-OmjswgoM1Zjs-CkB,]X7NtWB"
+              ],
+              "hutBlocks": [],
+              "size": {
+                "x": 11,
+                "y": 35,
+                "z": 11
+              }
+            },
+            "straight_down": {
+              "back": false,
+              "blur": [
+                "U6Awb3t7BzScTEWUr]sp31e.#rX8#rogW.WA"
+              ],
+              "hutBlocks": [],
+              "size": {
+                "x": 11,
+                "y": 35,
+                "z": 11
+              }
+            },
+            "tee": {
+              "back": false,
+              "blur": [
+                "U8B4BDt7AUR*Oma{sDo21YWB-CkB,bkBN@WB"
+              ],
+              "hutBlocks": [],
+              "size": {
+                "x": 11,
+                "y": 35,
+                "z": 11
+              }
+            },
+            "tee_down": {
+              "back": false,
+              "blur": [
+                "U6A,~yxsATJ7OmX6xHr]2*Rl$lxZ=fnkI:S_"
+              ],
+              "hutBlocks": [],
+              "size": {
+                "x": 11,
+                "y": 35,
+                "z": 11
+              }
+            }
+          },
+          "categories": {}
+        },
+        "signs": {
+          "blueprints": {
+            "street_sign": {
+              "back": false,
+              "blur": [
+                "U39[3Soe0wti-noeI@RkEJkB-DV]Joaz$xod"
+              ],
+              "hutBlocks": [],
+              "size": {
+                "x": 3,
+                "y": 5,
+                "z": 1
+              }
+            }
+          },
+          "categories": {}
+        }
+      }
+    },
+    "military": {
+      "blueprints": {
+        "archery": {
+          "back": true,
+          "blur": [
+            "U49k7kJBPe%FKya|$QjGP{$gVfJA=LoeI:nk",
+            "U3A1F0-TH09]GoxZ,[RRC?J8ik-m;lEMEM%0"
+          ],
+          "hutBlocks": [
+            "archery"
+          ],
+          "size": {
+            "x": 11,
+            "y": 35,
+            "z": 11
+          }
+        },
+        "barracks": {
+          "back": true,
+          "blur": [
+            "U48}SJjZYDt6KMkBr^aO*5oLRWX6xrWVn#s.",
+            "U48}SIjbp+t4O;oenTV^*5j[RWf*tMWVsls."
+          ],
+          "hutBlocks": [
+            "barracks"
+          ],
+          "size": {
+            "x": 22,
+            "y": 35,
+            "z": 22
+          }
+        },
+        "combatacademy": {
+          "back": true,
+          "blur": [
+            "U39@tX$fLVK5C3g1,@iyC[N_mtxU|{a2ENko",
+            "U39trJIbH1-#Goj[,IjbP_$|m[Ek[dSxEyru"
+          ],
+          "hutBlocks": [
+            "combatacademy"
+          ],
+          "size": {
+            "x": 11,
+            "y": 35,
+            "z": 11
+          }
+        },
+        "guardtower": {
+          "back": true,
+          "blur": [
+            "U48}kuoeq3tPk9fkofayb@jtizazXlazr=j[",
+            "U4986Noec}tPX4fkofayb=j[i$WVXmayrrkB"
+          ],
+          "hutBlocks": [
+            "guardtower"
+          ],
+          "size": {
+            "x": 11,
+            "y": 30,
+            "z": 11
+          }
+        }
+      },
+      "categories": {}
+    },
+    "mystic": {
+      "blueprints": {
+        "enchanter": {
+          "back": true,
+          "blur": [
+            "U48;|^jHy#o{XjWYsps+uWodVMWV$*s,S2R-",
+            "U48}baV_yzx=X%bHsDn$p+s.RCNaxHWnjZsp"
+          ],
+          "hutBlocks": [
+            "enchanter"
+          ],
+          "size": {
+            "x": 11,
+            "y": 30,
+            "z": 11
+          }
+        },
+        "graveyard": {
+          "back": true,
+          "blur": [
+            "U38=AOIVyf?@KGjKw~kQ%bt6M#Mz$-X3W+j1",
+            "U38}n+%euVDkKZov#?RCx.RjM$x@$ne?Sbf|"
+          ],
+          "hutBlocks": [
+            "graveyard"
+          ],
+          "size": {
+            "x": 11,
+            "y": 35,
+            "z": 11
+          }
+        },
+        "mysticalsite": {
+          "back": true,
+          "blur": [
+            "U38}krnlucgJynbHQ;nj%woxMhRlQ;WCx@oL",
+            "U38}kst6ubW-*FfkQ;e:%xe:IDbtH]WC%doe"
+          ],
+          "hutBlocks": [
+            "mysticalsite"
+          ],
+          "size": {
+            "x": 11,
+            "y": 30,
+            "z": 11
+          }
+        },
+        "netherworker": {
+          "back": true,
+          "blur": [
+            "U49k1UNHLs%JTao2sCayYdxZVIJ7nSW.wMnm",
+            "U597]@S|hY$$yAbGRlnjp=soVINtE4so-ANu"
+          ],
+          "hutBlocks": [
+            "netherworker"
+          ],
+          "size": {
+            "x": 11,
+            "y": 40,
+            "z": 11
+          }
+        }
+      },
+      "categories": {}
+    },
+    "walls": {
+      "blueprints": {},
+      "categories": {}
+    }
+  },
+  "displayName": "Littleton"
+}

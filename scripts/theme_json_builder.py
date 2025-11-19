@@ -11,6 +11,7 @@ from datetime import datetime
 from functools import cached_property, lru_cache
 from pathlib import Path
 from typing import Literal, Any
+
 import numpy as np
 from PIL import Image
 from blurhash import encode
@@ -538,6 +539,7 @@ class Style:
     def write_style_json(self):
         style_dict = format_json(asdict(self.style_json))
         self.images_dir.joinpath("style.json").write_text(json.dumps(style_dict))
+        self.images_dir.joinpath("style_indented.json").write_text(json.dumps(style_dict, indent=2))
 
 
 def style_runner(style: Style) -> Style:
