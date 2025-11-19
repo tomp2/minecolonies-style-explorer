@@ -9,6 +9,7 @@ import type { VariantProps } from "class-variance-authority";
 import { useAtom, useSetAtom } from "jotai";
 import * as React from "react";
 import { setTitleAndDescriptionFrom } from "@/lib/page-meta.ts";
+import { getStyleIconUrl } from "@/lib/resource-urls.ts";
 
 export type SelectableProps = React.ComponentPropsWithoutRef<typeof TogglePrimitive.Root> &
     VariantProps<typeof toggleVariants> & {};
@@ -84,7 +85,7 @@ export function ThemeSelectable({ style }: { style: StyleInfoJson }) {
             <div
                 className="float-end ml-auto size-[28px] shrink-0 align-middle"
                 style={{
-                    backgroundImage: `url(/minecolonies/${style.name}/icon.png)`,
+                    backgroundImage: `url(${getStyleIconUrl(style.name)})`,
                     backgroundSize: "contain",
                     backgroundRepeat: "no-repeat",
                     backgroundPosition: "center",

@@ -1,6 +1,7 @@
 import { blockToDisplayName, HutBlock } from "@/lib/hut-blocks.ts";
 import _missing_styles from "../assets/missing_styles.json";
 import _styles from "../assets/styles.json";
+import { getStyleJsonUrl } from "@/lib/resource-urls.ts";
 
 export type StyleInfoJson = {
     name: string;
@@ -142,10 +143,8 @@ export const missingStylesMap = new Map<string, MissingStyleInfoJson>(
 
 export const styleFiles = new Map<string, Theme>();
 
-const urlPrefix = process.env.NODE_ENV === "production" ? "/minecolonies-style-explorer" : "";
-
 async function downloadStyle(style: string): Promise<Theme> {
-    const response = await fetch(`${urlPrefix}/minecolonies/${style}/style.json`);
+    const response = await fetch(getStyleJsonUrl(style));
     const themeJson = (await response.json()) as ThemeJson;
     const themeObject: Theme = {
         name: style,
