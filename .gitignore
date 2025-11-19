@@ -24,12 +24,12 @@ dist-ssr
 *.sw?
 
 
-# .png files in the ./public/minecolonies subdirectories
 /public/minecolonies/**/*.png
-blueprints
-*.zip
-*.png
-*.yaml
+!/public/minecolonies/**/icon.png
+/blueprints
+/original_images
+/source-images
+/scripts/cache
 
 # Sentry Config File
 .env.sentry-build-plugin

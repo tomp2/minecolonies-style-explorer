@@ -47,6 +47,12 @@ export function ThemeSelectable({ style }: { style: StyleInfoJson }) {
         });
     }
 
+    function setAsOnlyStyle(styleId: string) {
+        setSelectedStyles(new Set([styleId]));
+        updateTab(new Set([styleId]));
+        setTitleAndDescriptionFrom([styleId]);
+    }
+
     const addedAt = style.addedAt ? new Date(style.addedAt) : undefined;
     const isNew = addedAt && addedAt > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000); // 7 days
     const wip = style.wip;
@@ -55,9 +61,13 @@ export function ThemeSelectable({ style }: { style: StyleInfoJson }) {
             aria-label={style.displayName}
             pressed={isSelected}
             onPressedChange={() => toggleStyle(style.name)}
-            className="text-sm text-current"
+            onContextMenu={(e) => {
+                e.preventDefault();
+                setAsOnlyStyle(style.name);
+            }}
+            className="text-sm text-current gap-0"
         >
-            <div className="mb-0.5 flex flex-wrap gap-x-1.5 leading-none">
+            <div className="mb-0.5 flex flex-wrap gap-x-1.5 leading-none ml-2">
                 {style.displayName}
                 <p className="text-muted-foreground text-xs">({style.authors.join(", ")})</p>
             </div>
@@ -71,6 +81,15 @@ export function ThemeSelectable({ style }: { style: StyleInfoJson }) {
                     WIP
                 </p>
             )}
+            <div
+                className="float-end ml-auto size-[28px] shrink-0 align-middle"
+                style={{
+                    backgroundImage: `url(/minecolonies/${style.name}/icon.png)`,
+                    backgroundSize: "contain",
+                    backgroundRepeat: "no-repeat",
+                    backgroundPosition: "center",
+                }}
+            />
         </Selectable>
     );
 }

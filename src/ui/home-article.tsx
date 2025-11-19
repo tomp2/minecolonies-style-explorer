@@ -1,6 +1,6 @@
 export function HomeArticle() {
     return (
-        <article className="prose prose-xl mx-auto mt-5 p-2 pb-14 dark:prose-invert">
+        <article className="prose prose-xl dark:prose-invert mx-auto mt-5 p-2 pb-14">
             <h1 className="text-4xl">
                 Welcome to the <em>unofficial</em> MineColonies Style Explorer!
             </h1>
@@ -14,7 +14,10 @@ export function HomeArticle() {
             </p>
             <p>
                 Start by selecting styles from the sidebar or searching for buildings. Click images to see
-                alternative angles, and use the heart icon to save favorites.
+                alternative angles, and use the heart icon to save favorites.{" "}
+                <strong className="hidden rounded bg-blue-200 px-1 pb-1 sm:inline">Right clicking</strong>
+                <strong className="inline rounded bg-blue-200 px-1 pb-1 sm:hidden">Holding down on</strong> a
+                style on the sidebar will deselect all other styles.
             </p>
             <h3>Support MineColonies</h3>
             <p>

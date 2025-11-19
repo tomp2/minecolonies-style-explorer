@@ -80,7 +80,7 @@ export function FullSidebar() {
                 </SidebarGroup>
                 <SidebarGroup className="pt-0">
                     <SidebarGroupLabel>Minecolonies</SidebarGroupLabel>
-                    <SidebarMenu>
+                    <SidebarMenu className="gap-0">
                         {[...styleInfoMap.values()]
                             .filter(style => style.type === "minecolonies")
                             .map(style => (
@@ -90,7 +90,7 @@ export function FullSidebar() {
                 </SidebarGroup>
                 <SidebarGroup className="py-0">
                     <SidebarGroupLabel>Stylecolonies</SidebarGroupLabel>
-                    <SidebarMenu>
+                    <SidebarMenu className="gap-0">
                         {[...styleInfoMap.values()]
                             .filter(style => style.type === "stylecolonies")
                             .map(style => (
@@ -100,7 +100,7 @@ export function FullSidebar() {
                 </SidebarGroup>
                 <SidebarGroup className="pt-0">
                     <SidebarGroupLabel>Other</SidebarGroupLabel>
-                    <SidebarMenu>
+                    <SidebarMenu className="gap-0">
                         {[...styleInfoMap.values()]
                             .filter(style => style.type === "other")
                             .map(style => (
