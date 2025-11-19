@@ -1,2 +1,8 @@
 **/dist
 src/assets/themes.json
+public
+source-images
+original_images
+blueprints
+.venv
+scripts/cache

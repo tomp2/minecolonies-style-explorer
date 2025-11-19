@@ -51,6 +51,7 @@ STYLES = {
         "birch",
         "jungle",
         "incan",
+        "lostcity"
     ],
     "stylecolonies": [
         "Antique",
@@ -68,7 +69,8 @@ STYLES = {
         "littleton",
         "Byzantine_for_1.20",
         "Shogun",
-        "Nile"
+        "Nile",
+        "sandyton"
     ],
 }
 

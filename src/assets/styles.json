@@ -207,6 +207,18 @@
       "wip": false
     },
     {
+      "name": "lostcity",
+      "displayName": "Lost Mesa City",
+      "type": "minecolonies",
+      "authors": [
+        "John Reiher",
+        "Raycoms",
+        "SomeAddons"
+      ],
+      "addedAt": "2025-11-19",
+      "wip": false
+    },
+    {
       "name": "medievalbirch",
       "displayName": "Medieval Birch",
       "type": "minecolonies",
@@ -285,6 +297,16 @@
         "Thaylar"
       ],
       "addedAt": null,
+      "wip": false
+    },
+    {
+      "name": "sandyton",
+      "displayName": "Sandyton",
+      "type": "other",
+      "authors": [
+        "Thaylar"
+      ],
+      "addedAt": "2025-11-19",
       "wip": false
     },
     {

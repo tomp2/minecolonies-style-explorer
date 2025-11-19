@@ -204,4 +204,16 @@
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
+    <url>
+        <loc>https://tomp2.github.io/minecolonies-style-explorer/?theme=lostcity</loc>
+        <lastmod>2025-11-19T04:54:02.857250</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://tomp2.github.io/minecolonies-style-explorer/?theme=sandyton</loc>
+        <lastmod>2025-11-19T04:54:02.857250</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
 </urlset>
