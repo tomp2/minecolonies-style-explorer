@@ -376,6 +376,17 @@
       "wip": false
     },
     {
+      "name": "underwaterbase",
+      "displayName": "Underwater Base",
+      "type": "stylecolonies",
+      "authors": [
+        "McSassa",
+        "matlom"
+      ],
+      "addedAt": "2025-11-29",
+      "wip": false
+    },
+    {
       "name": "birch",
       "displayName": "Urban Birch",
       "type": "minecolonies",
@@ -385,6 +396,16 @@
         "Raycoms"
       ],
       "addedAt": "2025-11-17",
+      "wip": false
+    },
+    {
+      "name": "acacia",
+      "displayName": "Urban Savanna",
+      "type": "minecolonies",
+      "authors": [
+        "John Reiher"
+      ],
+      "addedAt": "2025-11-29",
       "wip": false
     }
   ],

@@ -51,7 +51,8 @@ STYLES = {
         "birch",
         "jungle",
         "incan",
-        "lostcity"
+        "lostcity",
+        "acacia"
     ],
     "stylecolonies": [
         "Antique",
@@ -63,7 +64,8 @@ STYLES = {
         "frontier",
         "Crimson_Keep",
         "Hive",
-        "Tropical"
+        "Tropical",
+        "underwaterbase"
     ],
     "other": [
         "littleton",

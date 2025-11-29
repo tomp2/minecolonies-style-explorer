@@ -216,4 +216,16 @@
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
+    <url>
+        <loc>https://tomp2.github.io/minecolonies-style-explorer/?theme=underwaterbase</loc>
+        <lastmod>2025-11-29T14:53:08.886359</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://tomp2.github.io/minecolonies-style-explorer/?theme=acacia</loc>
+        <lastmod>2025-11-29T14:53:08.886359</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
 </urlset>
