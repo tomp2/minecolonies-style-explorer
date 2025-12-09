@@ -52,7 +52,8 @@ STYLES = {
         "jungle",
         "incan",
         "lostcity",
-        "acacia"
+        "acacia",
+        "warped"
     ],
     "stylecolonies": [
         "Antique",

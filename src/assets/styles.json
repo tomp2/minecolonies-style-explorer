@@ -407,6 +407,16 @@
       ],
       "addedAt": "2025-11-29",
       "wip": false
+    },
+    {
+      "name": "warped",
+      "displayName": "Warped Netherlands",
+      "type": "minecolonies",
+      "authors": [
+        "Cugo"
+      ],
+      "addedAt": "2025-12-09",
+      "wip": false
     }
   ],
   "categories": [
