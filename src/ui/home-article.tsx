@@ -1,16 +1,21 @@
 export function HomeArticle() {
     return (
-        <article className="prose prose-xl dark:prose-invert mx-auto mt-5 p-2 pb-14">
+        <article className="prose prose-xl dark:prose-invert mx-auto mt-5 p-2 pb-14 max-w-[75ch]">
             <h1 className="text-4xl">
                 Welcome to the <em>unofficial</em> MineColonies Style Explorer!
             </h1>
             <h3>Introduction</h3>
             <p>
-                This is an <em>unofficial</em> site for browsing the styles and buildings for the{" "}
+                This is an <em>unofficial</em> site for browsing{" "}
+                <strong className="rounded bg-red-200 px-1 pb-1">most (not all!)</strong> of the styles and
+                buildings for the{" "}
                 <a className="text-blue-500" href="https://minecolonies.com/">
                     MineColonies
                 </a>{" "}
                 mod. I created this site to make it easy to visually explore buildings by style and category.
+                This site is not meant to be 100% accurate and up-to-date at all times, but to give a{" "}
+                <strong className="rounded bg-blue-200 px-1 pb-1">rough idea</strong> of what the different
+                styles look like.
             </p>
             <p>
                 Start by selecting styles from the sidebar or searching for buildings. Click images to see
