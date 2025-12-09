@@ -4,8 +4,8 @@ import { useCaptureEventOnce } from "@/hooks/use-capture-event-once.ts";
 import {
     expandedBuildingAtom,
     favoritesPathsWriteAtom,
-    imageWidthAtom,
-    selectedThemesAtom,
+    imageWidthAtom, searchTermAtom,
+    selectedThemesAtom
 } from "@/lib/state-atoms.ts";
 import { BuildingData } from "@/lib/theme-data.ts";
 import { cn } from "@/lib/utils.ts";
@@ -282,9 +282,10 @@ function BuildingName({ building }: { building: BuildingData }) {
 /** A card that displays a building's image, name, path, and size. */
 export function BuildingCard({ building, isFavorite }: { building: BuildingData; isFavorite?: boolean }) {
     const selectedStylesCount = useAtomValue(selectedThemesAtom).size;
+    const isSearchResult = Boolean(useAtomValue(searchTermAtom));
 
     let pathString = `${building.path.slice(1).join("/")}`;
-    if (selectedStylesCount !== 1 || isFavorite) {
+    if (selectedStylesCount !== 1 || isFavorite || isSearchResult) {
         pathString = `${building.styleDisplayName}/${pathString}`;
     }
     return (

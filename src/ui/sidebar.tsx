@@ -42,7 +42,7 @@ export function FullSidebar() {
                 </SidebarMenu>
             </SidebarHeader>
             <SidebarContent>
-                <SidebarGroup className="pb-0">
+                <SidebarGroup className="pb-0 px-0">
                     <SidebarGroupLabel>Search</SidebarGroupLabel>
                     <SearchBar />
                 </SidebarGroup>

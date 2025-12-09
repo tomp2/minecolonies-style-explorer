@@ -13,6 +13,7 @@ import { useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 import { useDelayedCaptureEvent } from "@/hooks/delayed-capture-event.ts";
 import { SidebarGroupLabel } from "@/components/ui/sidebar.tsx";
+import { cn } from "@/lib/utils.ts";
 
 export function SearchBar() {
     const { capture } = useDelayedCaptureEvent();
@@ -25,19 +26,22 @@ export function SearchBar() {
     return (
         <div className="flex w-full flex-col px-2">
             <div className="relative">
-                <Search className="absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 transform text-muted-foreground" />
+                <Search className="text-muted-foreground absolute top-1/2 left-2 h-4 w-4 -translate-y-1/2 transform" />
                 <X
                     onClick={() => {
                         setInput("");
                         writeSearchTerm("");
                     }}
-                    className="absolute right-2 top-1/2 h-4 w-4 -translate-y-1/2 transform text-muted-foreground"
+                    className="text-muted-foreground absolute top-1/2 right-2 h-4 w-4 -translate-y-1/2 transform"
                 />
                 <Input
                     type="search"
                     placeholder="Search buildings..."
                     aria-label="Search buildings"
-                    className="pl-8"
+                    className={cn(
+                        "pl-8",
+                        input !== "" && "shadow-blue-600/40 shadow-md not-focus:border-blue-500 focus:ring-blue-500",
+                    )}
                     value={input}
                     onChange={e => {
                         const value = e.target.value.slice(0, 30);
