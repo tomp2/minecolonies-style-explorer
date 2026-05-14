@@ -33,3 +33,4 @@ dist-ssr
 
 # Sentry Config File
 .env.sentry-build-plugin
+/scripts/__pycache__
